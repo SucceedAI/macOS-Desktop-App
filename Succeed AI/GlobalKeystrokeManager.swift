@@ -1,35 +1,34 @@
-import Foundation
-import SwiftUI
+import Cocoa
 import Carbon.HIToolbox
-import AppKit
-import CoreGraphics
 
 class GlobalKeystrokeManager {
     // can be change by another unique keystroke event ID
     private var uniqueKeystrokeTrigger: String = "/ai "
-
-    
-    private var eventMonitor: Any?
-    private let aiService: AIProvideable
     private var currentTypedString: String = ""
 
-    init(aiService: AIProvideable) {
-        self.aiService = aiService
+    private var onKeystrokeDetected: (String) -> Void
+    private var currentQuery = ""
+    private var isCommandActive = false
+    private var aiProvider: AIProvideable
+
+    init(aiProvider: AIProvideable, onKeystrokeDetected: @escaping (String) -> Void) {
+        self.aiProvider = aiProvider
+        self.onKeystrokeDetected = onKeystrokeDetected
         setupGlobalKeystrokeMonitoring()
     }
 
     private func setupGlobalKeystrokeMonitoring() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
-
+        
+        // fail-fast and exit the function as early as possible
         if !accessEnabled {
-                Alert(
-                    title: Text("Accessibility Permission Not Granted").font(.largeTitle),
-                    message: Text("Accessibility permission needs to be granted. Allow the app in System Settings -> Privacy & Security -> -> Accessibility."),
-                    dismissButton: .default(Text("OK"))
-                )
+            // If not enabled, you will want to notify your UI layer to alert the user.
+            // This can be done via a callback, NotificationCenter, etc.
+            return
         }
-
+        
+        
         // add the event to the event handler
         NSEvent.addGlobalMonitorForEvents(
             matching: [.keyUp, .keyDown],
@@ -41,25 +40,36 @@ class GlobalKeystrokeManager {
     private func handleEvent(_ event: NSEvent) {
         guard let characters = event.characters else { return }
 
-        // Appending the typed character
-        currentTypedString += characters
-
-        // Check if it matches the unique keystroke pattern
-        if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
-            let query = String(currentTypedString.dropFirst(4)) // Remove '/ai ' prefix
-            aiService.sendQuery(query) { response in
-                // Handle the response, e.g., show it in UI or use it in some way
-                DispatchQueue.main.async {
-                    // Example: print the response
-                    print(response)
+        if isCommandActive {
+            if event.keyCode == kVK_Return || event.keyCode == kVK_Space {
+                // End of command
+                isCommandActive = false
+                let query = currentTypedString.trimmingCharacters(in: .whitespaces)
+                if query.hasPrefix(uniqueKeystrokeTrigger) {
+                    let actualQuery = String(query.dropFirst(4))
+                    aiProvider.sendQuery(actualQuery) { response in
+                        self.onKeystrokeDetected(response)
+                    }
                 }
+                currentTypedString = ""
+            } else {
+                // Append characters to the current query
+                currentTypedString += characters
             }
-            currentTypedString = "" // Reset the typed string
+        } else if characters == "/" {
+            // Start of command
+            isCommandActive = true
+            currentTypedString = characters
         }
+    }
 
-        // Reset if space or return key is pressed
-        if event.keyCode == kVK_Space || event.keyCode == kVK_Return {
-            currentTypedString = ""
-        }
+    func checkAccessibilityPermission() -> Bool {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: false]
+        return AXIsProcessTrustedWithOptions(options)
+    }
+
+    func requestAccessibilityPermission() {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
+        _ = AXIsProcessTrustedWithOptions(options)
     }
 }

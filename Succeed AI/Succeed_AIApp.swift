@@ -4,7 +4,10 @@ import SwiftUI
 struct SucceedAIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(aiService: MistralAIProvider())
+            ContentView()
+        }
+        Settings {
+            UserSettingsView()
         }
     }
 }

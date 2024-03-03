@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */; };
+		8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27A2B94469A0078D9F7 /* UserSettings.swift */; };
+		8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */; };
+		8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */; };
 		8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */; };
 		8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7B2B93F25000A8F6E6 /* ContentView.swift */; };
 		8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7D2B93F25000A8F6E6 /* Item.swift */; };
@@ -18,7 +22,7 @@
 		8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */; };
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
-		8F654CB32B94137800A8F6E6 /* MistralAIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */; };
+		8F654CB32B94137800A8F6E6 /* MistralAiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB22B94137800A8F6E6 /* MistralAiProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +43,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerApiProvider.swift; sourceTree = "<group>"; };
+		8F42E27A2B94469A0078D9F7 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
+		8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		8F654C762B93F25000A8F6E6 /* Succeed AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Succeed AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
 		8F654C7B2B93F25000A8F6E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,7 +63,7 @@
 		8F654CA82B940B1F00A8F6E6 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
-		8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MistralAIProvider.swift; sourceTree = "<group>"; };
+		8F654CB22B94137800A8F6E6 /* MistralAiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MistralAiProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,8 +115,12 @@
 			isa = PBXGroup;
 			children = (
 				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
+				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
+				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
+				8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */,
 				8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */,
-				8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */,
+				8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */,
+				8F654CB22B94137800A8F6E6 /* MistralAiProvider.swift */,
 				8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */,
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
 				8F654C7B2B93F25000A8F6E6 /* ContentView.swift */,
@@ -276,11 +288,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F654CB32B94137800A8F6E6 /* MistralAIProvider.swift in Sources */,
+				8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */,
+				8F654CB32B94137800A8F6E6 /* MistralAiProvider.swift in Sources */,
 				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
+				8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */,
 				8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */,
+				8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */,
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
+				8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */,
 				8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,6 +464,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
@@ -476,6 +493,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
