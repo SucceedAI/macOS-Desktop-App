@@ -18,13 +18,13 @@ struct ContentView: View {
         } message: {
             Text("The app requires additional permissions. Please grant the app permissions in System Settings -> Privacy & Security -> Accessibility.")
         }
-        .onChange(of: viewModel.showSettingsWindow) { newShowSetting, _ in
-            if newShowSetting {
+        .onChange(of: viewModel.showSettingsWindow) { newShowSettings, _ in
+            if newShowSettings {
                 openSettings()
             }
         }
     }
-    
+
     private func openSettings() {
         let settingsWindow = NSWindow(
             contentRect: NSRect(x: 20, y: 20, width: 480, height: 300),
