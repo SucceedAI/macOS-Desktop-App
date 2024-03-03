@@ -45,7 +45,7 @@ class GlobalKeystrokeManager {
                 isCommandActive = false
                 let query = currentTypedString.trimmingCharacters(in: .whitespaces)
                 if query.hasPrefix(uniqueKeystrokeTrigger) {
-                    let actualQuery = String(query.dropFirst(4))
+                    let actualQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count))
                     aiProvider.sendQuery(actualQuery) { response in
                         self.onKeystrokeDetected(response)
                     }
