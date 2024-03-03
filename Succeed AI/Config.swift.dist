@@ -1,0 +1,6 @@
+struct Config {
+    static let appTitle = "Succeed AI"
+    static let mistralApiKey = "your_mistral_api_key" // Replace with your actual API key
+    static let apiServiceProvider = MistralAiProvider.self // Replace with your preferred API service provider
+    static let uniqueKeystrokeTrigger = "/ai"
+}

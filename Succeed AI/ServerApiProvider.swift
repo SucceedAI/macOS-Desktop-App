@@ -4,7 +4,11 @@ import Foundation
 // that will then speak to the specific AI API
 class ServerApiProvider: AIProvideable {
     private var aiUrl: String = "https://api.succeedai.tech" // TODO need to host it :D
-    private var apiKey: String = "" // replace with your actual API key
+    private var apiKey: String
+
+    required init(apiKey: String) {
+        self.apiKey = apiKey
+    }
 
     func sendQuery(_ query: String, completion: @escaping (String) -> Void) {
         // Define the URL and request parameters

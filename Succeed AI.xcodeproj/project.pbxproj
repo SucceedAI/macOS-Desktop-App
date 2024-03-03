@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F316F012B94A09800F2ED47 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F316F002B94A09800F2ED47 /* Config.swift */; };
 		8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */; };
 		8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27A2B94469A0078D9F7 /* UserSettings.swift */; };
 		8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */; };
 		8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */; };
+		8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2852B9495C90078D9F7 /* Config.swift.dist */; };
 		8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */; };
 		8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7B2B93F25000A8F6E6 /* ContentView.swift */; };
 		8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7D2B93F25000A8F6E6 /* Item.swift */; };
@@ -43,10 +45,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8F316F002B94A09800F2ED47 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerApiProvider.swift; sourceTree = "<group>"; };
 		8F42E27A2B94469A0078D9F7 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		8F42E2852B9495C90078D9F7 /* Config.swift.dist */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.swift.dist; sourceTree = "<group>"; };
 		8F654C762B93F25000A8F6E6 /* Succeed AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Succeed AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
 		8F654C7B2B93F25000A8F6E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 			children = (
 				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
 				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
+				8F42E2852B9495C90078D9F7 /* Config.swift.dist */,
+				8F316F002B94A09800F2ED47 /* Config.swift */,
 				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
 				8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */,
 				8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */,
@@ -292,6 +298,8 @@
 				8F654CB32B94137800A8F6E6 /* MistralAiProvider.swift in Sources */,
 				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
+				8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */,
+				8F316F012B94A09800F2ED47 /* Config.swift in Sources */,
 				8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */,
 				8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */,
 				8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */,

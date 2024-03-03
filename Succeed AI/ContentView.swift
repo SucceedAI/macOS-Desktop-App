@@ -6,7 +6,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Text("Succeed AI")
+            Text(Config.appTitle)
             // Additional UI elements can be added here
         }
         .onAppear {

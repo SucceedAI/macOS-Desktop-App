@@ -2,7 +2,11 @@ import Foundation
 
 class MistralAiProvider: AIProvideable {
     private var aiUrl: String = "https://api.mistralai.com"
-    private var apiKey: String = "" // replace with your actual API key
+    private var apiKey: String
+
+    required init(apiKey: String) {
+        self.apiKey = apiKey
+    }
 
     func sendQuery(_ query: String, completion: @escaping (String) -> Void) {
         // Define the URL and request parameters

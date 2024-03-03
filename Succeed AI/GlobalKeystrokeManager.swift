@@ -44,6 +44,8 @@ class GlobalKeystrokeManager {
                 // End of command
                 isCommandActive = false
                 let query = currentTypedString.trimmingCharacters(in: .whitespaces)
+
+                let uniqueKeystrokeTrigger = Config.uniqueKeystrokeTrigger + " "
                 if query.hasPrefix(uniqueKeystrokeTrigger) {
                     let actualQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count))
                     aiProvider.sendQuery(actualQuery) { response in
