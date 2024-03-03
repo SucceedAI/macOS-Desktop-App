@@ -23,7 +23,10 @@ class AppViewModel: ObservableObject {
     }
 
     func sendQueryToAI(_ query: String) {
-        aiProvider.sendQuery(query) { [weak self] response in
+        // format the query with specific instructions to send to
+        let formattedQuery = getAiInstructions(query: query)
+        
+        aiProvider.sendQuery(formattedQuery) { [weak self] response in
             DispatchQueue.main.async {
                 self?.aiResponse = response
             }
@@ -43,8 +46,19 @@ class AppViewModel: ObservableObject {
             NSWorkspace.shared.open(url)
         }
     }
-    
+
     func openSettingsWindow() {
         showSettingsWindow = true
+    }
+
+    private func getAiInstructions(query: String) -> String {
+        let instructionQuery = """
+Follow the instruction from the text in triple quotes below:
+\"\"\"\(query)\"\"\"
+
+Do not return anything else other than the given instruction. Do not wrap responses in quotes.
+"""
+
+        return instructionQuery
     }
 }
