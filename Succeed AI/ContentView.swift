@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var showingPermissionsAlert = false
 
     init() {
+        //let aiProvier = ServerApiProvider()
         let aiProvider = MistralAiProvider() // Replace with your actual AI service provider
         _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
     }
@@ -14,22 +15,29 @@ struct ContentView: View {
             Text("Succeed AI")
         }
         .onAppear {
-            viewModel.requestAccessibilityPermission()
-            showingPermissionsAlert = !viewModel.isAccessibilityPermissionGranted
+            viewModel.checkAndRequestAccessibilityPermission()
         }
-        .alert(isPresented: $showingPermissionsAlert) {
-            Alert(
-                title: Text("Accessibility Permission Not Granted"),
-                message: Text("The app requires additional permissions. Allow the app in System Settings -> Privacy & Security -> Accessibility."),
-                dismissButton: .default(Text("OK"))
-            )
+        .alert("Accessibility Permission Not Granted", isPresented: $showingPermissionsAlert) {
+            Button("Open System Preferences", action: viewModel.openSystemPreferences)
+        } message: {
+            Text("The app requires additional permissions. Please grant the app permissions in System Settings -> Privacy & Security -> Accessibility.")
+        }
+        .onChange(of: viewModel.showSettingsWindow) { show in
+            if show {
+                openSettings()
+            }
         }
     }
     
-//    private func openSystemPreferences() {
-//        // Open the System Preferences to the Accessibility pane
-//        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-//            NSWorkspace.shared.open(url)
-//        }
-//    }
+    private func openSettings() {
+        let settingsWindow = NSWindow(
+            contentRect: NSRect(x: 20, y: 20, width: 480, height: 300),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            backing: .buffered, defer: false)
+        settingsWindow.center()
+        settingsWindow.setFrameAutosaveName("Settings")
+        settingsWindow.contentView = NSHostingView(rootView: UserSettingsView())
+        settingsWindow.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
 }

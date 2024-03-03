@@ -3,7 +3,8 @@ import Carbon.HIToolbox
 
 class GlobalKeystrokeManager {
     // can be change by another unique keystroke event ID
-    private var uniqueKeystrokeTrigger: String = "/ai "
+    @Published var uniqueKeystrokeTrigger: String = "/ai "
+
     private var currentTypedString: String = ""
 
     private var onKeystrokeDetected: (String) -> Void
@@ -62,7 +63,7 @@ class GlobalKeystrokeManager {
             currentTypedString = characters
         }
     }
-
+    
     func checkAccessibilityPermission() -> Bool {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: false]
         return AXIsProcessTrustedWithOptions(options)
