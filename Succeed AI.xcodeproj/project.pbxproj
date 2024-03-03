@@ -15,6 +15,10 @@
 		8F654C8E2B93F25100A8F6E6 /* Succeed_AITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C8D2B93F25100A8F6E6 /* Succeed_AITests.swift */; };
 		8F654C982B93F25100A8F6E6 /* Succeed_AIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C972B93F25100A8F6E6 /* Succeed_AIUITests.swift */; };
 		8F654C9A2B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C992B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift */; };
+		8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */; };
+		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
+		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
+		8F654CB32B94137800A8F6E6 /* MistralAIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,11 @@
 		8F654C932B93F25100A8F6E6 /* Succeed AIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Succeed AIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C972B93F25100A8F6E6 /* Succeed_AIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIUITests.swift; sourceTree = "<group>"; };
 		8F654C992B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalKeystrokeManager.swift; sourceTree = "<group>"; };
+		8F654CA82B940B1F00A8F6E6 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
+		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
+		8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MistralAIProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +106,10 @@
 		8F654C782B93F25000A8F6E6 /* Succeed AI */ = {
 			isa = PBXGroup;
 			children = (
+				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
+				8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */,
+				8F654CB22B94137800A8F6E6 /* MistralAIProvider.swift */,
+				8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */,
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
 				8F654C7B2B93F25000A8F6E6 /* ContentView.swift */,
 				8F654C7D2B93F25000A8F6E6 /* Item.swift */,
@@ -128,6 +141,7 @@
 			children = (
 				8F654C972B93F25100A8F6E6 /* Succeed_AIUITests.swift */,
 				8F654C992B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift */,
+				8F654CA82B940B1F00A8F6E6 /* AIService.swift */,
 			);
 			path = "Succeed AIUITests";
 			sourceTree = "<group>";
@@ -262,6 +276,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F654CB32B94137800A8F6E6 /* MistralAIProvider.swift in Sources */,
+				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
+				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
 				8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */,
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
 				8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */,
@@ -281,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F654C982B93F25100A8F6E6 /* Succeed_AIUITests.swift in Sources */,
+				8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */,
 				8F654C9A2B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,12 +443,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Succeed-AI-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -451,12 +471,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Succeed-AI-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

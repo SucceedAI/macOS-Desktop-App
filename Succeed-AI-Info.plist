@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict/>
+	</array>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>
+        Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses.
+    </string>
+
+</dict>
+</plist>

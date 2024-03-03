@@ -1,59 +1,30 @@
-//
-//  ContentView.swift
-//  Succeed AI
-//
-//  Created by Pierre on 3/3/2024.
-//
-
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var inputText: String = ""
+    @State private var outputText: String = ""
+    var aiService: AIProvideable
 
+    init(aiService: AIProvideable) {
+        self.aiService = aiService
+    }
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+        VStack {
+            TextField("Enter your query", text: $inputText)
+                .padding()
+
+            Button("Send Request") {
+                aiService.sendQuery(inputText) { response in
+                    DispatchQueue.main.async {
+                        self.outputText = response
                     }
                 }
             }
-        } detail: {
-            Text("Select an item")
-        }
-    }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            Text(outputText)
+                .padding()
         }
+        .frame(width: 400, height: 300)
     }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

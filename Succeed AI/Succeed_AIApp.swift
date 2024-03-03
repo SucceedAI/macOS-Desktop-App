@@ -1,32 +1,10 @@
-//
-//  Succeed_AIApp.swift
-//  Succeed AI
-//
-//  Created by Pierre on 3/3/2024.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
-struct Succeed_AIApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+struct SucceedAIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(aiService: MistralAIProvider())
         }
-        .modelContainer(sharedModelContainer)
     }
 }
