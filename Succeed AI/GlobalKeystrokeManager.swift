@@ -6,10 +6,8 @@ class GlobalKeystrokeManager {
     @Published var uniqueKeystrokeTrigger: String = "/ai "
 
     private var currentTypedString: String = ""
-
     private var onKeystrokeDetected: (String) -> Void
-    private var currentQuery = ""
-    private var isCommandActive = false
+    private var isCommandActive: Bool = false
     private var aiProvider: AIProvideable
 
     init(aiProvider: AIProvideable, onKeystrokeDetected: @escaping (String) -> Void) {
