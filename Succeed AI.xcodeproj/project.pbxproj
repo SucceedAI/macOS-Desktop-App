@@ -13,6 +13,7 @@
 		8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */; };
 		8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */; };
 		8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2852B9495C90078D9F7 /* Config.swift.dist */; };
+		8F636F012B96719F00D01CDC /* SystemInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F636F002B96719F00D01CDC /* SystemInfoProvider.swift */; };
 		8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */; };
 		8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7B2B93F25000A8F6E6 /* ContentView.swift */; };
 		8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7D2B93F25000A8F6E6 /* Item.swift */; };
@@ -50,6 +51,7 @@
 		8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		8F42E2852B9495C90078D9F7 /* Config.swift.dist */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.swift.dist; sourceTree = "<group>"; };
+		8F636F002B96719F00D01CDC /* SystemInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfoProvider.swift; sourceTree = "<group>"; };
 		8F654C762B93F25000A8F6E6 /* Succeed AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Succeed AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
 		8F654C7B2B93F25000A8F6E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */,
 				8F654C842B93F25100A8F6E6 /* Succeed_AI.entitlements */,
 				8F654C812B93F25100A8F6E6 /* Preview Content */,
+				8F636F002B96719F00D01CDC /* SystemInfoProvider.swift */,
 			);
 			path = "Succeed AI";
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
 				8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */,
 				8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */,
+				8F636F012B96719F00D01CDC /* SystemInfoProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,7 +472,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S2A23S7R4S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
@@ -498,7 +502,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = S2A23S7R4S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";

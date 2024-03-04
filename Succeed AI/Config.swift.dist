@@ -7,7 +7,7 @@ struct Config {
     static let apiServiceProvider = ServerApiProvider.self
 
     // depending of the environment, it could be localhost, staging.domain.com or the prod domain
-    static let apiUrl = "http://localhost:3004" // TODO replace to https://api.succeedai.tech
+    static let apiUrl = "http://localhost:3004/v1/ai" // TODO replace to https://api.succeedai.tech
 
     // Replace with your actual API key
     static let apiKey = "your_mistral_api_key"

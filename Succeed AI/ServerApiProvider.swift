@@ -19,10 +19,20 @@ class ServerApiProvider: AIProvideable {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue(apiKey, forHTTPHeaderField: "Authorization")
+        
+        // Add Content Type
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Add token key to the request header
+        request.addValue(apiKey, forHTTPHeaderField: "Authorization")
 
-        let requestBody = ["query": query]
+        // Prepare the payload
+        let systemInfoProvider = SystemInfoProvider()
+        let systemInfo = systemInfoProvider.getSystemInfo()
+        let requestBody: [String: Any] = [
+            "query": query,
+            "systemInfo": systemInfo 
+        ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
         } catch {
