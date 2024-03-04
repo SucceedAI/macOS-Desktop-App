@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct SucceedAIApp: App {
-    @StateObject private var viewModel = AppViewModel(aiProvider: Config.apiServiceProvider.init(apiKey: Config.mistralApiKey))
+    @StateObject private var viewModel = AppViewModel(aiProvider: Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl))
 
     var body: some Scene {
         WindowGroup {

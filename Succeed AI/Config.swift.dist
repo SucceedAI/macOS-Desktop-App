@@ -1,11 +1,17 @@
 struct Config {
+    // Name of the macOS app
     static let appTitle = "Succeed AI"
 
     // Replace with your preferred AI API service provider
-    // can be either MistralAiProvider.self or ServerApiProvider.self
-    static let apiServiceProvider = MistralAiProvider.self
+    // can be either ServerApiProvider.self or MistralAiProvider.self
+    static let apiServiceProvider = ServerApiProvider.self
 
-    static let mistralApiKey = "your_mistral_api_key" // Replace with your actual API key
+    // depending of the environment, it could be localhost, staging.domain.com or the prod domain
+    static let apiUrl = "http://localhost:3004" // TODO replace to https://api.succeedai.tech
 
+    // Replace with your actual API key
+    static let apiKey = "your_mistral_api_key"
+
+    // chosen prefix for triggering and querying to AI
     static let uniqueKeystrokeTrigger = "/ai"
 }

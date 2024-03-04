@@ -3,17 +3,16 @@ import Foundation
 // ServerApiProvider will first speak to a prixy API wrapper
 // that will then speak to the specific AI API
 class ServerApiProvider: AIProvideable {
-    private var aiUrl: String = "https://api.succeedai.tech" // TODO need to host it :D
+    private var apiUrl: String
     private var apiKey: String
 
-    required init(apiKey: String) {
+    required init(apiKey: String, apiUrl: String) {
         self.apiKey = apiKey
+        self.apiUrl = apiUrl
     }
 
     func sendQuery(_ query: String, completion: @escaping (String) -> Void) {
-        // Define the URL and request parameters
-        // Replace with the actual API endpoint and your API key
-        guard let url = URL(string: aiUrl + "/query") else {
+        guard let url = URL(string: apiUrl + "/query") else {
             completion("Invalid URL")
             return
         }
