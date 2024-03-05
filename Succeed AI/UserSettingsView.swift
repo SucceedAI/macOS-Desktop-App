@@ -11,6 +11,7 @@ struct UserSettingsView: View {
                 }
                 Text("Font size: \(Int(fontSizePreference))")
             }
+
             // Add more settings here as needed
         }
         .padding()

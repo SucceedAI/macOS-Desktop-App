@@ -1,7 +1,8 @@
 import Foundation
 import IOKit
 
-class SystemInfoProvider {
+// static utility class
+final class SystemInfoUtility {
     static func getSystemInfo() -> [String: String] {
         var info = [String: String]()
 

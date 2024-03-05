@@ -27,11 +27,10 @@ class ServerApiProvider: AIProvideable {
         request.addValue(apiKey, forHTTPHeaderField: "Authorization")
 
         // Prepare the payload
-        let systemInfoProvider = SystemInfoProvider()
-        let systemInfo = systemInfoProvider.getSystemInfo()
+        let systemInfo = SystemInfoUtility.getSystemInfo()
         let requestBody: [String: Any] = [
             "query": query,
-            "systemInfo": systemInfo 
+            "systemInfo": systemInfo
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)

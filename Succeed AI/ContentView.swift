@@ -27,9 +27,12 @@ struct ContentView: View {
 
     private func openSettings() {
         let settingsWindow = NSWindow(
+            // set the window dimentions
             contentRect: NSRect(x: 20, y: 20, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false)
+            backing: .buffered, defer: false
+        )
+
         settingsWindow.center()
         settingsWindow.setFrameAutosaveName("Settings")
         settingsWindow.contentView = NSHostingView(rootView: UserSettingsView())
