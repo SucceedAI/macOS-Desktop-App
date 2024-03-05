@@ -23,14 +23,14 @@ class ServerApiProvider: AIProvideable {
         // Add Content Type
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Add token key to the request header
-        request.addValue(apiKey, forHTTPHeaderField: "Authorization")
+        // Add bearer token key to the request header
+        request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
         // Prepare the payload
-        let systemInfo = SystemInfoUtility.getSystemInfo()
+        let osInfo = SystemUtility.getOperatingSystemInfo()
         let requestBody: [String: Any] = [
             "query": query,
-            "systemInfo": systemInfo
+            "sInfo": osInfo
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
