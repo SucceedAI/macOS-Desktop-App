@@ -20,7 +20,7 @@ class GlobalKeystrokeManager {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
         
-        // fail-fast and exit the function as early as possible
+        // fail-early and exit the function as early as possible
         if !accessEnabled {
             // If not enabled, you will want to notify your UI layer to alert the user.
             // This can be done via a callback, NotificationCenter, etc.
@@ -48,7 +48,7 @@ class GlobalKeystrokeManager {
                 let uniqueKeystrokeTrigger = Config.uniqueKeystrokeTrigger + " "
                 if query.hasPrefix(uniqueKeystrokeTrigger) {
                     let actualQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count))
-                    aiProvider.sendQuery(actualQuery) { response in
+                    aiProvider.query(actualQuery) { response in
                         self.onKeystrokeDetected(response)
                     }
                 }
@@ -63,7 +63,7 @@ class GlobalKeystrokeManager {
             currentTypedString = characters
         }
     }
-    
+
     func checkAccessibilityPermission() -> Bool {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: false]
         return AXIsProcessTrustedWithOptions(options)

@@ -25,6 +25,7 @@
 		8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */; };
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
+		8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80C7502B97C71A00325157 /* ServerResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		8F654CA82B940B1F00A8F6E6 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
+		8F80C7502B97C71A00325157 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				8F316F002B94A09800F2ED47 /* Config.swift */,
 				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
 				8F636F002B96719F00D01CDC /* SystemUtility.swift */,
+				8F80C7502B97C71A00325157 /* ServerResponse.swift */,
 				8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */,
 				8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */,
 				8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */,
@@ -297,6 +300,7 @@
 				8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */,
 				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
+				8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */,
 				8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */,
 				8F316F012B94A09800F2ED47 /* Config.swift in Sources */,
 				8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */,

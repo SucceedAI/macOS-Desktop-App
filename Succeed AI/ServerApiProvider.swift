@@ -11,7 +11,7 @@ class ServerApiProvider: AIProvideable {
         self.apiUrl = apiUrl
     }
 
-    func sendQuery(_ query: String, completion: @escaping (String) -> Void) {
+    func query(_ query: String, completion: @escaping (String) -> Void) {
         guard let url = URL(string: apiUrl + "/query") else {
             completion("Invalid URL")
             return
@@ -30,7 +30,7 @@ class ServerApiProvider: AIProvideable {
         let osInfo = SystemUtility.getOperatingSystemInfo()
         let requestBody: [String: Any] = [
             "query": query,
-            "sInfo": osInfo
+            "systemInfo": osInfo
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
@@ -45,10 +45,15 @@ class ServerApiProvider: AIProvideable {
                 completion("Error: \(error.localizedDescription)")
                 return
             }
-            if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                completion(responseString)
-            } else {
+            guard let data = data else {
                 completion("Error: No data received")
+                return
+            }
+            do {
+                let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
+                completion(serverResponse.content)
+            } catch {
+                completion("Error: Could not decode the response")
             }
         }.resume()
     }
