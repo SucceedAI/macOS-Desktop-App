@@ -27,29 +27,29 @@ class GlobalKeystrokeManager {
             return
         }
         
-        
         // add the event to the event handler
-        NSEvent.addGlobalMonitorForEvents(
-            matching: [.keyUp, .keyDown],
-            handler: { (event) in
-            self.handleEvent(event)
-        })
+        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown]) { [weak self] event in
+            self?.handleEvent(event)
+        }
     }
 
     private func handleEvent(_ event: NSEvent) {
-        guard let characters = event.characters else { return }
+        guard let characters = event.charactersIgnoringModifiers else { return }
 
         if isCommandActive {
-            if event.keyCode == kVK_Return || event.keyCode == kVK_Space {
-                // End of command
+            if event.keyCode == kVK_Return {
                 isCommandActive = false
-                let query = currentTypedString.trimmingCharacters(in: .whitespaces)
+                let trimmedString = currentTypedString.trimmingCharacters(in: .whitespacesAndNewlines)
+                let uniqueKeystrokeTrigger = Config.uniqueKeystrokeTrigger
+                if trimmedString.hasPrefix(uniqueKeystrokeTrigger) {
+                    let actualQuery = String(trimmedString.dropFirst(uniqueKeystrokeTrigger.count)).trimmingCharacters(in: .whitespaces)
 
-                let uniqueKeystrokeTrigger = Config.uniqueKeystrokeTrigger + " "
-                if query.hasPrefix(uniqueKeystrokeTrigger) {
-                    let actualQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count))
+                    // send data to API
                     aiProvider.query(actualQuery) { response in
-                        self.onKeystrokeDetected(response)
+                        DispatchQueue.main.async {
+                            let fullCommandLength = uniqueKeystrokeTrigger.count + actualQuery.count
+                            self.insertText(replacing: fullCommandLength, with: response)
+                        }
                     }
                 }
                 currentTypedString = ""
@@ -61,6 +61,29 @@ class GlobalKeystrokeManager {
             // Start of command
             isCommandActive = true
             currentTypedString = characters
+        }
+    }
+
+    private func insertText(replacing queryLength: Int, with response: String) {
+        let backspaces = String(repeating: "\u{8}", count: queryLength)
+        let scriptText = """
+                         tell application "System Events"
+                             keystroke "\(backspaces)"
+                             delay 0.2
+                             keystroke "\(response)"
+                         end tell
+                         """
+        executeAppleScript(scriptText)
+    }
+
+    private func executeAppleScript(_ scriptText: String) {
+        var error: NSDictionary?
+        if let script = NSAppleScript(source: scriptText) {
+            script.executeAndReturnError(&error)
+        }
+
+        if let error = error {
+            print("AppleScript Error: \(error)")
         }
     }
 
