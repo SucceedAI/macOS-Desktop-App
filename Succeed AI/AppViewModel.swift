@@ -1,5 +1,5 @@
+import Foundation
 import SwiftUI
-import Combine
 
 class AppViewModel: ObservableObject {
     @Published var aiResponse: String = ""
@@ -23,16 +23,21 @@ class AppViewModel: ObservableObject {
     }
 
     func sendQueryToAI(_ query: String) {
-        // format the query with specific instructions to send to
-        let formattedQuery = getAiInstructions(query: query)
-        
-        aiProvider.sendQuery(formattedQuery) { [weak self] response in
+        let formattedQuery = getAiInstructions(query)
+        aiProvider.query(formattedQuery) { [weak self] response in
             DispatchQueue.main.async {
                 self?.aiResponse = response
             }
         }
     }
     
+    func initializeGlobalKeystrokeManager() {
+        globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider) { [weak self] query in
+            self?.sendQueryToAI(query)
+        }
+        globalKeystrokeManager?.setupGlobalKeystrokeMonitoring()
+    }
+
     func checkAndRequestAccessibilityPermission() {
         isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
 
@@ -51,7 +56,7 @@ class AppViewModel: ObservableObject {
         showSettingsWindow = true
     }
 
-    private func getAiInstructions(query: String) -> String {
+    private func getAiInstructions(_ query: String) -> String {
         let instructionQuery = """
 Follow the instruction from the text in triple quotes below:
 \"\"\"\(query)\"\"\"
