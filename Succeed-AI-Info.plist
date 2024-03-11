@@ -10,6 +10,7 @@
     <string>
         Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses.
     </string>
-
+    <key>LSUIElement</key>
+    <true/>
 </dict>
 </plist>

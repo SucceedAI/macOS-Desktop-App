@@ -2,15 +2,17 @@ import SwiftUI
 
 @main
 struct SucceedAIApp: App {
-    @StateObject private var viewModel = AppViewModel(aiProvider: Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl))
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: viewModel)
+            EmptyView().frame(width: 0, height: 0)
+            Text("")
+                .hidden()
         }.commands {
             CommandGroup(replacing: .appSettings) {
                 Button("Settings") {
-                    viewModel.openSettingsWindow()
+                    appDelegate.viewModel?.openSettingsWindow()
                 }
                 .keyboardShortcut(",", modifiers: .command)
             }

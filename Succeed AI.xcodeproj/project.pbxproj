@@ -12,10 +12,8 @@
 		8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27A2B94469A0078D9F7 /* UserSettings.swift */; };
 		8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */; };
 		8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */; };
-		8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2852B9495C90078D9F7 /* Config.swift.dist */; };
 		8F636F012B96719F00D01CDC /* SystemUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F636F002B96719F00D01CDC /* SystemUtility.swift */; };
 		8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */; };
-		8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7B2B93F25000A8F6E6 /* ContentView.swift */; };
 		8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C7D2B93F25000A8F6E6 /* Item.swift */; };
 		8F654C802B93F25100A8F6E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */; };
 		8F654C832B93F25100A8F6E6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F654C822B93F25100A8F6E6 /* Preview Assets.xcassets */; };
@@ -26,6 +24,7 @@
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
 		8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80C7502B97C71A00325157 /* ServerResponse.swift */; };
+		8F883FC82B9F0ECC008974C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FC72B9F0ECC008974C9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +54,6 @@
 		8F636F002B96719F00D01CDC /* SystemUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUtility.swift; sourceTree = "<group>"; };
 		8F654C762B93F25000A8F6E6 /* Succeed AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Succeed AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
-		8F654C7B2B93F25000A8F6E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8F654C7D2B93F25000A8F6E6 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F654C822B93F25100A8F6E6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -70,6 +68,7 @@
 		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
 		8F80C7502B97C71A00325157 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
+		8F883FC72B9F0ECC008974C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,9 +120,10 @@
 			isa = PBXGroup;
 			children = (
 				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
-				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
 				8F42E2852B9495C90078D9F7 /* Config.swift.dist */,
 				8F316F002B94A09800F2ED47 /* Config.swift */,
+				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
+				8F883FC72B9F0ECC008974C9 /* AppDelegate.swift */,
 				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
 				8F636F002B96719F00D01CDC /* SystemUtility.swift */,
 				8F80C7502B97C71A00325157 /* ServerResponse.swift */,
@@ -132,7 +132,6 @@
 				8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */,
 				8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */,
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
-				8F654C7B2B93F25000A8F6E6 /* ContentView.swift */,
 				8F654C7D2B93F25000A8F6E6 /* Item.swift */,
 				8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */,
 				8F654C842B93F25100A8F6E6 /* Succeed_AI.entitlements */,
@@ -301,10 +300,9 @@
 				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
 				8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */,
-				8F42E2862B9495C90078D9F7 /* Config.swift.dist in Sources */,
+				8F883FC82B9F0ECC008974C9 /* AppDelegate.swift in Sources */,
 				8F316F012B94A09800F2ED47 /* Config.swift in Sources */,
 				8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */,
-				8F654C7C2B93F25000A8F6E6 /* ContentView.swift in Sources */,
 				8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */,
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
 				8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */,
@@ -476,7 +474,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = S2A23S7R4S;
+				DEVELOPMENT_TEAM = 2V8LZ2444Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
@@ -506,7 +504,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = S2A23S7R4S;
+				DEVELOPMENT_TEAM = 2V8LZ2444Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";

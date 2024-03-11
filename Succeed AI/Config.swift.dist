@@ -13,5 +13,8 @@ struct Config {
     static let apiKey = "your_mistral_api_key"
 
     // chosen prefix for triggering and querying to AI
-    static let uniqueKeystrokeTrigger = "/ai"
+    static let uniqueKeystrokeTrigger = "/ai "
+    
+    // https://developer.apple.com/sf-symbols/release-notes/
+    static let systemSymbolName = "lightbulb.circle"
 }
