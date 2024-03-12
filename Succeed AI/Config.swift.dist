@@ -1,6 +1,8 @@
 struct Config {
     // Name of the macOS app
     static let appTitle = "Succeed AI"
+    
+    static let bundleIdentifier = "me.ph7.Succeed-Al"
 
     // Replace with your preferred AI API service provider
     // can be either ServerApiProvider.self or MistralAiProvider.self
