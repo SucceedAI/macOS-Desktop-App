@@ -34,7 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupStatusBarItem() {
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusBarItem?.button {
-            button.image = NSImage(systemSymbolName: Config.systemSymbolName, accessibilityDescription: Config.appTitle)
+            
+            button.image = NSImage(systemSymbolName: "lightbulb.circle.fill", accessibilityDescription: Config.appTitle)
             button.action = #selector(statusBarButtonClicked(_:))
         }
     }
