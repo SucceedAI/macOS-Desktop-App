@@ -8,11 +8,16 @@ class GlobalKeystrokeManager {
     private var onKeystrokeDetected: (String) -> Void
     private var isCommandActive: Bool = false
     private var aiProvider: AIProvideable
+    private var eventMonitor: Any?
 
     init(aiProvider: AIProvideable, onKeystrokeDetected: @escaping (String) -> Void) {
         self.aiProvider = aiProvider
         self.onKeystrokeDetected = onKeystrokeDetected
         setupGlobalKeystrokeMonitoring()
+    }
+
+    deinit {
+        stopGlobalKeystrokeMonitoring()
     }
 
     public func setupGlobalKeystrokeMonitoring() {
@@ -21,13 +26,21 @@ class GlobalKeystrokeManager {
 
         // fail-early and exit the function as early as possible
         if !accessEnabled {
-            // notify the user if accessibility permissions are not granted
+            print("Accessibility permissions not granted")
             return
         }
 
-        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown]) { [weak self] event in
+        // add the event to the event handler
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown]) { [weak self] event in
             self?.handleEvent(event)
         }
+    }
+
+    private func stopGlobalKeystrokeMonitoring() {
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+        eventMonitor = nil
     }
 
     private func handleEvent(_ event: NSEvent) {
@@ -36,20 +49,26 @@ class GlobalKeystrokeManager {
         let enterKey = event.keyCode == kVK_Return
 
         if enterKey && isCommandActive {
+            // End of command processing
             isCommandActive = false
             let query = currentTypedString.trimmingCharacters(in: .whitespacesAndNewlines)
-            // send data to API
-            aiProvider.query(query) { response in
-                DispatchQueue.main.async {
-                    let fullCommandLength = self.uniqueKeystrokeTrigger.count + query.count
-                    self.insertText(replacing: fullCommandLength, with: response)
+            if query.hasPrefix(uniqueKeystrokeTrigger) {
+                let trimmedQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count)).trimmingCharacters(in: .whitespaces)
+                aiProvider.query(trimmedQuery) { response in
+                    DispatchQueue.main.async {
+                        let fullCommandLength = self.uniqueKeystrokeTrigger.count + trimmedQuery.count
+                        self.insertText(replacing: fullCommandLength, with: response)
+                    }
                 }
             }
             currentTypedString = ""
-        } else if characters.starts(with: uniqueKeystrokeTrigger) {
+        //} else if characters.starts(with: uniqueKeystrokeTrigger) {
+        } else if characters == "/" {
+            // Start of command
             isCommandActive = true
             currentTypedString = characters
         } else if isCommandActive {
+            // Continue accumulating characters
             currentTypedString += characters
         }
     }
