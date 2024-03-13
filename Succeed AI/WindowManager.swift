@@ -6,18 +6,26 @@ class WindowManager {
     private var settingsWindow: NSWindow?
 
     func openSettings() {
-        if settingsWindow == nil {
+        DispatchQueue.main.async {
+            self.createAndShowSettingsWindow()
+        }
+    }
+
+    private func createAndShowSettingsWindow() {
+        if self.settingsWindow == nil {
             let settingsView = UserSettingsView()  // Your SwiftUI settings view
-            settingsWindow = NSWindow(
+            let window = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 200, height: 200),
                 styleMask: [.titled, .closable],
                 backing: .buffered, defer: false
             )
-            settingsWindow?.center()
-            settingsWindow?.setFrameAutosaveName("Settings")
-            settingsWindow?.contentView = NSHostingView(rootView: settingsView)
+            window.center()
+            window.setFrameAutosaveName("Settings")
+            window.contentView = NSHostingView(rootView: settingsView)
+
+            self.settingsWindow = window
         }
-        settingsWindow?.makeKeyAndOrderFront(nil)
+        self.settingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 }
