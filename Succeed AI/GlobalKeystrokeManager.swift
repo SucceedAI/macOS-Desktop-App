@@ -31,7 +31,7 @@ class GlobalKeystrokeManager {
         }
 
         // add the event to the event handler
-        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .keyDown]) { [weak self] event in
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleEvent(event)
         }
     }

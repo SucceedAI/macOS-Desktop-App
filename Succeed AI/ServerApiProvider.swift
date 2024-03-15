@@ -53,7 +53,7 @@ class ServerApiProvider: AIProvideable {
                 let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
                 completion(serverResponse.content)
             } catch {
-                completion("Error: Could not decode the response")
+                completion("Oops: Couldn't retrieve the response from AI server.")
             }
         }.resume()
     }
