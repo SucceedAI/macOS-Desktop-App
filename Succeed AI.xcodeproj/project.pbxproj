@@ -486,6 +486,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -518,6 +519,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
