@@ -6,18 +6,24 @@ class WindowManager {
 
     func openSettings() {
         DispatchQueue.main.async {
-            if self.settingsWindow == nil {
-                let settingsView = UserSettingsView()
-                self.settingsWindow = NSWindow(
-                    contentRect: NSRect(x: 0, y: 0, width: 300, height: 200),
-                    styleMask: [.titled, .closable],
-                    backing: .buffered, defer: false
-                )
-                self.settingsWindow?.center()
-                self.settingsWindow?.contentView = NSHostingView(rootView: settingsView)
-            }
+            self.createSettingsWindowIfNeeded()
             self.settingsWindow?.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
         }
+    }
+
+    private func createSettingsWindowIfNeeded() {
+        guard settingsWindow == nil else { return }
+
+        let settingsView = UserSettingsView()
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 300, height: 200),
+            styleMask: [.titled, .closable],
+            backing: .buffered, defer: false
+        )
+        window.center()
+        window.contentView = NSHostingView(rootView: settingsView)
+
+        settingsWindow = window
     }
 }
