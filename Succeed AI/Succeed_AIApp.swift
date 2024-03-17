@@ -27,9 +27,11 @@ struct SucceedAIApp: App {
         MenuBarExtra(Config.appTitle, systemImage: Config.systemSymbolName) {
             Text("The AI service is running. Use CMD+SHIFT+Enter to interact 🚀")
             
-            Button("Settings", action: { WindowManager.shared.openSettings() }).keyboardShortcut(",")
+            Button("Settings", action: { openSettings() }).keyboardShortcut(",")
+            Button("Renew License", action: { openURL(Config.renewLicenseUrl) })
+            Button("Social", action: { openURL(Config.socialMediaUrl) })
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
-        
+
         }.menuBarExtraStyle(.menu)
     }
         
@@ -47,5 +49,10 @@ struct SucceedAIApp: App {
         }
         globalSettingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    private func openURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        NSWorkspace.shared.open(url)
     }
 }

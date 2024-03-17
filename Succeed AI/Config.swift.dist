@@ -1,7 +1,7 @@
 struct Config {
     // Name of the macOS app
     static let appTitle = "Succeed AI"
-    
+
     static let bundleIdentifier = "me.ph7.Succeed-Al"
 
     // Replace with your preferred AI API service provider
@@ -19,4 +19,7 @@ struct Config {
     
     // https://developer.apple.com/sf-symbols/release-notes/
     static let systemSymbolName = "lightbulb.circle"
+
+    static let socialMediaUrl = "https://twitter.com/succeedai" // https://succeedai.live/social
+    static let renewLicenseUrl = "https://succeedai.live/license"
 }
