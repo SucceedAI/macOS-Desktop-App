@@ -62,8 +62,8 @@ class GlobalKeystrokeManager {
                 }
             }
             currentTypedString = ""
-        //} else if characters.starts(with: uniqueKeystrokeTrigger) {
-        } else if characters == "/" {
+        } else if characters.starts(with: uniqueKeystrokeTrigger) {
+        //} else if characters == "/" {
             // Start of command
             isCommandActive = true
             currentTypedString = characters
@@ -78,7 +78,7 @@ class GlobalKeystrokeManager {
         let scriptText = """
                          tell application "System Events"
                              keystroke "\(backspaces)"
-                             delay 0.2
+                             delay 0.1
                              keystroke "\(response)"
                          end tell
                          """
