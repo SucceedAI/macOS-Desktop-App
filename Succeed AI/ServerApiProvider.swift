@@ -11,7 +11,7 @@ class ServerApiProvider: AIProvideable {
         self.apiUrl = apiUrl
     }
 
-    func query(_ query: String, completion: @escaping (String) -> Void) {
+    func query(_ query: String, completion: @escaping (String) -> Void) -> Void {
         guard let url = URL(string: apiUrl + "/query") else {
             completion("Invalid URL")
             return
@@ -28,8 +28,9 @@ class ServerApiProvider: AIProvideable {
 
         // Prepare the payload
         let osInfo = SystemUtility.getOperatingSystemInfo()
+        let formattedQuery = getAiInstructions(query)
         let requestBody: [String: Any] = [
-            "query": query,
+            "query": formattedQuery,
             "systemInfo": osInfo
         ]
         do {
@@ -56,5 +57,16 @@ class ServerApiProvider: AIProvideable {
                 completion("Oops: Couldn't retrieve the response from AI server.")
             }
         }.resume()
+    }
+
+    func getAiInstructions(_ query: String) -> String {
+        let instructionQuery = """
+Follow the instruction from the text in triple quotes below:
+\"\"\"\(query)\"\"\"
+
+Do not return anything else other than the given instruction. Do not wrap responses in quotes.
+"""
+
+        return instructionQuery
     }
 }

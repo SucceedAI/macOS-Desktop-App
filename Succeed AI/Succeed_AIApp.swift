@@ -9,14 +9,12 @@ var globalSettingsWindow: NSWindow?
 struct SucceedAIApp: App {
     @State private var isSettingsWindowOpen = false
     @AppStorage("startAtLogin") private var startAtLogin: Bool = false
-    @StateObject private var viewModel: AppViewModel
+    @StateObject private var viewModel: AppViewModel = {
+        let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
+        return AppViewModel(aiProvider: aiProvider)
+    }()
 
     init() {
-        let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
-        _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
-        
-        viewModel.initializeGlobalKeystrokeManager()
-        
         if startAtLogin {
             // Enable the helper app if the preference is true
             SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, true)
@@ -47,6 +45,7 @@ struct SucceedAIApp: App {
             globalSettingsWindow?.title = "Settings"
             globalSettingsWindow?.contentView = NSHostingView(rootView: settingsView)
         }
+
         globalSettingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }

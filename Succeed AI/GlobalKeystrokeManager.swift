@@ -5,22 +5,20 @@ class GlobalKeystrokeManager {
     @Published var uniqueKeystrokeTrigger: String = Config.uniqueKeystrokeTrigger
 
     private var currentTypedString: String = ""
-    private var onKeystrokeDetected: (String) -> Void
-    private var isCommandActive: Bool = false
+    private var isCommandActive: Bool = true // false
     private var aiProvider: AIProvideable
     private var eventMonitor: Any?
 
-    init(aiProvider: AIProvideable, onKeystrokeDetected: @escaping (String) -> Void) {
+    init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
-        self.onKeystrokeDetected = onKeystrokeDetected
-        setupGlobalKeystrokeMonitoring()
+        triggerGlobalKeystrokeMonitoring()
     }
 
     deinit {
         stopGlobalKeystrokeMonitoring()
     }
 
-    public func setupGlobalKeystrokeMonitoring() {
+    public func triggerGlobalKeystrokeMonitoring() {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
 
@@ -44,7 +42,10 @@ class GlobalKeystrokeManager {
     }
 
     private func handleEvent(_ event: NSEvent) {
-        guard let characters = event.charactersIgnoringModifiers else { return }
+        guard let characters = event.characters else { return }
+
+        // Appending the typed character
+        currentTypedString += characters
         
         let enterKey = event.keyCode == kVK_Return
 

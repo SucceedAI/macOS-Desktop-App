@@ -11,31 +11,15 @@ class AppViewModel: ObservableObject {
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
-        setupGlobalKeystrokeManager()
+        initializeGlobalKeystrokeManager()
     }
 
-    private func setupGlobalKeystrokeManager() {
-        globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider) { [weak self] query in
-            self?.sendQueryToAI(query)
-        }
-
+    private func initializeGlobalKeystrokeManager() {
+        globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
+        
+        globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
+        
         isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
-    }
-
-    func sendQueryToAI(_ query: String) {
-        let formattedQuery = getAiInstructions(query)
-        aiProvider.query(formattedQuery) { [weak self] response in
-            DispatchQueue.main.async {
-                self?.aiResponse = response
-            }
-        }
-    }
-    
-    func initializeGlobalKeystrokeManager() {
-        globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider) { [weak self] query in
-            self?.sendQueryToAI(query)
-        }
-        globalKeystrokeManager?.setupGlobalKeystrokeMonitoring()
     }
 
     func checkAndRequestAccessibilityPermission() {
@@ -54,16 +38,5 @@ class AppViewModel: ObservableObject {
 
     func openSettingsWindow() {
         showSettingsWindow = true
-    }
-
-    private func getAiInstructions(_ query: String) -> String {
-        let instructionQuery = """
-Follow the instruction from the text in triple quotes below:
-\"\"\"\(query)\"\"\"
-
-Do not return anything else other than the given instruction. Do not wrap responses in quotes.
-"""
-
-        return instructionQuery
     }
 }
