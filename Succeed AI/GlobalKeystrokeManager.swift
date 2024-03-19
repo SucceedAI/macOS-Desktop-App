@@ -5,7 +5,7 @@ class GlobalKeystrokeManager {
     @Published var uniqueKeystrokeTrigger: String = Config.uniqueKeystrokeTrigger
 
     private var currentTypedString: String = ""
-    private var isCommandActive: Bool = true // false
+    private var isCommandActive: Bool = false
     private var aiProvider: AIProvideable
     private var eventMonitor: Any?
 
@@ -42,40 +42,47 @@ class GlobalKeystrokeManager {
     }
 
     private func handleEvent(_ event: NSEvent) {
-        guard let characters = event.characters else { return }
+        guard let characters = event.charactersIgnoringModifiers else { return }
 
-        // Appending the typed character
-        currentTypedString += characters
-        
-        let enterKey = event.keyCode == kVK_Return
-
-        if enterKey && isCommandActive {
-            // End of command processing
-            isCommandActive = false
-            let query = currentTypedString.trimmingCharacters(in: .whitespacesAndNewlines)
-            if query.hasPrefix(uniqueKeystrokeTrigger) {
-                let trimmedQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count)).trimmingCharacters(in: .whitespaces)
-                aiProvider.query(trimmedQuery) { response in
-                    DispatchQueue.main.async {
-                        let fullCommandLength = self.uniqueKeystrokeTrigger.count + trimmedQuery.count
-                        self.insertText(replacing: fullCommandLength, with: response)
-                    }
-                }
-            }
-            currentTypedString = ""
-        } else if characters.starts(with: uniqueKeystrokeTrigger) {
-        //} else if characters == "/" {
-            // Start of command
-            isCommandActive = true
-            currentTypedString = characters
-        } else if isCommandActive {
-            // Continue accumulating characters
+        if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
+            currentTypedString.removeLast()
+        } else {
             currentTypedString += characters
+            if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
+                isCommandActive = true
+            }
+
+            if isCommandActive && event.keyCode == kVK_Return {
+                processCommand()
+            }
         }
     }
-    
-    private func insertText(replacing queryLength: Int, with response: String) {
-        let backspaces = String(repeating: "\u{8}", count: queryLength)
+
+    private func processCommand() {
+        let query = currentTypedString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if query.hasPrefix(uniqueKeystrokeTrigger) {
+            let trimmedQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count)).trimmingCharacters(in: .whitespaces)
+            aiProvider.query(trimmedQuery) { response in
+                DispatchQueue.main.async {
+                    self.insertText(response)
+                }
+            }
+        }
+        resetCommandState()
+    }
+
+    private func resetCommandState() {
+        isCommandActive = false
+        currentTypedString = ""
+        commandCompletionTimer?.invalidate()
+    }
+
+    private func insertText(_ response: String) {
+        // Calculate the number of backspaces needed to remove the typed query
+        let numBackspaces = currentTypedString.count
+        let backspaces = String(repeating: "\u{8}", count: numBackspaces)
+
+        // Construct and execute the AppleScript
         let scriptText = """
                          tell application "System Events"
                              keystroke "\(backspaces)"
@@ -83,7 +90,6 @@ class GlobalKeystrokeManager {
                              keystroke "\(response)"
                          end tell
                          """
-
         executeAppleScript(scriptText)
     }
 
