@@ -47,10 +47,12 @@ class GlobalKeystrokeManager {
         if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
             currentTypedString.removeLast()
         } else {
-            currentTypedString += characters
-            if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
+            if !isCommandActive && currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
                 isCommandActive = true
+            } else if isCommandActive && !currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
+                isCommandActive = false
             }
+            currentTypedString += characters
 
             if isCommandActive && event.keyCode == kVK_Return {
                 processCommand()
