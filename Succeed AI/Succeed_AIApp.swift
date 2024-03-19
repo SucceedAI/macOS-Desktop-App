@@ -4,10 +4,8 @@ import ServiceManagement
 
 var globalSettingsWindow: NSWindow?
 
-
 @main
 struct SucceedAIApp: App {
-    @State private var isSettingsWindowOpen = false
     @AppStorage("startAtLogin") private var startAtLogin: Bool = false
     @StateObject private var viewModel: AppViewModel = {
         let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
@@ -23,16 +21,17 @@ struct SucceedAIApp: App {
 
     var body: some Scene {
         MenuBarExtra(Config.appTitle, systemImage: Config.systemSymbolName) {
-            Text("The AI service is running. Use CMD+SHIFT+Enter to interact 🚀")
-            
+            Text("The AI service is running. Use CMD+SHIFT+Enter to interact")
+            Text("⚠️ Make sure the Accessibility permissions is granted ⚠️")
+
             Button("Settings", action: { openSettings() }).keyboardShortcut(",")
             Button("Renew License", action: { openURL(Config.renewLicenseUrl) })
             Button("Social", action: { openURL(Config.socialMediaUrl) })
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
-
-        }.menuBarExtraStyle(.menu)
+        }
+        .menuBarExtraStyle(.menu)
     }
-        
+
     private func openSettings() {
         if globalSettingsWindow == nil {
             let settingsView = UserSettingsView()

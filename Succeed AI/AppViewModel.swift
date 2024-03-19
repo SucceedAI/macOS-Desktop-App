@@ -11,6 +11,7 @@ class AppViewModel: ObservableObject {
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
+        checkAndRequestAccessibilityPermission()
         initializeGlobalKeystrokeManager()
     }
 
