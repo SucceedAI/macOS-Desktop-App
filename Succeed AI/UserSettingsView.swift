@@ -9,9 +9,9 @@ struct UserSettingsView: View {
         Form {
             Section(header: Text("General")) {
                 Toggle("Start at Login", isOn: $startAtLogin)
-                    .onChange(of: startAtLogin) { newShowSetting, _ in
+                    .onChange(of: startAtLogin) { newValue, _ in
                         DispatchQueue.main.async {
-                            handleStartAtLoginChange(newShowSetting)
+                            handleStartAtLoginChange(newValue)
                         }
                     }
             }
@@ -25,16 +25,19 @@ struct UserSettingsView: View {
         .padding()
         .frame(width: 300, height: 200)
         .navigationTitle("Settings")
+        .onAppear {
+            startAtLogin = isAppSetToStartAtLogin()
+        }
     }
 
     private func handleStartAtLoginChange(_ newValue: Bool) {
-        // Logic for handling "Start at Login" goes here
-        print("Start at login set to: \(newValue)")
-        let success = SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, true)
-
+        let success = SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, newValue)
         if !success {
-            // Handle the error here
             print("Failed to \(newValue ? "enable" : "disable") start at login")
         }
+    }
+
+    private func isAppSetToStartAtLogin() -> Bool {
+        return UserDefaults.standard.bool(forKey: "startAtLogin")
     }
 }

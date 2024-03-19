@@ -14,7 +14,8 @@ struct Config {
     // Replace with your actual API key
     static let apiKey = "your_mistral_api_key"
 
-    // chosen prefix for triggering and querying to AI
+    // this prefix can be change by another unique keystroke event ID
+    // it will be used for triggering and querying AI API
     static let uniqueKeystrokeTrigger = "/ai "
     
     // https://developer.apple.com/sf-symbols/release-notes/
@@ -22,4 +23,5 @@ struct Config {
 
     static let socialMediaUrl = "https://twitter.com/succeedai" // https://succeedai.live/social
     static let renewLicenseUrl = "https://succeedai.live/license"
+
 }
