@@ -28,6 +28,7 @@ class AppViewModel: ObservableObject {
 
         if !isAccessibilityPermissionGranted {
             globalKeystrokeManager?.requestAccessibilityPermission()
+            openSystemPreferences()
         }
     }
 
