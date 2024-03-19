@@ -76,7 +76,6 @@ class GlobalKeystrokeManager {
     private func resetCommandState() {
         isCommandActive = false
         currentTypedString = ""
-        commandCompletionTimer?.invalidate()
     }
 
     private func insertText(_ response: String) {
