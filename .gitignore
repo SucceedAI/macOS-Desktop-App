@@ -91,3 +91,6 @@ iOSInjectionProject/
 
 # Config 
 Config.swift
+
+# macOS
+.DS_Store
