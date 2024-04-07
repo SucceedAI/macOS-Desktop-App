@@ -16,7 +16,7 @@ struct Config {
 
     // this prefix can be change by another unique keystroke event ID
     // it will be used for triggering and querying AI API
-    static let uniqueKeystrokeTrigger = "/ai "
+    static let keystrokePrefixTrigger = "/ai "
     
     // https://developer.apple.com/sf-symbols/release-notes/
     static let systemSymbolName = "lightbulb.circle"

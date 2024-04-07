@@ -20,8 +20,7 @@ struct SucceedAIApp: App {
 
     var body: some Scene {
         MenuBarExtra(Config.appTitle, systemImage: Config.systemSymbolName) {
-            let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
-            let accessEnabled = AXIsProcessTrustedWithOptions(options)
+            let accessEnabled = viewModel.checkAndRequestAccessibilityPermission()
             if !accessEnabled {
                 Button("⚠️ Accessibility permissions need to be granted ⚠️", action: { viewModel.openSystemPreferences() })
             }
