@@ -1,28 +1,32 @@
 import SwiftUI
-import SwiftUIX
 import ServiceManagement
-
-var globalSettingsWindow: NSWindow?
 
 @main
 struct SucceedAIApp: App {
-    @AppStorage("startAtLogin") private var startAtLogin: Bool = false
-    @StateObject private var viewModel: AppViewModel = {
-        let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
-        return AppViewModel(aiProvider: aiProvider)
-    }()
+    // Launch at Login preference
+    @AppStorage("startAtLogin") private var startAtLogin: Bool = true
+
+    @StateObject private var viewModel: AppViewModel
 
     init() {
+        let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
+        _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
+
         if startAtLogin {
-            // Enable the helper app if the preference is true
+            // Enable Login Item helper if the preference is true
             SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, true)
         }
     }
 
     var body: some Scene {
         MenuBarExtra(Config.appTitle, systemImage: Config.systemSymbolName) {
+            let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
+            let accessEnabled = AXIsProcessTrustedWithOptions(options)
+            if !accessEnabled {
+                Button("⚠️ Accessibility permissions need to be granted ⚠️", action: { openURL("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") })
+            }
+
             Text("The AI service is running. Use CMD+SHIFT+Enter to interact")
-            Text("⚠️ Make sure the Accessibility permissions is granted ⚠️")
 
             Button("Settings", action: { openSettings() }).keyboardShortcut(",")
             Button("Renew License", action: { openURL(Config.renewLicenseUrl) })
@@ -33,20 +37,10 @@ struct SucceedAIApp: App {
     }
 
     private func openSettings() {
-        if globalSettingsWindow == nil {
-            let settingsView = UserSettingsView()
-            globalSettingsWindow = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 400, height: 400),
-                styleMask: [.titled, .closable],
-                backing: .buffered, defer: false
-            )
-            globalSettingsWindow?.center()
-            globalSettingsWindow?.title = "Settings"
-            globalSettingsWindow?.contentView = NSHostingView(rootView: settingsView)
-        }
+        // TODO Need to implement the window here
+        let settingsView = UserSettingsView()
 
-        globalSettingsWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        viewModel.openSettingsWindow()
     }
 
     private func openURL(_ urlString: String) {

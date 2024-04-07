@@ -25,6 +25,8 @@ class GlobalKeystrokeManager {
         // fail-early and exit the function as early as possible
         if !accessEnabled {
             print("Accessibility permissions not granted")
+
+            // Logic to notify the user about granting permissions goes here
             return
         }
 
@@ -43,19 +45,12 @@ class GlobalKeystrokeManager {
 
     private func handleEvent(_ event: NSEvent) {
         guard let characters = event.charactersIgnoringModifiers else { return }
-
-        if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
-            currentTypedString.removeLast()
+        if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) && event.keyCode == kVK_Return {
+            processCommand()
         } else {
-            if !isCommandActive && currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
-                isCommandActive = true
-            } else if isCommandActive && !currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
-                isCommandActive = false
-            }
             currentTypedString += characters
-
-            if isCommandActive && event.keyCode == kVK_Return {
-                processCommand()
+            if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
+                isCommandActive = true
             }
         }
     }
