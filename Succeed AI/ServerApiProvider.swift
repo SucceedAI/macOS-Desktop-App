@@ -64,7 +64,7 @@ class ServerApiProvider: AIProvideable {
 Follow the instruction from the text in triple quotes below:
 \"\"\"\(query)\"\"\"
 
-Do not return anything else other than the given instruction. Do not wrap responses in quotes.
+Do not return anything else other than the given instruction. Do not even mention any prefix before the expecting response. ONLY the needed response. Do not wrap responses in quotes.
 """
 
         return instructionQuery
