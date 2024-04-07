@@ -1,8 +1,12 @@
+// AXIsProcessTrustedWithOptions is part of the Application Services framework,
+// which is a part of Carbon. Ensure it's correctly imported and used.
+// However, this function should typically be available once you import AppKit
+import AppKit
 import Cocoa
 import Carbon.HIToolbox
 
 class GlobalKeystrokeManager {
-    @Published var uniqueKeystrokeTrigger: String = Config.uniqueKeystrokeTrigger
+    @Published var keystrokePrefixTrigger: String = Config.keystrokePrefixTrigger
 
     private var currentTypedString: String = ""
     private var isCommandActive: Bool = false
@@ -19,8 +23,7 @@ class GlobalKeystrokeManager {
     }
 
     public func triggerGlobalKeystrokeMonitoring() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
-        let accessEnabled = AXIsProcessTrustedWithOptions(options)
+        let accessEnabled = checkAndRequestAccessibilityPermission()
 
         // fail-early and exit the function as early as possible
         if !accessEnabled {
@@ -44,28 +47,41 @@ class GlobalKeystrokeManager {
     }
 
     private func handleEvent(_ event: NSEvent) {
-        guard let characters = event.charactersIgnoringModifiers else { return }
-        if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) && event.keyCode == kVK_Return {
-            processCommand()
-        } else {
-            currentTypedString += characters
-            if currentTypedString.hasPrefix(uniqueKeystrokeTrigger) {
-                isCommandActive = true
+         guard let charactersIgnoringModifiers = event.charactersIgnoringModifiers else { return }
+
+         if isCommandActive {
+             if isQueryReady(event) {
+                 processQuery()
+
+                 // Once processed, reset the query to empty
+                 resetCommandState()
+             } else if event.keyCode == kVK_Delete {
+                 currentTypedString = String(currentTypedString.dropLast())
+             } else {
+                 currentTypedString += charactersIgnoringModifiers
+             }
+         } else if charactersIgnoringModifiers.starts(with: keystrokePrefixTrigger) {
+             isCommandActive = true
+             currentTypedString = charactersIgnoringModifiers
+         }
+     }
+
+
+    private func processQuery() {
+        let actualQuery = String(currentTypedString.dropFirst(keystrokePrefixTrigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
+        print("Waiting for a response from the server")
+
+        aiProvider.query(actualQuery) { response in
+            DispatchQueue.main.async {
+                self.insertText(response)
             }
         }
     }
 
-    private func processCommand() {
-        let query = currentTypedString.trimmingCharacters(in: .whitespacesAndNewlines)
-        if query.hasPrefix(uniqueKeystrokeTrigger) {
-            let trimmedQuery = String(query.dropFirst(uniqueKeystrokeTrigger.count)).trimmingCharacters(in: .whitespaces)
-            aiProvider.query(trimmedQuery) { response in
-                DispatchQueue.main.async {
-                    self.insertText(response)
-                }
-            }
-        }
-        resetCommandState()
+    private func isQueryReady(_ event: NSEvent) -> Bool {
+        let isQueryReady = isCommandActive && currentTypedString.hasPrefix(keystrokePrefixTrigger) && event.keyCode == kVK_Return
+
+        return isQueryReady
     }
 
     private func resetCommandState() {
@@ -100,13 +116,8 @@ class GlobalKeystrokeManager {
         }
     }
 
-    func checkAccessibilityPermission() -> Bool {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: false]
+    func checkAndRequestAccessibilityPermission() -> Bool {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
         return AXIsProcessTrustedWithOptions(options)
-    }
-
-    func requestAccessibilityPermission() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
-        _ = AXIsProcessTrustedWithOptions(options)
     }
 }

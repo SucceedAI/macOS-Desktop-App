@@ -3,7 +3,6 @@ import SwiftUI
 
 class AppViewModel: ObservableObject {
     @Published var aiResponse: String = ""
-    @Published var isAccessibilityPermissionGranted: Bool = false
     @Published var showSettingsWindow = false
     
     private var globalKeystrokeManager: GlobalKeystrokeManager?
@@ -11,7 +10,6 @@ class AppViewModel: ObservableObject {
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
-        checkAndRequestAccessibilityPermission()
         initializeGlobalKeystrokeManager()
     }
 
@@ -19,8 +17,6 @@ class AppViewModel: ObservableObject {
         globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
 
         globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
-
-        isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
     }
 
     public func openSystemPreferences() {
@@ -29,13 +25,14 @@ class AppViewModel: ObservableObject {
         }
     }
 
-    public func checkAndRequestAccessibilityPermission() {
-        isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
+    public func checkAndRequestAccessibilityPermission() -> Bool {
+        let isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAndRequestAccessibilityPermission() ?? false
 
         if !isAccessibilityPermissionGranted {
-            globalKeystrokeManager?.requestAccessibilityPermission()
             openSystemPreferences()
         }
+
+        return isAccessibilityPermissionGranted
     }
 
     public func openSettingsWindow() {
