@@ -17,13 +17,19 @@ class AppViewModel: ObservableObject {
 
     private func initializeGlobalKeystrokeManager() {
         globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
-        
+
         globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
-        
+
         isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
     }
 
-    func checkAndRequestAccessibilityPermission() {
+    public func openSystemPreferences() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    public func checkAndRequestAccessibilityPermission() {
         isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAccessibilityPermission() ?? false
 
         if !isAccessibilityPermissionGranted {
@@ -32,13 +38,7 @@ class AppViewModel: ObservableObject {
         }
     }
 
-    func openSystemPreferences() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-            NSWorkspace.shared.open(url)
-        }
-    }
-
-    func openSettingsWindow() {
+    public func openSettingsWindow() {
         showSettingsWindow = true
     }
 }

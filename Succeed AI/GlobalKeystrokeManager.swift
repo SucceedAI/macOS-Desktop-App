@@ -24,7 +24,7 @@ class GlobalKeystrokeManager {
 
         // fail-early and exit the function as early as possible
         if !accessEnabled {
-            print("Accessibility permissions not granted")
+            print("Ouch! Accessibility permissions is not granted. Cannot procceed to the request event")
 
             // Logic to notify the user about granting permissions goes here
             return
