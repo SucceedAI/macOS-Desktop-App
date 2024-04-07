@@ -23,7 +23,7 @@ struct SucceedAIApp: App {
             let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as CFString: true]
             let accessEnabled = AXIsProcessTrustedWithOptions(options)
             if !accessEnabled {
-                Button("⚠️ Accessibility permissions need to be granted ⚠️", action: { openURL("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") })
+                Button("⚠️ Accessibility permissions need to be granted ⚠️", action: { viewModel.openSystemPreferences() })
             }
 
             Text("The AI service is running. Use CMD+SHIFT+Enter to interact")
