@@ -47,25 +47,32 @@ class GlobalKeystrokeManager {
     }
 
     private func handleEvent(_ event: NSEvent) {
-         guard let charactersIgnoringModifiers = event.charactersIgnoringModifiers else { return }
+        print("handleEvent: waiting")
+        guard let characters = event.charactersIgnoringModifiers else { return }
 
-         if isCommandActive {
-             if isQueryReady(event) {
-                 processQuery()
+        // Append new characters to the current string
+        if isCommandActive {
+            print("isCommandActive=true")
+            if event.keyCode == kVK_Return {
+                // When Enter (Return) is pressed, process the query
+                processQuery()
 
-                 // Once processed, reset the query to empty
-                 resetCommandState()
-             } else if event.keyCode == kVK_Delete {
-                 currentTypedString = String(currentTypedString.dropLast())
-             } else {
-                 currentTypedString += charactersIgnoringModifiers
-             }
-         } else if charactersIgnoringModifiers.starts(with: keystrokePrefixTrigger) {
-             isCommandActive = true
-             currentTypedString = charactersIgnoringModifiers
-         }
+                // Once processed, reset the query to empty
+                resetCommandState()
+            } else if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
+                // Handle backspace
+                currentTypedString.removeLast()
+            } else {
+                // Continue building the string with the new characters
+                currentTypedString += characters
+            }
+        } else if characters.hasPrefix(keystrokePrefixTrigger) {
+            print("waiting")
+            // Start command mode when the keystroke prefix trigger is detected
+            isCommandActive = true
+            currentTypedString = characters
+        }
      }
-
 
     private func processQuery() {
         let actualQuery = String(currentTypedString.dropFirst(keystrokePrefixTrigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
