@@ -74,6 +74,7 @@ class GlobalKeystrokeManager {
             // Add a short delay before typing the response
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             //DispatchQueue.main.async {
+                // Type the API response to end-user window
                 self.replaceUserInput(with: response)
             }
         }
@@ -96,21 +97,36 @@ class GlobalKeystrokeManager {
             deleteKeyUp?.post(tap: .cghidEventTap)
         }
 
-        // Type the API response
-        let unicodeString = response.utf16.map { UniChar($0) }
-        let stringLength = unicodeString.count
-        
-        let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
-        let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
-
-        unicodeString.withUnsafeBufferPointer { bufferPointer in
-            guard let baseAddress = bufferPointer.baseAddress else { return }
-            keyUpEvent!.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
-            keyUpEvent!.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
+        // Split the response into chunks
+        let chunkSize = 100
+        var responseChunks: [String] = []
+        var startIndex = response.startIndex
+        while startIndex < response.endIndex {
+            let endIndex = response.index(startIndex, offsetBy: chunkSize, limitedBy: response.endIndex) ?? response.endIndex
+            responseChunks.append(String(response[startIndex..<endIndex]))
+            startIndex = endIndex
         }
 
-        keyDownEvent?.post(tap: .cghidEventTap)
-        keyUpEvent?.post(tap: .cghidEventTap)
+        // Type each chunk separately
+        for chunk in responseChunks {
+            let unicodeString = chunk.utf16.map { UniChar($0) }
+            let stringLength = unicodeString.count
+
+            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+
+            unicodeString.withUnsafeBufferPointer { bufferPointer in
+                guard let baseAddress = bufferPointer.baseAddress else { return }
+                keyDownEvent?.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
+                keyUpEvent?.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
+            }
+
+            keyDownEvent?.post(tap: .cghidEventTap)
+            keyUpEvent?.post(tap: .cghidEventTap)
+
+            // Add a small delay between chunks
+            usleep(10000) // 10 milliseconds
+        }
     }
 
     private func executeAppleScript(_ scriptText: String) {
