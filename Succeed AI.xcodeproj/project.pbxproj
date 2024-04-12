@@ -24,7 +24,6 @@
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
 		8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80C7502B97C71A00325157 /* ServerResponse.swift */; };
-		8F883FCB2BA05AF8008974C9 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 8F883FCA2BA05AF8008974C9 /* SwiftUIX */; };
 		8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FCC2BA05C4B008974C9 /* WindowManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,7 +76,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F883FCB2BA05AF8008974C9 /* SwiftUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,7 +183,6 @@
 			);
 			name = "Succeed AI";
 			packageProductDependencies = (
-				8F883FCA2BA05AF8008974C9 /* SwiftUIX */,
 			);
 			productName = "Succeed AI";
 			productReference = 8F654C762B93F25000A8F6E6 /* Succeed AI.app */;
@@ -486,6 +483,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses";
@@ -519,6 +517,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Succeed-AI-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Succeed AI requires access to monitor global keystrokes to enable convenient and efficient querying of AI services directly from your keyboard, enhancing productivity and providing quick access to AI-generated information and responses";
@@ -656,14 +655,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		8F883FCA2BA05AF8008974C9 /* SwiftUIX */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8F883FC92BA05AF8008974C9 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8F654C6E2B93F25000A8F6E6 /* Project object */;
 }
