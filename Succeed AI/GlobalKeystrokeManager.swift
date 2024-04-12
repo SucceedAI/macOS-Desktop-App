@@ -43,21 +43,18 @@ class GlobalKeystrokeManager {
 
         // If ENTER key pressed
         if isCommandActive && characters == "\r" {
-            print("Pressed enter")
-            print(currentTypedString)
-
-            if currentTypedString.hasPrefix(keystrokePrefixTrigger) {
-                print("yes")
-                //if event.keyCode == kVK_Return {
-                // When Enter (Return) is pressed, process the query
-                processQuery()
-
-                // Once processed, reset the query to empty
+            if !currentTypedString.contains(keystrokePrefixTrigger) {
+                // Flush buffer if doesn't match with "/ai" command
                 resetCommandState()
-            } else {
-                // Flush buffer if prefix doesn't match with "/ai"
-                resetCommandState()
+                return
             }
+
+            //if event.keyCode == kVK_Return {
+            // When Enter (Return) is pressed, process the query
+            processQuery()
+
+            // Once processed, reset the query to empty
+            resetCommandState()
         } else if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
             // Handle backspace
             currentTypedString.removeLast()
@@ -75,7 +72,7 @@ class GlobalKeystrokeManager {
 
         aiProvider.query(actualQuery) { response in
             DispatchQueue.main.async {
-                self.insertText(response)
+                self.replaceUserInput(with: response)
             }
         }
     }
@@ -94,11 +91,37 @@ class GlobalKeystrokeManager {
         let scriptText = """
                          tell application "System Events"
                              keystroke "\(backspaces)"
-                             delay 0.1
+                             delay 0.2
                              keystroke "\(response)"
                          end tell
                          """
         executeAppleScript(scriptText)
+    }
+
+    private func replaceUserInput(with response: String) {
+        let source = CGEventSource(stateID: .combinedSessionState)
+
+        // Delete the user's input
+        let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
+        let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
+
+        for _ in 0..<currentTypedString.count {
+            deleteKeyDown?.post(tap: .cghidEventTap)
+            deleteKeyUp?.post(tap: .cghidEventTap)
+        }
+
+        // Type the API response
+        let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+        let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+
+        let unicharArray = Array(response.utf16)
+        unicharArray.withUnsafeBufferPointer { bufferPointer in
+            keyDownEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
+            keyUpEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
+        }
+
+        keyDownEvent?.post(tap: .cghidEventTap)
+        keyUpEvent?.post(tap: .cghidEventTap)
     }
 
     private func executeAppleScript(_ scriptText: String) {
