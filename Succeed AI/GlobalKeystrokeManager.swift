@@ -15,7 +15,6 @@ class GlobalKeystrokeManager {
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
-        triggerGlobalKeystrokeMonitoring()
     }
 
     deinit {
@@ -39,40 +38,36 @@ class GlobalKeystrokeManager {
         }
     }
 
-    private func stopGlobalKeystrokeMonitoring() {
-        if let monitor = eventMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-        eventMonitor = nil
-    }
-
     private func handleEvent(_ event: NSEvent) {
-        print("handleEvent: waiting")
         guard let characters = event.charactersIgnoringModifiers else { return }
 
-        // Append new characters to the current string
-        if isCommandActive {
-            print("isCommandActive=true")
-            if event.keyCode == kVK_Return {
+        // If ENTER key pressed
+        if isCommandActive && characters == "\r" {
+            print("Pressed enter")
+            print(currentTypedString)
+
+            if currentTypedString.hasPrefix(keystrokePrefixTrigger) {
+                print("yes")
+                //if event.keyCode == kVK_Return {
                 // When Enter (Return) is pressed, process the query
                 processQuery()
 
                 // Once processed, reset the query to empty
                 resetCommandState()
-            } else if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
-                // Handle backspace
-                currentTypedString.removeLast()
             } else {
-                // Continue building the string with the new characters
-                currentTypedString += characters
+                // Flush buffer if prefix doesn't match with "/ai"
+                resetCommandState()
             }
-        } else if characters.hasPrefix(keystrokePrefixTrigger) {
-            print("waiting")
-            // Start command mode when the keystroke prefix trigger is detected
+        } else if event.keyCode == kVK_Delete && !currentTypedString.isEmpty {
+            // Handle backspace
+            currentTypedString.removeLast()
+        } else {
+            // Append new characters to the current string
+            currentTypedString += characters
+
             isCommandActive = true
-            currentTypedString = characters
         }
-     }
+    }
 
     private func processQuery() {
         let actualQuery = String(currentTypedString.dropFirst(keystrokePrefixTrigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -83,12 +78,6 @@ class GlobalKeystrokeManager {
                 self.insertText(response)
             }
         }
-    }
-
-    private func isQueryReady(_ event: NSEvent) -> Bool {
-        let isQueryReady = isCommandActive && currentTypedString.hasPrefix(keystrokePrefixTrigger) && event.keyCode == kVK_Return
-
-        return isQueryReady
     }
 
     private func resetCommandState() {
@@ -121,6 +110,13 @@ class GlobalKeystrokeManager {
         if let error = error {
             print("AppleScript Error: \(error)")
         }
+    }
+
+    private func stopGlobalKeystrokeMonitoring() {
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+        eventMonitor = nil
     }
 
     func checkAndRequestAccessibilityPermission() -> Bool {
