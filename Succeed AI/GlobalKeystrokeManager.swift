@@ -100,28 +100,31 @@ class GlobalKeystrokeManager {
 
     private func replaceUserInput(with response: String) {
         let source = CGEventSource(stateID: .combinedSessionState)
-
+        
         // Delete the user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
-
+        
         for _ in 0..<currentTypedString.count {
             deleteKeyDown?.post(tap: .cghidEventTap)
             deleteKeyUp?.post(tap: .cghidEventTap)
         }
 
-        // Type the API response
-        let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
-        let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+        // Add a short delay before typing the response
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // Type the API response
+            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
 
-        let unicharArray = Array(response.utf16)
-        unicharArray.withUnsafeBufferPointer { bufferPointer in
-            keyDownEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
-            keyUpEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
+            let unicharArray = Array(response.utf16)
+            unicharArray.withUnsafeBufferPointer { bufferPointer in
+                keyDownEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
+                keyUpEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
+            }
+
+            keyDownEvent?.post(tap: .cghidEventTap)
+            keyUpEvent?.post(tap: .cghidEventTap)
         }
-
-        keyDownEvent?.post(tap: .cghidEventTap)
-        keyUpEvent?.post(tap: .cghidEventTap)
     }
 
     private func executeAppleScript(_ scriptText: String) {
