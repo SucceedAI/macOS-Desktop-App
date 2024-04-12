@@ -86,8 +86,12 @@ class GlobalKeystrokeManager {
     }
 
     private func replaceUserInput(with response: String) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(response, forType: .string)
+
         let source = CGEventSource(stateID: .combinedSessionState)
-        
+
         // Delete the user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
@@ -97,36 +101,17 @@ class GlobalKeystrokeManager {
             deleteKeyUp?.post(tap: .cghidEventTap)
         }
 
-        // Split the response into chunks
-        let chunkSize = 100
-        var responseChunks: [String] = []
-        var startIndex = response.startIndex
-        while startIndex < response.endIndex {
-            let endIndex = response.index(startIndex, offsetBy: chunkSize, limitedBy: response.endIndex) ?? response.endIndex
-            responseChunks.append(String(response[startIndex..<endIndex]))
-            startIndex = endIndex
-        }
+        // Simulate Command+V to paste the response
+        let commandKey = CGEventFlags.maskCommand
 
-        // Type each chunk separately
-        for chunk in responseChunks {
-            let unicodeString = chunk.utf16.map { UniChar($0) }
-            let stringLength = unicodeString.count
+        let pasteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: true)
+        pasteKeyDown?.flags = commandKey
 
-            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
-            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+        let pasteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: false)
+        pasteKeyUp?.flags = commandKey
 
-            unicodeString.withUnsafeBufferPointer { bufferPointer in
-                guard let baseAddress = bufferPointer.baseAddress else { return }
-                keyDownEvent?.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
-                keyUpEvent?.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
-            }
-
-            keyDownEvent?.post(tap: .cghidEventTap)
-            keyUpEvent?.post(tap: .cghidEventTap)
-
-            // Add a small delay between chunks
-            usleep(10000) // 10 milliseconds
-        }
+        pasteKeyDown?.post(tap: .cghidEventTap)
+        pasteKeyUp?.post(tap: .cghidEventTap)
     }
 
     private func executeAppleScript(_ scriptText: String) {
