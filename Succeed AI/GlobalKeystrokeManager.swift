@@ -71,7 +71,9 @@ class GlobalKeystrokeManager {
         print("Waiting for a response from the server")
 
         aiProvider.query(actualQuery) { response in
-            DispatchQueue.main.async {
+            // Add a short delay before typing the response
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            //DispatchQueue.main.async {
                 self.replaceUserInput(with: response)
             }
         }
@@ -82,49 +84,33 @@ class GlobalKeystrokeManager {
         currentTypedString = ""
     }
 
-    private func insertText(_ response: String) {
-        // Calculate the number of backspaces needed to remove the typed query
-        let numBackspaces = currentTypedString.count
-        let backspaces = String(repeating: "\u{8}", count: numBackspaces)
-
-        // Construct and execute the AppleScript
-        let scriptText = """
-                         tell application "System Events"
-                             keystroke "\(backspaces)"
-                             delay 0.2
-                             keystroke "\(response)"
-                         end tell
-                         """
-        executeAppleScript(scriptText)
-    }
-
     private func replaceUserInput(with response: String) {
         let source = CGEventSource(stateID: .combinedSessionState)
         
         // Delete the user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
-        
+
         for _ in 0..<currentTypedString.count {
             deleteKeyDown?.post(tap: .cghidEventTap)
             deleteKeyUp?.post(tap: .cghidEventTap)
         }
 
-        // Add a short delay before typing the response
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // Type the API response
-            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
-            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+        // Type the API response
+        let unicodeString = response.utf16.map { UniChar($0) }
+        let stringLength = unicodeString.count
+        
+        let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+        let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
 
-            let unicharArray = Array(response.utf16)
-            unicharArray.withUnsafeBufferPointer { bufferPointer in
-                keyDownEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
-                keyUpEvent?.keyboardSetUnicodeString(stringLength: unicharArray.count, unicodeString: bufferPointer.baseAddress)
-            }
-
-            keyDownEvent?.post(tap: .cghidEventTap)
-            keyUpEvent?.post(tap: .cghidEventTap)
+        unicodeString.withUnsafeBufferPointer { bufferPointer in
+            guard let baseAddress = bufferPointer.baseAddress else { return }
+            keyUpEvent!.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
+            keyUpEvent!.keyboardSetUnicodeString(stringLength: stringLength, unicodeString: baseAddress)
         }
+
+        keyDownEvent?.post(tap: .cghidEventTap)
+        keyUpEvent?.post(tap: .cghidEventTap)
     }
 
     private func executeAppleScript(_ scriptText: String) {
