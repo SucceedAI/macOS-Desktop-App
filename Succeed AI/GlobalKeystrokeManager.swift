@@ -89,29 +89,44 @@ class GlobalKeystrokeManager {
         let pasteboard = NSPasteboard.general
         pasteboard.declareTypes([.string], owner: nil)
         pasteboard.setString(response, forType: .string)
-
+        
         let source = CGEventSource(stateID: .combinedSessionState)
-
-        // Delete the user's input
+        
+        // Move the cursor to the beginning of the line
+        let moveToBeginningKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Home), keyDown: true)
+        let moveToBeginningKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Home), keyDown: false)
+        moveToBeginningKeyDown?.post(tap: .cghidEventTap)
+        moveToBeginningKeyUp?.post(tap: .cghidEventTap)
+        
+        // Select the "/ai <QUERY>" text
+        let selectTextKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightShift), keyDown: true)
+        let selectTextKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightShift), keyDown: false)
+        
+        selectTextKeyDown?.post(tap: .cghidEventTap)
+        for _ in 0..<currentTypedString.count {
+            let moveRightKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightArrow), keyDown: true)
+            let moveRightKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightArrow), keyDown: false)
+            moveRightKeyDown?.post(tap: .cghidEventTap)
+            moveRightKeyUp?.post(tap: .cghidEventTap)
+        }
+        selectTextKeyUp?.post(tap: .cghidEventTap)
+        
+        // Delete the selected "/ai <QUERY>" text
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
-
-        for _ in 0..<currentTypedString.count {
-            deleteKeyDown?.post(tap: .cghidEventTap)
-            deleteKeyUp?.post(tap: .cghidEventTap)
+        deleteKeyDown?.post(tap: .cghidEventTap)
+        deleteKeyUp?.post(tap: .cghidEventTap)
+        
+        // Type the response
+        for char in response {
+            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
+            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+            let unicodeString = String(char).utf16.map { UniChar($0) }
+            keyDownEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
+            keyUpEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
+            keyDownEvent?.post(tap: .cghidEventTap)
+            keyUpEvent?.post(tap: .cghidEventTap)
         }
-
-        // Simulate Command+V to paste the response
-        let commandKey = CGEventFlags.maskCommand
-
-        let pasteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: true)
-        pasteKeyDown?.flags = commandKey
-
-        let pasteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: false)
-        pasteKeyUp?.flags = commandKey
-
-        pasteKeyDown?.post(tap: .cghidEventTap)
-        pasteKeyUp?.post(tap: .cghidEventTap)
     }
 
     private func stopGlobalKeystrokeMonitoring() {
