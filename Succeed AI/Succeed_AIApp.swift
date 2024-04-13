@@ -19,7 +19,7 @@ struct SucceedAIApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra(Config.appTitle, systemImage: Config.systemSymbolName) {
+        MenuBarExtra(Config.appTitle, systemImage: viewModel.isLoading ? "hourglass" : Config.systemSymbolName) {
             let accessEnabled = viewModel.checkAndRequestAccessibilityPermission()
             if !accessEnabled {
                 Button("⚠️ Accessibility permissions need to be granted ⚠️", action: { viewModel.openSystemPreferences() })

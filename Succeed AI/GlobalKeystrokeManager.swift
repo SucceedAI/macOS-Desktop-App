@@ -6,6 +6,7 @@ import Cocoa
 import Carbon.HIToolbox
 
 class GlobalKeystrokeManager {
+    @Published var isLoading: Bool = false
     @Published var keystrokePrefixTrigger: String = Config.keystrokePrefixTrigger
 
     private var currentTypedString: String = ""
@@ -68,7 +69,7 @@ class GlobalKeystrokeManager {
 
     private func processQuery() {
         let actualQuery = String(currentTypedString.dropFirst(keystrokePrefixTrigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
-        print("Waiting for a response from the server")
+        isLoading = true // Set isLoading to true before making the API request
 
         aiProvider.query(actualQuery) { response in
             // Add a short delay before typing the response
@@ -76,6 +77,7 @@ class GlobalKeystrokeManager {
             //DispatchQueue.main.async {
                 // Type the API response to end-user window
                 self.replaceUserInput(with: response)
+                self.isLoading = false // Set isLoading to false after receiving the response
             }
         }
     }
