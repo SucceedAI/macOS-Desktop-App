@@ -114,17 +114,6 @@ class GlobalKeystrokeManager {
         pasteKeyUp?.post(tap: .cghidEventTap)
     }
 
-    private func executeAppleScript(_ scriptText: String) {
-        var error: NSDictionary?
-        if let script = NSAppleScript(source: scriptText) {
-            script.executeAndReturnError(&error)
-        }
-
-        if let error = error {
-            print("AppleScript Error: \(error)")
-        }
-    }
-
     private func stopGlobalKeystrokeMonitoring() {
         if let monitor = eventMonitor {
             NSEvent.removeMonitor(monitor)
