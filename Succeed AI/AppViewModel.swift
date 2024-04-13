@@ -4,6 +4,7 @@ import SwiftUI
 class AppViewModel: ObservableObject {
     @Published var aiResponse: String = ""
     @Published var showSettingsWindow = false
+    @Published var isLoading: Bool = false
     
     private var globalKeystrokeManager: GlobalKeystrokeManager?
     private let aiProvider: AIProvideable
@@ -16,6 +17,10 @@ class AppViewModel: ObservableObject {
     private func initializeGlobalKeystrokeManager() {
         globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
         globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
+
+        // Subscribe to the isLoading property of GlobalKeystrokeManager
+        globalKeystrokeManager?.$isLoading
+            .assign(to: &$isLoading)
     }
 
     public func openSystemPreferences() {
