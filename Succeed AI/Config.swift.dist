@@ -8,18 +8,19 @@ struct Config {
     // can be either ServerApiProvider.self or MistralAiProvider.self
     static let apiServiceProvider = ServerApiProvider.self
 
-    // depending of the environment, it could be localhost, staging.domain.com or the prod domain
+    // Depending of the environment, it could be localhost, staging.domain.com or the prod domain
     static let apiUrl = "http://localhost:3004/v1/ai" // TODO replace to https://api.succeedai.tech
 
-    // Replace with your actual API key
-    static let apiKey = "your_mistral_api_key"
+    // Replace with actual API key
+    static let apiKey = "api_key"
 
     // this prefix can be change by another unique keystroke event ID
     // it will be used for triggering and querying AI API
     static let keystrokePrefixTrigger = "/ai "
     
     // https://developer.apple.com/sf-symbols/release-notes/
-    static let systemSymbolName = "lightbulb.circle"
+    static let appIconSymbolName = "lightbulb.circle"
+    static let loadingIconSymbolName = "hourglass"
 
     static let socialMediaUrl = "https://twitter.com/succeedai" // https://succeedai.live/social
     static let renewLicenseUrl = "https://succeedai.live/license"
