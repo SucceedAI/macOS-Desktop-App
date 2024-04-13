@@ -86,46 +86,34 @@ class GlobalKeystrokeManager {
     }
 
     private func replaceUserInput(with response: String) {
-        let pasteboard = NSPasteboard.general
-        pasteboard.declareTypes([.string], owner: nil)
-        pasteboard.setString(response, forType: .string)
-        
         let source = CGEventSource(stateID: .combinedSessionState)
         
-        // Move the cursor to the beginning of the line
-        let moveToBeginningKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Home), keyDown: true)
-        let moveToBeginningKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Home), keyDown: false)
-        moveToBeginningKeyDown?.post(tap: .cghidEventTap)
-        moveToBeginningKeyUp?.post(tap: .cghidEventTap)
+        // Select the user's input
+        let selectAllKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_A), keyDown: true)
+        let selectAllKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_A), keyDown: false)
         
-        // Select the "/ai <QUERY>" text
-        let selectTextKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightShift), keyDown: true)
-        let selectTextKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightShift), keyDown: false)
+        let commandKey = CGEventFlags.maskCommand
+        selectAllKeyDown?.flags = commandKey
+        selectAllKeyUp?.flags = commandKey
         
-        selectTextKeyDown?.post(tap: .cghidEventTap)
-        for _ in 0..<currentTypedString.count {
-            let moveRightKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightArrow), keyDown: true)
-            let moveRightKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_RightArrow), keyDown: false)
-            moveRightKeyDown?.post(tap: .cghidEventTap)
-            moveRightKeyUp?.post(tap: .cghidEventTap)
-        }
-        selectTextKeyUp?.post(tap: .cghidEventTap)
+        selectAllKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
+        selectAllKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
         
-        // Delete the selected "/ai <QUERY>" text
+        // Delete the selected user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
-        deleteKeyDown?.post(tap: .cghidEventTap)
-        deleteKeyUp?.post(tap: .cghidEventTap)
+        deleteKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
+        deleteKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
         
         // Type the response
-        for char in response {
+        for character in response.unicodeScalars {
+            let unicodeString = String(character).utf16.map { UniChar($0) }
             let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
             let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
-            let unicodeString = String(char).utf16.map { UniChar($0) }
             keyDownEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
             keyUpEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
-            keyDownEvent?.post(tap: .cghidEventTap)
-            keyUpEvent?.post(tap: .cghidEventTap)
+            keyDownEvent?.post(tap: CGEventTapLocation.cghidEventTap)
+            keyUpEvent?.post(tap: CGEventTapLocation.cghidEventTap)
         }
     }
 
