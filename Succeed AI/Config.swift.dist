@@ -22,7 +22,8 @@ struct Config {
     static let appIconSymbolName = "lightbulb.circle"
     static let loadingIconSymbolName = "hourglass"
 
-    static let socialMediaUrl = "https://twitter.com/succeedai" // https://succeedai.live/social
+    static let socialMediaUrl = "https://succeedai.live/succeedai-youtube-channel" // https://succeedai.live/social
+    static let supportUrl = "https://support.succeedai.live" // SupportBee helpdesk platform
     static let renewLicenseUrl = "https://succeedai.live/license"
 
 }

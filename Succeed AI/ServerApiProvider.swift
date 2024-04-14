@@ -5,10 +5,12 @@ import Foundation
 class ServerApiProvider: AIProvideable {
     private var apiUrl: String
     private var apiKey: String
+    private var licenseKey: String
 
     required init(apiKey: String, apiUrl: String) {
         self.apiKey = apiKey
         self.apiUrl = apiUrl
+        self.licenseKey = "license needs to be stored in the user AppStorage"
     }
 
     func query(_ query: String, completion: @escaping (String) -> Void) -> Void {
@@ -19,16 +21,20 @@ class ServerApiProvider: AIProvideable {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        
+
         // Add Content Type
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         // Add bearer token key to the request header
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+
+        // Add license key to header
+        request.setValue(licenseKey, forHTTPHeaderField: "License")
 
         // Prepare the payload
         let osInfo = SystemUtility.getOperatingSystemInfo()
         let formattedQuery = getAiInstructions(query)
+
         let requestBody: [String: Any] = [
             "query": formattedQuery,
             "systemInfo": osInfo
