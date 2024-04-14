@@ -7,20 +7,10 @@ struct SucceedAIApp: App {
     @AppStorage("startAtLogin") private var startAtLogin: Bool = true
 
     @StateObject private var viewModel: AppViewModel
-    @State private var showAccessibilityAlert = false
 
     init() {
         let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
-
-        // Check accessibility permissions before initializing AppViewModel
-        if AXIsProcessTrusted() {
-            _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
-            showAccessibilityAlert = false
-        } else {
-            // Set the state variable to show the accessibility alert
-            _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
-            showAccessibilityAlert = true
-        }
+        _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
 
         if startAtLogin {
             // Enable Login Item helper if the preference is true
@@ -48,21 +38,12 @@ struct SucceedAIApp: App {
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
         }
         .menuBarExtraStyle(.menu)
-        .alert(isPresented: $showAccessibilityAlert) {
-            Alert(
-                title: Text("Accessibility Permissions Required"),
-                message: Text("Please grant accessibility permissions to use this app."),
-                primaryButton: .default(Text("Open System Preferences"), action: {
-                    viewModel.openSystemPreferences()
-                }),
-                secondaryButton: .cancel()
-            )
-        }
     }
 
     private func openSettings() {
-        // TODO: Implement the settings window
+        // TODO Need to implement the window here
         let settingsView = UserSettingsView()
+
         viewModel.openSettingsWindow()
     }
 
