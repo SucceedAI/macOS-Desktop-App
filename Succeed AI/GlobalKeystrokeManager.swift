@@ -91,24 +91,26 @@ class GlobalKeystrokeManager {
 
     private func replaceUserInput(with response: String) {
         let source = CGEventSource(stateID: .combinedSessionState)
-        
+
         // Select the user's input
         let selectAllKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_A), keyDown: true)
         let selectAllKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_A), keyDown: false)
-        
+
         let commandKey = CGEventFlags.maskCommand
         selectAllKeyDown?.flags = commandKey
         selectAllKeyUp?.flags = commandKey
-        
+
         selectAllKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
         selectAllKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
-        
+
+        // TODO Find a less-strict version when it doesn't remove the above texts from the user
+        // Currently, it would erase everything from theb active window. Only CMD+Z can undo the ereased entries previously typed and deleted by Succeed AI
         // Delete the selected user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
         deleteKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
         deleteKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
-        
+
         // Type the response
         for character in response.unicodeScalars {
             let unicodeString = String(character).utf16.map { UniChar($0) }
