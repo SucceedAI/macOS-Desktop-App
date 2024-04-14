@@ -23,10 +23,10 @@ class ServerApiProvider: AIProvideable {
         request.httpMethod = "POST"
 
         // Add Content Type
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         // Add bearer token key to the request header
-        request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
         // Add license key to header
         request.setValue(licenseKey, forHTTPHeaderField: "License")
