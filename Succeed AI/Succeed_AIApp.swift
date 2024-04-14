@@ -7,10 +7,20 @@ struct SucceedAIApp: App {
     @AppStorage("startAtLogin") private var startAtLogin: Bool = true
 
     @StateObject private var viewModel: AppViewModel
+    @State private var showAccessibilityAlert = false
 
     init() {
         let aiProvider = Config.apiServiceProvider.init(apiKey: Config.apiKey, apiUrl: Config.apiUrl)
-        _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
+
+        // Check accessibility permissions before initializing AppViewModel
+        if AXIsProcessTrusted() {
+            _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
+            showAccessibilityAlert = false
+        } else {
+            // Set the state variable to show the accessibility alert
+            _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
+            showAccessibilityAlert = true
+        }
 
         if startAtLogin {
             // Enable Login Item helper if the preference is true
