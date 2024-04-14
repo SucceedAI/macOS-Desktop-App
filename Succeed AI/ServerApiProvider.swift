@@ -10,7 +10,7 @@ class ServerApiProvider: AIProvideable {
     required init(apiKey: String, apiUrl: String) {
         self.apiKey = apiKey
         self.apiUrl = apiUrl
-        self.licenseKey = "license needs to be stored in the user AppStorage"
+        self.licenseKey = "1:license needs to be stored in the user AppStorage" // format: <LICENSE_ID>:<LICENSE_KEY>
     }
 
     func query(_ query: String, completion: @escaping (String) -> Void) -> Void {
