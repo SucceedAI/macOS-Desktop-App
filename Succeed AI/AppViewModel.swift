@@ -31,7 +31,6 @@ class AppViewModel: ObservableObject {
 
     public func checkAndRequestAccessibilityPermission() -> Bool {
         let isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAndRequestAccessibilityPermission() ?? false
-
         if !isAccessibilityPermissionGranted {
             openSystemPreferences()
         }
