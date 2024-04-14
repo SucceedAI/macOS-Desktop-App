@@ -77,7 +77,9 @@ class GlobalKeystrokeManager {
             //DispatchQueue.main.async {
                 // Type the API response to end-user window
                 self.replaceUserInput(with: response)
-                self.isLoading = false // Set isLoading to false after receiving the response
+
+                // Note: placing `isLoading = false` inside the asyncAfter() block to ensure proper synchronization with the UI update
+                self.isLoading = false // Set isLoading to false after typing the response
             }
         }
     }
