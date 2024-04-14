@@ -38,17 +38,31 @@ struct SucceedAIApp: App {
             Text("The AI service is running. Use CMD+SHIFT+Enter to interact")
 
             Button("Settings", action: { openSettings() }).keyboardShortcut(",")
-            Button("Renew License", action: { openURL(Config.renewLicenseUrl) })
-            Button("Social", action: { openURL(Config.socialMediaUrl) })
+
+            Button("Account: License Manager", action: { openURL(Config.renewLicenseUrl) })
+
+            Button("Follow Product News", action: { openURL(Config.socialMediaUrl) })
+
+            Button("Support/Feedback", action: { openURL(Config.supportUrl) })
+
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
         }
         .menuBarExtraStyle(.menu)
+        .alert(isPresented: $showAccessibilityAlert) {
+            Alert(
+                title: Text("Accessibility Permissions Required"),
+                message: Text("Please grant accessibility permissions to use this app."),
+                primaryButton: .default(Text("Open System Preferences"), action: {
+                    viewModel.openSystemPreferences()
+                }),
+                secondaryButton: .cancel()
+            )
+        }
     }
 
     private func openSettings() {
-        // TODO Need to implement the window here
+        // TODO: Implement the settings window
         let settingsView = UserSettingsView()
-
         viewModel.openSettingsWindow()
     }
 
