@@ -52,7 +52,7 @@
 		8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		8F42E2852B9495C90078D9F7 /* Config.swift.dist */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.swift.dist; sourceTree = "<group>"; };
 		8F636F002B96719F00D01CDC /* SystemUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUtility.swift; sourceTree = "<group>"; };
-		8F654C762B93F25000A8F6E6 /* Succeed AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Succeed AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F654C762B93F25000A8F6E6 /* SucceedAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SucceedAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
 		8F654C7D2B93F25000A8F6E6 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 		8F654C772B93F25000A8F6E6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8F654C762B93F25000A8F6E6 /* Succeed AI.app */,
+				8F654C762B93F25000A8F6E6 /* SucceedAI.app */,
 				8F654C892B93F25100A8F6E6 /* Succeed AITests.xctest */,
 				8F654C932B93F25100A8F6E6 /* Succeed AIUITests.xctest */,
 			);
@@ -169,9 +169,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8F654C752B93F25000A8F6E6 /* Succeed AI */ = {
+		8F654C752B93F25000A8F6E6 /* SucceedAI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F654C9D2B93F25100A8F6E6 /* Build configuration list for PBXNativeTarget "Succeed AI" */;
+			buildConfigurationList = 8F654C9D2B93F25100A8F6E6 /* Build configuration list for PBXNativeTarget "SucceedAI" */;
 			buildPhases = (
 				8F654C722B93F25000A8F6E6 /* Sources */,
 				8F654C732B93F25000A8F6E6 /* Frameworks */,
@@ -181,11 +181,11 @@
 			);
 			dependencies = (
 			);
-			name = "Succeed AI";
+			name = SucceedAI;
 			packageProductDependencies = (
 			);
 			productName = "Succeed AI";
-			productReference = 8F654C762B93F25000A8F6E6 /* Succeed AI.app */;
+			productReference = 8F654C762B93F25000A8F6E6 /* SucceedAI.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8F654C882B93F25100A8F6E6 /* Succeed AITests */ = {
@@ -263,7 +263,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8F654C752B93F25000A8F6E6 /* Succeed AI */,
+				8F654C752B93F25000A8F6E6 /* SucceedAI */,
 				8F654C882B93F25100A8F6E6 /* Succeed AITests */,
 				8F654C922B93F25100A8F6E6 /* Succeed AIUITests */,
 			);
@@ -339,12 +339,12 @@
 /* Begin PBXTargetDependency section */
 		8F654C8B2B93F25100A8F6E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F654C752B93F25000A8F6E6 /* Succeed AI */;
+			target = 8F654C752B93F25000A8F6E6 /* SucceedAI */;
 			targetProxy = 8F654C8A2B93F25100A8F6E6 /* PBXContainerItemProxy */;
 		};
 		8F654C952B93F25100A8F6E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F654C752B93F25000A8F6E6 /* Succeed AI */;
+			target = 8F654C752B93F25000A8F6E6 /* SucceedAI */;
 			targetProxy = 8F654C942B93F25100A8F6E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -623,7 +623,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F654C9D2B93F25100A8F6E6 /* Build configuration list for PBXNativeTarget "Succeed AI" */ = {
+		8F654C9D2B93F25100A8F6E6 /* Build configuration list for PBXNativeTarget "SucceedAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F654C9E2B93F25100A8F6E6 /* Debug */,
