@@ -90,6 +90,7 @@ class GlobalKeystrokeManager {
     }
 
     private func replaceUserInput(with response: String) {
+        // First, retrieve the source
         let source = CGEventSource(stateID: .combinedSessionState)
 
         // Select the user's input

@@ -1,4 +1,5 @@
 struct Config {
+
     // Name of the macOS app
     static let appTitle = "Succeed AI"
 
