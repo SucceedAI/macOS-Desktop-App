@@ -25,6 +25,7 @@
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
 		8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80C7502B97C71A00325157 /* ServerResponse.swift */; };
 		8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FCC2BA05C4B008974C9 /* WindowManager.swift */; };
+		8FB165792BE0E75000BF912A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB165782BE0E75000BF912A /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
 		8F80C7502B97C71A00325157 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
 		8F883FCC2BA05C4B008974C9 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		8FB165782BE0E75000BF912A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
 				8F42E2852B9495C90078D9F7 /* Config.swift.dist */,
 				8F883FCC2BA05C4B008974C9 /* WindowManager.swift */,
+				8FB165782BE0E75000BF912A /* ContentView.swift */,
 				8F316F002B94A09800F2ED47 /* Config.swift */,
 				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
 				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
@@ -311,6 +314,7 @@
 				8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */,
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
 				8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */,
+				8FB165792BE0E75000BF912A /* ContentView.swift in Sources */,
 				8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */,
 				8F636F012B96719F00D01CDC /* SystemUtility.swift in Sources */,
 			);
