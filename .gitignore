@@ -94,3 +94,6 @@ Config.swift
 
 # macOS
 .DS_Store
+ 
+ # Ignore binary/executable app files
+*.dmg
