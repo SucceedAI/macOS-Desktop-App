@@ -22,7 +22,7 @@ struct SucceedAIApp: App {
         MenuBarExtra(Config.appTitle, systemImage: viewModel.isLoading ? Config.loadingIconSymbolName : Config.appIconSymbolName) {
             let accessEnabled = viewModel.checkAndRequestAccessibilityPermission()
             if !accessEnabled {
-                Button("⚠️ Accessibility permissions for " + Config.appTitle + "need to be granted ⚠️", action: { viewModel.openSystemPreferences() })
+                Button("'" + Config.appTitle + "'Accessibility permissions need to be granted", action: { viewModel.openSystemPreferences() })
                 Text("System Settings -> Privacy & Security -> Accessibility -> Enable " + Config.appTitle)
             } else {
                 Text("✨ AI service running. Type “/ai <YOUR_QUERY>” and press ENTER. Let the magic happening 💫")
