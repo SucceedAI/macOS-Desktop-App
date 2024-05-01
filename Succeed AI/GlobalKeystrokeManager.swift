@@ -105,14 +105,14 @@ class GlobalKeystrokeManager {
         selectAllKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
 
         // TODO Find a less-strict version when it doesn't remove the above texts from the user
-        // Currently, it would erase everything from theb active window. Only CMD+Z can undo the ereased entries previously typed and deleted by Succeed AI
+        // Currently, it would erase everything in the active window. Only CMD+Z can undo the ereased entries previously typed by user
         // Delete the selected user's input
         let deleteKeyDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: true)
         let deleteKeyUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Delete), keyDown: false)
         deleteKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
         deleteKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
 
-        // Type the response
+        // Type the response (use for loop to simulate the typewriting-like, character-per-character)
         for character in response.unicodeScalars {
             let unicodeString = String(character).utf16.map { UniChar($0) }
             let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
