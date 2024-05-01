@@ -39,14 +39,18 @@ struct SucceedAIApp: App {
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
         }
         .menuBarExtraStyle(.menu)
+        WindowGroup {
+            ContentView()
+                .sheet(isPresented: $viewModel.showSettingsWindow) {
+                    UserSettingsView()
+                }
+        }
     }
 
     private func openSettings() {
-        // TODO Need to implement the window here
-        let settingsView = UserSettingsView()
-
         viewModel.openSettingsWindow()
     }
+
 
     private func openURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
