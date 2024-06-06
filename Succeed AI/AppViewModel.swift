@@ -11,7 +11,11 @@ class AppViewModel: ObservableObject {
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
-        initializeGlobalKeystrokeManager()
+        self.globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
+    }
+
+    func startGlobalKeystrokeMonitoring() {
+        globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
     }
 
     private func initializeGlobalKeystrokeManager() {

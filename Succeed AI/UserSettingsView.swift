@@ -10,9 +10,7 @@ struct UserSettingsView: View {
             Section(header: Text("General")) {
                 Toggle("Start at Login", isOn: $startAtLogin)
                     .onChange(of: startAtLogin) { newValue, _ in
-                        DispatchQueue.main.async {
-                            handleStartAtLoginChange(newValue)
-                        }
+                        handleStartAtLoginChange(newValue)
                     }
             }
             Section(header: Text("Appearance")) {
@@ -25,9 +23,6 @@ struct UserSettingsView: View {
         .padding()
         .frame(width: 300, height: 200)
         .navigationTitle("Settings")
-        .onAppear {
-            startAtLogin = isAppSetToStartAtLogin()
-        }
     }
 
     private func handleStartAtLoginChange(_ newValue: Bool) {
@@ -35,9 +30,5 @@ struct UserSettingsView: View {
         if !success {
             print("Failed to \(newValue ? "enable" : "disable") start at login")
         }
-    }
-
-    private func isAppSetToStartAtLogin() -> Bool {
-        return UserDefaults.standard.bool(forKey: "startAtLogin")
     }
 }
