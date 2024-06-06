@@ -1,5 +1,7 @@
 # macOS AI Productivity Desktop App
 
+**Succeed AI** is a very simple and minimalist macOS app that is about to radically change your daily tasks on your laptop. Succeed AI has been designed to completely remove any context switching (when you shift your attention across different apps).
+
 
 ## Get Started
 
