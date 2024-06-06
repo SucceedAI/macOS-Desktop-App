@@ -3,9 +3,7 @@ import ServiceManagement
 
 @main
 struct SucceedAIApp: App {
-    // Launch at Login preference
     @AppStorage("startAtLogin") private var startAtLogin: Bool = true
-
     @StateObject private var viewModel: AppViewModel
 
     init() {
@@ -13,8 +11,7 @@ struct SucceedAIApp: App {
         _viewModel = StateObject(wrappedValue: AppViewModel(aiProvider: aiProvider))
 
         if startAtLogin {
-            // Enable Login Item helper if the preference is true
-            SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, true)
+            enableLoginItemIfNeeded()
         }
     }
 
@@ -22,13 +19,17 @@ struct SucceedAIApp: App {
         MenuBarExtra(Config.appTitle, systemImage: viewModel.isLoading ? Config.loadingIconSymbolName : Config.appIconSymbolName) {
             let accessEnabled = viewModel.checkAndRequestAccessibilityPermission()
             if !accessEnabled {
-                Button("'" + Config.appTitle + "'Accessibility permissions need to be granted", action: { viewModel.openSystemPreferences() })
+                Button("'" + Config.appTitle + "' Accessibility permissions need to be granted", action: { viewModel.openSystemPreferences() })
                 Text("System Settings -> Privacy & Security -> Accessibility -> Enable " + Config.appTitle)
             } else {
-                Text("✨ AI service running. Type “/ai <YOUR_QUERY>” and press ENTER. Let the magic happening 💫")
+                Button(action: {
+                    viewModel.startGlobalKeystrokeMonitoring()
+                }) {
+                    Text("✨ AI service running. Type /ai <YOUR_QUERY> and press ENTER. Let the magic happening 💫")
+                }
             }
 
-            Button("Settings", action: { openSettings() }).keyboardShortcut(",")
+            Button("Settings", action: { viewModel.openSettingsWindow() }).keyboardShortcut(",")
 
             Button("Account: License Manager", action: { openURL(Config.renewLicenseUrl) })
 
@@ -39,21 +40,23 @@ struct SucceedAIApp: App {
             Button("Quit", action: { NSApplication.shared.terminate(nil) }).keyboardShortcut("q")
         }
         .menuBarExtraStyle(.menu)
-        WindowGroup {
-            ContentView()
-                .sheet(isPresented: $viewModel.showSettingsWindow) {
-                    UserSettingsView()
-                }
-        }
     }
-
-    private func openSettings() {
-        viewModel.openSettingsWindow()
-    }
-
 
     private func openURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         NSWorkspace.shared.open(url)
+    }
+
+    private func enableLoginItemIfNeeded() {
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = runningApps.contains {
+            $0.bundleIdentifier == Config.bundleIdentifier
+        }
+
+        SMLoginItemSetEnabled(Config.bundleIdentifier as CFString, true)
+
+        if isRunning {
+            return
+        }
     }
 }
