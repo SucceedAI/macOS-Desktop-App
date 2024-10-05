@@ -10,4 +10,4 @@
 
 ## Author
 
-**[Pierre-Henry Soria ツ](https://ph7.me)** – A super passionate & enthusiastic problem-solver / senior software engineer living in Sydney 🦘 Also, a true cheese 🧀, ristretto ☕️, and dark chocolate lover! 🤩
+**[Pierre-Henry Soria ツ](https://ph7.me)** – A super passionate & enthusiastic Problem-Solver and AI Software Engineer with data scientist background. Also, a real Roquefort 🧀, ristretto ☕️, and dark chocolate lover! 😋
