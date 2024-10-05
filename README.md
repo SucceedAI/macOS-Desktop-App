@@ -6,6 +6,7 @@
 ## Get Started
 
 1. Rename `Succeed AI/Config.swift.dist` to `Succeed AI/Config.swift` and update the information in there.
+2. Open the project in Xcode (on macOS) and build the project and run the project from there.
 
 
 ## Author
