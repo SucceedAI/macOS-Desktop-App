@@ -9,6 +9,11 @@
 2. Open the project in Xcode (on macOS) and build the project and run the project from there.
 
 
+## Feedback
+
+Any feedback, suggestion, or pathces, just open either a GitHub [Issue](https://github.com/SucceedAI/macOS-Desktop-App/issues) or a [Pull Request](https://github.com/SucceedAI/macOS-Desktop-App/pulls).
+
+
 ## Author
 
 **[Pierre-Henry Soria ツ](https://ph7.me)** – A super passionate & enthusiastic Problem-Solver and AI Software Engineer with data scientist background. Also, a real Roquefort 🧀, ristretto ☕️, and dark chocolate lover! 😋
