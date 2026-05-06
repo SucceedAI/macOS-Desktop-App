@@ -17,11 +17,14 @@ class WindowManager {
 
         let settingsView = UserSettingsView()
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 300, height: 200),
-            styleMask: [.titled, .closable],
+            contentRect: NSRect(x: 0, y: 0, width: 560, height: 520),
+            styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered, defer: false
         )
+        window.title = "SucceedAI Settings"
         window.center()
+        window.isReleasedWhenClosed = false
+        window.setFrameAutosaveName("SettingsWindow")
         window.contentView = NSHostingView(rootView: settingsView)
 
         settingsWindow = window

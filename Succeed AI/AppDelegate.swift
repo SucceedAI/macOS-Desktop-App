@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func setupGlobalKeystrokeManager() {
-        viewModel?.initializeGlobalKeystrokeManager()
+        viewModel?.startGlobalKeystrokeMonitoring()
     }
 
     private func setupStatusBarItem() {
