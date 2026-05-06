@@ -1,19 +1,21 @@
 import Foundation
 
-// ServerApiProvider will first speak to a prixy API wrapper
-// that will then speak to the specific AI API
+// ServerApiProvider speaks to the product API wrapper, which then calls the AI provider.
 class ServerApiProvider: AIProvideable {
     private var apiUrl: String
     private var apiKey: String
-    private var licenseKey: String
 
     required init(apiKey: String, apiUrl: String) {
         self.apiKey = apiKey
         self.apiUrl = apiUrl
-        self.licenseKey = "1:license needs to be stored in the user AppStorage" // format: <LICENSE_ID>:<LICENSE_KEY>
     }
 
     func query(_ query: String, completion: @escaping (String) -> Void) -> Void {
+        guard !apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, apiKey != "api_key" else {
+            completion("SucceedAI is not configured: missing API key.")
+            return
+        }
+
         guard let url = URL(string: apiUrl + "/query") else {
             completion("Invalid URL")
             return
@@ -28,8 +30,10 @@ class ServerApiProvider: AIProvideable {
         // Add bearer token key to the request header
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
-        // Add license key to header
-        request.setValue(licenseKey, forHTTPHeaderField: "License")
+        if let licenseKey = UserDefaults.standard.string(forKey: "licenseKey")?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !licenseKey.isEmpty {
+            request.setValue(licenseKey, forHTTPHeaderField: "License")
+        }
 
         // Prepare the payload
         let osInfo = SystemUtility.getOperatingSystemInfo()

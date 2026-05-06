@@ -36,8 +36,16 @@ final class SystemUtility {
                 return "macOS Big Sur"
             case (12, _):
                 return "macOS Monterey"
+            case (13, _):
+                return "macOS Ventura"
+            case (14, _):
+                return "macOS Sonoma"
+            case (15, _):
+                return "macOS Sequoia"
+            case (26, _):
+                return "macOS Tahoe"
             default:
-                return "macOS (Unknown Version)"
+                return "macOS"
         }
     }
     
