@@ -92,6 +92,9 @@ iOSInjectionProject/
 # Config 
 Config.swift
 
+# Local developer configuration — contains signing secrets, never commit
+Local.xcconfig
+
 # macOS
 .DS_Store
  

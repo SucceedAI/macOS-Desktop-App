@@ -6,7 +6,16 @@
 ## Get Started
 
 1. Rename `Succeed AI/Config.swift.dist` to `Succeed AI/Config.swift` and update the information in there.
-2. Open the project in Xcode (on macOS) and build the project and run the project from there.
+2. Set up your local Xcode signing configuration:
+   ```bash
+   cp Local.xcconfig.dist Local.xcconfig
+   ```
+   Open `Local.xcconfig` and replace `YOUR_TEAM_ID` with your Apple Developer Team ID
+   (find it at [developer.apple.com](https://developer.apple.com) → Account → Membership).
+3. Open the project in Xcode (on macOS) and build the project and run the project from there.
+
+> `Local.xcconfig` is git-ignored and keeps your signing credentials out of source control.
+> Never commit it. The committed template is `Local.xcconfig.dist`.
 
 
 ## Feedback

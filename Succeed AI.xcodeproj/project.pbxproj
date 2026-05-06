@@ -71,6 +71,8 @@
 		8F80C7502B97C71A00325157 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
 		8F883FCC2BA05C4B008974C9 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		8FB165782BE0E75000BF912A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C31D142B8A7747E38D397F9B /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = SOURCE_ROOT; };
+		56A49EABE1604B199202CBF5 /* Local.xcconfig.dist */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig.dist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,8 @@
 		8F654C6D2B93F25000A8F6E6 = {
 			isa = PBXGroup;
 			children = (
+				C31D142B8A7747E38D397F9B /* Local.xcconfig */,
+				56A49EABE1604B199202CBF5 /* Local.xcconfig.dist */,
 				8F654C782B93F25000A8F6E6 /* Succeed AI */,
 				8F654C8C2B93F25100A8F6E6 /* Succeed AITests */,
 				8F654C962B93F25100A8F6E6 /* Succeed AIUITests */,
@@ -260,7 +264,6 @@
 			);
 			mainGroup = 8F654C6D2B93F25000A8F6E6;
 			packageReferences = (
-				8F883FC92BA05AF8008974C9 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = 8F654C772B93F25000A8F6E6 /* Products */;
 			projectDirPath = "";
@@ -474,17 +477,15 @@
 		};
 		8F654C9E2B93F25100A8F6E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = YOUR_TEAM_ID;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -511,18 +512,16 @@
 		};
 		8F654C9F2B93F25100A8F6E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
-				DEVELOPMENT_TEAM = YOUR_TEAM_ID;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -656,16 +655,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		8F883FC92BA05AF8008974C9 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.9;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 8F654C6E2B93F25000A8F6E6 /* Project object */;
 }

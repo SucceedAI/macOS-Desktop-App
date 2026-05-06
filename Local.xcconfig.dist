@@ -1,0 +1,30 @@
+//
+// Local.xcconfig.dist — Template for local developer configuration.
+//
+// HOW TO USE:
+//   1. Copy this file:  cp Local.xcconfig.dist Local.xcconfig
+//   2. Fill in the values below with your own Apple developer credentials.
+//   3. Local.xcconfig is listed in .gitignore and must never be committed.
+//
+// WHERE TO FIND THESE VALUES:
+//   - DEVELOPMENT_TEAM : developer.apple.com → Account → Membership → Team ID
+//                        (10-character alphanumeric string, e.g. AB12CD34EF)
+//   - CODE_SIGN_IDENTITY: usually "Apple Development" for local builds,
+//                         "Apple Distribution" for App Store / Notarization
+//
+
+// ── Identity ──────────────────────────────────────────────────────────────────
+
+DEVELOPMENT_TEAM = YOUR_TEAM_ID
+
+// ── Code Signing ──────────────────────────────────────────────────────────────
+
+CODE_SIGN_IDENTITY = Apple Development
+CODE_SIGN_STYLE = Automatic
+
+// ── Optional overrides ────────────────────────────────────────────────────────
+// Uncomment and set these only if you need to override the project defaults.
+
+// PRODUCT_BUNDLE_IDENTIFIER = me.ph7.SucceedAI
+// PROVISIONING_PROFILE_SPECIFIER =
+
