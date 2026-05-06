@@ -3,14 +3,14 @@ struct Config {
     // Name of the macOS app
     static let appTitle = "SucceedAI"
 
-    static let bundleIdentifier = "me.ph7.SucceedAl"
+    static let bundleIdentifier = "me.ph7.SucceedAI"
 
     // Replace with your preferred AI API service provider
     // can be either ServerApiProvider.self or MistralAiProvider.self
     static let apiServiceProvider = ServerApiProvider.self
 
     // Depending of the environment, it could be localhost, staging.domain.com or the prod domain
-    static let apiUrl = "http://localhost:3004/v1/ai" // TODO replace to https://api.succeedai.tech
+    static let apiUrl = "https://api.succeedai.tech/v1/ai"
 
     // Replace with actual API key
     static let apiKey = "api_key"
@@ -25,6 +25,5 @@ struct Config {
 
     static let socialMediaUrl = "https://succeedai.live/succeedai-youtube-channel" // https://succeedai.live/social
     static let supportUrl = "https://support.succeedai.live" // SupportBee helpdesk platform
-    static let renewLicenseUrl = "https://succeedai.live/license"
 
 }

@@ -2,13 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict/>
-	</array>
-	<key>Categor</key>
-	<string></string>
 	<key>NSAccessibilityUsageDescription</key>
-	<string>This app requires accessibility permissions to function properly.</string>
+	<string>SucceedAI uses Accessibility permission to detect the /ai command you type and replace it with the generated response in the active app.</string>
 </dict>
 </plist>
