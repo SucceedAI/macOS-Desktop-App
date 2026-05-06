@@ -1,30 +1,32 @@
 import Foundation
 import SwiftUI
+import Combine
 
 class AppViewModel: ObservableObject {
     @Published var aiResponse: String = ""
-    @Published var showSettingsWindow = false
     @Published var isLoading: Bool = false
+    @Published private(set) var isMonitoring: Bool = false
     
     private var globalKeystrokeManager: GlobalKeystrokeManager?
     private let aiProvider: AIProvideable
+    private var cancellables = Set<AnyCancellable>()
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
         self.globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
+        bindGlobalKeystrokeManager()
+        startGlobalKeystrokeMonitoringIfAllowed()
     }
 
     func startGlobalKeystrokeMonitoring() {
-        globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
+        guard let globalKeystrokeManager else { return }
+        let didStart = globalKeystrokeManager.triggerGlobalKeystrokeMonitoring()
+        isMonitoring = didStart
     }
 
-    private func initializeGlobalKeystrokeManager() {
-        globalKeystrokeManager = GlobalKeystrokeManager(aiProvider: aiProvider)
-        globalKeystrokeManager?.triggerGlobalKeystrokeMonitoring()
-
-        // Subscribe to the isLoading property of GlobalKeystrokeManager
-        globalKeystrokeManager?.$isLoading
-            .assign(to: &$isLoading)
+    func startGlobalKeystrokeMonitoringIfAllowed() {
+        guard isAccessibilityPermissionGranted() else { return }
+        startGlobalKeystrokeMonitoring()
     }
 
     public func openSystemPreferences() {
@@ -34,7 +36,7 @@ class AppViewModel: ObservableObject {
     }
 
     public func checkAndRequestAccessibilityPermission() -> Bool {
-        let isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAndRequestAccessibilityPermission() ?? false
+        let isAccessibilityPermissionGranted = globalKeystrokeManager?.checkAndRequestAccessibilityPermission(prompt: true) ?? false
         if !isAccessibilityPermissionGranted {
             openSystemPreferences()
         }
@@ -42,7 +44,20 @@ class AppViewModel: ObservableObject {
         return isAccessibilityPermissionGranted
     }
 
+    public func isAccessibilityPermissionGranted() -> Bool {
+        globalKeystrokeManager?.isAccessibilityPermissionGranted() ?? false
+    }
+
     public func openSettingsWindow() {
-        showSettingsWindow = true
+        WindowManager.shared.openSettings()
+    }
+
+    private func bindGlobalKeystrokeManager() {
+        globalKeystrokeManager?.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                self?.isLoading = isLoading
+            }
+            .store(in: &cancellables)
     }
 }
