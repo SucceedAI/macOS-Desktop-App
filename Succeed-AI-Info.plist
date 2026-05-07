@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSAccessibilityUsageDescription</key>
-	<string>SucceedAI uses Accessibility permission to detect the /ai command you type and replace it with the generated response in the active app.</string>
+	<string>SucceedAI uses Accessibility permission to detect your configured command trigger and replace it with the generated response in the active app.</string>
 </dict>
 </plist>
