@@ -19,10 +19,15 @@ struct SucceedAIApp: App {
 
 private struct StatusPanelView: View {
     @ObservedObject var viewModel: AppViewModel
+    @AppStorage(UserSettings.commandTriggerKey) private var commandTrigger: String = UserSettings.defaultCommandTrigger
 
     private var isConfigured: Bool {
         let key = Config.apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         return !key.isEmpty && key != "api_key"
+    }
+
+    private var displayTrigger: String {
+        UserSettings.validatedCommandTrigger(commandTrigger).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     var body: some View {
@@ -55,7 +60,7 @@ private struct StatusPanelView: View {
                 Text("Instant AI in any macOS text field.")
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundStyle(.secondary)
-                Text("Type /ai, describe the task, press Return.")
+                Text("Type \(displayTrigger), describe the task, press Return.")
                     .font(.system(.caption, design: .monospaced, weight: .semibold))
                     .foregroundStyle(.teal)
                     .padding(.horizontal, 10)
@@ -69,24 +74,25 @@ private struct StatusPanelView: View {
 
     @ViewBuilder
     private var statusCard: some View {
-        if !isConfigured {
+        if !viewModel.isAccessibilityPermissionGranted() {
+            PanelCard(tint: .orange) {
+                Label("Accessibility permission required", systemImage: "hand.raised.fill")
+                    .font(.system(.headline, design: .rounded, weight: .semibold))
+                Text("macOS needs your approval before SucceedAI can detect and replace commands in other apps.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                PermissionStepList(appName: Config.appTitle)
+                PrimaryPanelButton(title: "Grant Permission", systemImage: "lock.open.fill") {
+                    _ = viewModel.checkAndRequestAccessibilityPermission()
+                }
+            }
+        } else if !isConfigured {
             PanelCard(tint: .orange) {
                 Label("API key needed", systemImage: "key.horizontal.fill")
                     .font(.system(.headline, design: .rounded, weight: .semibold))
                 Text("The app builds correctly, but AI responses require a production API key in the local Config.swift before release.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
-            }
-        } else if !viewModel.isAccessibilityPermissionGranted() {
-            PanelCard(tint: .orange) {
-                Label("Accessibility permission required", systemImage: "hand.raised.fill")
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
-                Text("macOS needs your approval before SucceedAI can detect and replace /ai commands in other apps.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                PrimaryPanelButton(title: "Grant Permission", systemImage: "lock.open.fill") {
-                    _ = viewModel.checkAndRequestAccessibilityPermission()
-                }
             }
         } else {
             PanelCard(tint: viewModel.isMonitoring ? .green : .teal) {
@@ -101,7 +107,7 @@ private struct StatusPanelView: View {
                         .padding(.vertical, 5)
                         .background((viewModel.isMonitoring ? Color.green : Color.teal).opacity(0.12), in: Capsule())
                 }
-                Text(viewModel.isMonitoring ? "SucceedAI is listening for /ai commands across macOS." : "Start the service when you want SucceedAI available everywhere.")
+                Text(viewModel.isMonitoring ? "SucceedAI is listening for \(displayTrigger) commands across macOS." : "Start the service when you want SucceedAI available everywhere.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                 PrimaryPanelButton(title: viewModel.isMonitoring ? "Keep Running" : "Start AI Service", systemImage: viewModel.isMonitoring ? "waveform.path" : "play.fill") {
@@ -117,7 +123,7 @@ private struct StatusPanelView: View {
             Text("How it works")
                 .font(.system(.headline, design: .rounded, weight: .semibold))
             WorkflowRow(number: "1", title: "Open any app", detail: "Mail, Notes, Slack, a browser, or any editable text field.")
-            WorkflowRow(number: "2", title: "Type your command", detail: "Example: /ai rewrite this message with a warmer tone")
+            WorkflowRow(number: "2", title: "Type your command", detail: "Example: \(displayTrigger) rewrite this message with a warmer tone")
             WorkflowRow(number: "3", title: "Press Return", detail: "SucceedAI replaces the command with the generated response.")
         }
     }
@@ -162,6 +168,37 @@ private struct StatusPanelView: View {
     private func openURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         NSWorkspace.shared.open(url)
+    }
+}
+
+private struct PermissionStepList: View {
+    var appName: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            PermissionStep(number: "1", title: "Open Privacy & Security")
+            PermissionStep(number: "2", title: "Choose Accessibility")
+            PermissionStep(number: "3", title: "Enable \(appName)")
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+private struct PermissionStep: View {
+    var number: String
+    var title: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(number)
+                .font(.system(.caption2, design: .rounded, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 20, height: 20)
+                .background(.orange.gradient, in: Circle())
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
     }
 }
 
