@@ -9,21 +9,21 @@ struct Config {
     // can be either ServerApiProvider.self or MistralAiProvider.self
     static let apiServiceProvider = ServerApiProvider.self
 
-    // Depending of the environment, it could be localhost, staging.domain.com or the prod domain
-    static let apiUrl = "https://api.succeedai.tech/v1/ai"
+    // Railway proxy base URL for the backend, without the trailing /query route.
+    // For production, map this host to the Railway service that serves ai-proxy-server.
+    static let apiUrl = "https://YOUR-RAILWAY-PROXY.up.railway.app/v1/ai"
 
     // Replace with actual API key
     static let apiKey = "api_key"
 
-    // this prefix can be change by another unique keystroke event ID
-    // it will be used for triggering and querying AI API
+    // Default trigger; users can change the active trigger from Settings > Keys.
     static let keystrokePrefixTrigger = "/ai "
     
     // https://developer.apple.com/sf-symbols/release-notes/
     static let appIconSymbolName = "lightbulb.circle"
     static let loadingIconSymbolName = "hourglass"
 
-    static let socialMediaUrl = "https://succeedai.live/succeedai-youtube-channel" // https://succeedai.live/social
-    static let supportUrl = "https://support.succeedai.live" // SupportBee helpdesk platform
+    static let socialMediaUrl = "https://www.producthunt.com/products/succeed-ai"
+    static let supportUrl = "https://succeed.pierrehenry.dev/support/"
 
 }
