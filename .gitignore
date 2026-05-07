@@ -100,3 +100,6 @@ Local.xcconfig
  
  # Ignore binary/executable app files
 *.dmg
+
+# Backend proxy lives in its own repository; avoid committing an embedded gitlink.
+ai-proxy-server/
