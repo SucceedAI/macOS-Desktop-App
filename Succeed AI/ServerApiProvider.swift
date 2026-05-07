@@ -7,22 +7,23 @@ class ServerApiProvider: AIProvideable {
 
     required init(apiKey: String, apiUrl: String) {
         self.apiKey = apiKey
-        self.apiUrl = apiUrl
+        self.apiUrl = apiUrl.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
     }
 
-    func query(_ query: String, completion: @escaping (String) -> Void) -> Void {
+    func query(_ query: String, completion: @escaping (Result<String, AIProviderError>) -> Void) -> Void {
         guard !apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, apiKey != "api_key" else {
-            completion("SucceedAI is not configured: missing API key.")
+            completion(.failure(AIProviderError(userMessage: "SucceedAI is not configured: missing API key.")))
             return
         }
 
         guard let url = URL(string: apiUrl + "/query") else {
-            completion("Invalid URL")
+            completion(.failure(AIProviderError(userMessage: "SucceedAI is not configured: invalid API URL.")))
             return
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.timeoutInterval = 60
 
         // Add Content Type
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -46,27 +47,56 @@ class ServerApiProvider: AIProvideable {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
         } catch {
-            completion("Error: Unable to encode request body")
+            completion(.failure(AIProviderError(userMessage: "SucceedAI could not prepare the AI request.")))
             return
         }
 
         // Perform the network request
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                completion("Error: \(error.localizedDescription)")
+                completion(.failure(AIProviderError(userMessage: "SucceedAI could not reach the AI service: \(error.localizedDescription)")))
                 return
             }
+
+            if let httpResponse = response as? HTTPURLResponse,
+               !(200...299).contains(httpResponse.statusCode) {
+                completion(.failure(AIProviderError(userMessage: self.userMessage(for: httpResponse.statusCode))))
+                return
+            }
+
             guard let data = data else {
-                completion("Error: No data received")
+                completion(.failure(AIProviderError(userMessage: "SucceedAI did not receive a response from the AI service.")))
                 return
             }
+
             do {
                 let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
-                completion(serverResponse.content)
+                let content = serverResponse.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !content.isEmpty else {
+                    completion(.failure(AIProviderError(userMessage: "SucceedAI received an empty AI response.")))
+                    return
+                }
+
+                completion(.success(content))
             } catch {
-                completion("Oops: Couldn't retrieve the response from AI server.")
+                completion(.failure(AIProviderError(userMessage: "SucceedAI could not read the AI response.")))
             }
         }.resume()
+    }
+
+    private func userMessage(for statusCode: Int) -> String {
+        switch statusCode {
+        case 401, 403:
+            return "SucceedAI could not authenticate with the AI service. Check the production API token."
+        case 413:
+            return "This prompt is too long for the AI service. Shorten it and try again."
+        case 429:
+            return "The AI service is busy or rate limited. Wait a moment and try again."
+        case 500...599:
+            return "The AI service is temporarily unavailable. Try again shortly."
+        default:
+            return "The AI service returned an unexpected response."
+        }
     }
 
     func getAiInstructions(_ query: String) -> String {

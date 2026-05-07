@@ -8,13 +8,18 @@ import Combine
 
 class GlobalKeystrokeManager {
     @Published var isLoading: Bool = false
-    @Published var keystrokePrefixTrigger: String = Config.keystrokePrefixTrigger
 
     private var currentTypedString: String = ""
     private var isCommandActive: Bool = false
     private var aiProvider: AIProvideable
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
+    private var isReplacingText: Bool = false
+    private var activeReplacementID: UUID?
+
+    private var keystrokePrefixTrigger: String {
+        UserSettings.commandTrigger()
+    }
 
     init(aiProvider: AIProvideable) {
         self.aiProvider = aiProvider
@@ -90,6 +95,10 @@ class GlobalKeystrokeManager {
             return Unmanaged.passUnretained(event)
         }
 
+        if isReplacingText {
+            return Unmanaged.passUnretained(event)
+        }
+
         if nsEvent.keyCode == kVK_Return {
             let didProcessCommand = processQuery(commandText: currentTypedString)
             resetCommandState()
@@ -98,7 +107,7 @@ class GlobalKeystrokeManager {
 
         if nsEvent.keyCode == kVK_Delete && !currentTypedString.isEmpty {
             currentTypedString.removeLast()
-            isCommandActive = !currentTypedString.isEmpty
+            isCommandActive = currentTypedString.hasPrefix(keystrokePrefixTrigger)
             return Unmanaged.passUnretained(event)
         }
 
@@ -142,22 +151,44 @@ class GlobalKeystrokeManager {
     }
 
     private func processQuery(commandText: String) -> Bool {
-        guard isCommandActive, commandText.hasPrefix(keystrokePrefixTrigger) else {
+        let trigger = keystrokePrefixTrigger
+        guard isCommandActive, commandText.hasPrefix(trigger) else {
             return false
         }
 
-        let actualQuery = String(commandText.dropFirst(keystrokePrefixTrigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
+        let actualQuery = String(commandText.dropFirst(trigger.count)).trimmingCharacters(in: .whitespacesAndNewlines)
         guard !actualQuery.isEmpty else {
             return false
         }
+
+        let replacementID = UUID()
+        activeReplacementID = replacementID
+        isReplacingText = true
+        removeUserInput(replacing: commandText)
 
         DispatchQueue.main.async {
             self.isLoading = true
         }
 
-        aiProvider.query(actualQuery) { response in
+        scheduleReplacementFailsafe(replacementID: replacementID, commandText: commandText)
+
+        aiProvider.query(actualQuery) { result in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.replaceUserInput(with: response, replacing: commandText)
+                guard self.activeReplacementID == replacementID else {
+                    return
+                }
+
+                switch result {
+                case .success(let response):
+                    self.insertResponse(response)
+                case .failure(let error):
+                    NSSound.beep()
+                    self.insertResponse(commandText)
+                    print(error.userMessage)
+                }
+
+                self.activeReplacementID = nil
+                self.isReplacingText = false
                 self.isLoading = false
             }
         }
@@ -170,7 +201,7 @@ class GlobalKeystrokeManager {
         currentTypedString = ""
     }
 
-    private func replaceUserInput(with response: String, replacing commandText: String) {
+    private func removeUserInput(replacing commandText: String) {
         let source = CGEventSource(stateID: .combinedSessionState)
 
         for _ in commandText {
@@ -179,16 +210,49 @@ class GlobalKeystrokeManager {
             deleteKeyDown?.post(tap: CGEventTapLocation.cghidEventTap)
             deleteKeyUp?.post(tap: CGEventTapLocation.cghidEventTap)
         }
+    }
 
-        for character in response.unicodeScalars {
-            let unicodeString = String(character).utf16.map { UniChar($0) }
-            let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true)
-            let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
-            keyDownEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
-            keyUpEvent?.keyboardSetUnicodeString(stringLength: unicodeString.count, unicodeString: unicodeString)
-            keyDownEvent?.post(tap: CGEventTapLocation.cghidEventTap)
-            keyUpEvent?.post(tap: CGEventTapLocation.cghidEventTap)
+    private func scheduleReplacementFailsafe(replacementID: UUID, commandText: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 65) {
+            guard self.activeReplacementID == replacementID else {
+                return
+            }
+
+            NSSound.beep()
+            self.insertResponse(commandText)
+            self.activeReplacementID = nil
+            self.isReplacingText = false
+            self.isLoading = false
+            print("SucceedAI timed out before the AI service returned a response.")
         }
+    }
+
+    private func insertResponse(_ response: String) {
+        guard !response.isEmpty else { return }
+
+        let pasteboard = NSPasteboard.general
+        let snapshot = PasteboardSnapshot(pasteboard: pasteboard)
+
+        pasteboard.clearContents()
+        pasteboard.setString(response, forType: .string)
+        let responseChangeCount = pasteboard.changeCount
+
+        pasteFromClipboard()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+            guard pasteboard.changeCount == responseChangeCount else { return }
+            snapshot.restore(to: pasteboard)
+        }
+    }
+
+    private func pasteFromClipboard() {
+        let source = CGEventSource(stateID: .combinedSessionState)
+        let keyDownEvent = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: true)
+        let keyUpEvent = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_ANSI_V), keyDown: false)
+        keyDownEvent?.flags = .maskCommand
+        keyUpEvent?.flags = .maskCommand
+        keyDownEvent?.post(tap: .cghidEventTap)
+        keyUpEvent?.post(tap: .cghidEventTap)
     }
 
     private func stopGlobalKeystrokeMonitoring() {
@@ -211,5 +275,37 @@ class GlobalKeystrokeManager {
     func checkAndRequestAccessibilityPermission(prompt: Bool) -> Bool {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: prompt]
         return AXIsProcessTrustedWithOptions(options)
+    }
+}
+
+private struct PasteboardSnapshot {
+    private let items: [[NSPasteboard.PasteboardType: Data]]
+
+    init(pasteboard: NSPasteboard) {
+        items = pasteboard.pasteboardItems?.map { item in
+            var itemData: [NSPasteboard.PasteboardType: Data] = [:]
+            for type in item.types {
+                if let data = item.data(forType: type) {
+                    itemData[type] = data
+                }
+            }
+            return itemData
+        } ?? []
+    }
+
+    func restore(to pasteboard: NSPasteboard) {
+        pasteboard.clearContents()
+
+        let pasteboardItems = items.map { itemData in
+            let item = NSPasteboardItem()
+            for (type, data) in itemData {
+                item.setData(data, forType: type)
+            }
+            return item
+        }
+
+        if !pasteboardItems.isEmpty {
+            pasteboard.writeObjects(pasteboardItems)
+        }
     }
 }
