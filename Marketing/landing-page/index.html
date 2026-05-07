@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SucceedAI - AI Writing Assistant for Mac</title>
+  <meta name="description" content="SucceedAI is an AI text replacement assistant for macOS. Type a command in any Mac app, press Return, and replace it with polished AI-generated text.">
+  <link rel="canonical" href="https://succeed.pierrehenry.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SucceedAI - AI Text Replacement for macOS">
+  <meta property="og:description" content="Use AI inside Mail, Notes, browsers, Slack, and any editable Mac text field without copy-paste or context switching.">
+  <meta property="og:image" content="https://succeed.pierrehenry.dev/assets/product-hunt-og-1200x630.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SucceedAI - AI Writing Assistant for Mac">
+  <meta name="twitter:description" content="Write with AI in any Mac app without switching context.">
+  <meta name="twitter:image" content="https://succeed.pierrehenry.dev/assets/product-hunt-og-1200x630.jpg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SucceedAI",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "macOS",
+    "description": "SucceedAI is an AI text replacement assistant for macOS that lets users type a command in any editable Mac text field and replace it with AI-generated text in place.",
+    "image": "https://succeed.pierrehenry.dev/assets/product-hunt-og-1200x630.jpg",
+    "url": "https://succeed.pierrehenry.dev/",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "sameAs": [
+      "https://www.producthunt.com/products/succeed-ai",
+      "https://github.com/SucceedAI/"
+    ],
+    "downloadUrl": "https://github.com/SucceedAI/macOS-Desktop-App/releases/latest"
+  }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0b1e25;
+      --muted: #53666d;
+      --teal: #12bfb2;
+      --blue: #2276ff;
+      --orange: #ff6135;
+      --cream: #faf7ee;
+      --card: rgba(255,255,255,.78);
+      --line: rgba(11,30,37,.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Avenir Next, ui-rounded, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 78% 4%, rgba(18,191,178,.28), transparent 34rem),
+        radial-gradient(circle at 3% 80%, rgba(255,97,53,.13), transparent 28rem),
+        linear-gradient(135deg, #f8fdf7, #e6f8f3 52%, #fff7ec);
+    }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 34px 0 12px; }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 24px; }
+    .brand img { width: 44px; height: 44px; border-radius: 12px; }
+    .navlinks { display: flex; gap: 22px; color: var(--muted); font-weight: 600; }
+    .hero { display: grid; grid-template-columns: .95fr 1.05fr; gap: 48px; align-items: center; padding: 78px 0 82px; }
+    .eyebrow { display: inline-flex; padding: 10px 16px; border-radius: 999px; color: #06766f; background: rgba(18,191,178,.14); font-weight: 800; }
+    h1 { font-size: clamp(52px, 7vw, 86px); line-height: .94; letter-spacing: -0.06em; margin: 24px 0 22px; }
+    .lead { font-size: 22px; line-height: 1.55; color: var(--muted); max-width: 610px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 999px; font-weight: 800; text-decoration: none; }
+    .primary { background: var(--orange); color: #fff; box-shadow: 0 18px 42px rgba(255,97,53,.22); }
+    .secondary { background: rgba(255,255,255,.7); border: 1px solid var(--line); }
+    .tertiary { color: #07363b; background: rgba(18,191,178,.12); border: 1px solid rgba(18,191,178,.24); }
+    .hero-card { position: relative; padding: 18px; border-radius: 34px; background: var(--card); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 30px 80px rgba(11,30,37,.16); }
+    .hero-card img { display: block; width: 100%; border-radius: 24px; }
+    section { padding: 72px 0; }
+    .section-head { max-width: 720px; margin-bottom: 32px; }
+    h2 { font-size: clamp(38px, 5vw, 58px); line-height: 1; letter-spacing: -0.045em; margin: 0 0 18px; }
+    .section-head p, .body-copy { color: var(--muted); font-size: 20px; line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { padding: 26px; border-radius: 28px; background: var(--card); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 16px 48px rgba(11,30,37,.08); }
+    .card h3 { margin: 0 0 10px; font-size: 24px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: step; }
+    .step:before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #fff; background: var(--teal); font-weight: 900; margin-bottom: 18px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+    .download-panel { display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; padding: 30px; border-radius: 34px; background: rgba(10,48,54,.92); color: #eafffb; box-shadow: 0 28px 85px rgba(10,48,54,.18); }
+    .download-panel h2 { font-size: clamp(34px, 4.8vw, 58px); margin-bottom: 12px; }
+    .download-panel p { color: #c8e5e2; font-size: 19px; line-height: 1.55; margin: 0; }
+    .trust-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; color: #c8e5e2; font-weight: 800; }
+    .trust-row span { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.10); }
+    .faq details { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .faq summary { cursor: pointer; font-weight: 800; font-size: 20px; }
+    .faq p { color: var(--muted); line-height: 1.55; }
+    footer { padding: 48px 0 72px; color: var(--muted); }
+    @media (max-width: 880px) {
+      .hero, .split { grid-template-columns: 1fr; }
+      .grid, .steps, .download-panel { grid-template-columns: 1fr; }
+      .navlinks { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <nav>
+      <div class="brand"><img src="../../ProductHunt/icons/product-hunt-icon-240x240.png" alt="SucceedAI app icon"> SucceedAI</div>
+      <div class="navlinks"><a href="#download">Download</a><a href="#how">How it works</a><a href="#use-cases">Use cases</a><a href="https://github.com/SucceedAI/">GitHub</a><a href="#faq">FAQ</a></div>
+    </nav>
+  </header>
+  <main>
+    <section class="hero wrap">
+      <div>
+        <span class="eyebrow">AI text replacement for macOS</span>
+        <h1>Write with AI in any Mac app without switching context</h1>
+        <p class="lead">SucceedAI lets you type a command in any editable Mac text field, describe what you need, press Return, and replace the command with polished AI-generated text.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/SucceedAI/macOS-Desktop-App/releases/latest">Download for macOS</a>
+          <a class="button secondary" href="https://github.com/SucceedAI/">View on GitHub</a>
+          <a class="button tertiary" href="https://www.producthunt.com/products/succeed-ai">Product Hunt</a>
+        </div>
+      </div>
+      <div class="hero-card"><img src="../../ProductHunt/gallery/01-ai-command-anywhere-1270x760.jpg" alt="SucceedAI AI writing assistant working in a Mac text field"></div>
+    </section>
+
+    <section id="download" class="wrap">
+      <div class="download-panel">
+        <div>
+          <span class="eyebrow">Latest macOS build</span>
+          <h2>Download SucceedAI for macOS</h2>
+          <p>Install the menu bar app, enable Accessibility permission, customize your trigger in Settings, and use AI directly where your cursor already is.</p>
+          <div class="trust-row"><span>macOS 14+</span><span>Menu bar app</span><span>Custom /ai trigger</span><span>GitHub releases</span></div>
+        </div>
+        <div class="actions" style="margin-top:0"><a class="button primary" href="https://github.com/SucceedAI/macOS-Desktop-App/releases/latest">Download latest release</a><a class="button secondary" href="https://github.com/SucceedAI/">GitHub organization</a></div>
+      </div>
+    </section>
+    <section class="wrap">
+      <div class="section-head">
+        <h2>AI should not make you leave the app you are using</h2>
+        <p>Browser chat tools are powerful, but they create a slow loop: select text, copy it, open another app, write a prompt, copy the answer, paste it back, and fix formatting. SucceedAI removes that loop.</p>
+      </div>
+      <div class="grid">
+        <div class="card"><h3>No browser loop</h3><p>Use AI writing from the text field where the work is already happening.</p></div>
+        <div class="card"><h3>No copy-paste tax</h3><p>Replace a command with the generated response instead of juggling windows.</p></div>
+        <div class="card"><h3>No broken flow</h3><p>Draft emails, notes, messages, and support replies without switching context.</p></div>
+        <div class="card"><h3>Safer failures</h3><p>If the AI service cannot respond, SucceedAI restores the original command instead of pasting an error into your work.</p></div>
+        <div class="card"><h3>Clear setup</h3><p>The app explains Accessibility permission, opens the right macOS settings panel, and lets users check permission status.</p></div>
+        <div class="card"><h3>Open project</h3><p>Follow the public GitHub organization for releases, issues, support, and product updates.</p></div>
+      </div>
+    </section>
+    <section id="how" class="wrap">
+      <div class="section-head"><h2>One trigger. One prompt. One Return key.</h2></div>
+      <div class="steps">
+        <div class="card step"><h3>Open any app</h3><p>Use an editable text field in Mail, Notes, browsers, documents, or messaging apps.</p></div>
+        <div class="card step"><h3>Type your trigger</h3><p>Start with the default command or customize it from Settings > Keys.</p></div>
+        <div class="card step"><h3>Describe the task</h3><p>Ask SucceedAI to rewrite, summarize, translate, shorten, expand, or polish text.</p></div>
+        <div class="card step"><h3>Press Return</h3><p>The command is replaced with generated text in the active field.</p></div>
+      </div>
+    </section>
+    <section id="use-cases" class="wrap">
+      <div class="section-head"><h2>Use AI wherever you write on your Mac</h2></div>
+      <div class="grid">
+        <div class="card"><h3>Email</h3><p>Rewrite rough replies, soften tone, tighten long messages, and create clearer subject lines.</p></div>
+        <div class="card"><h3>Notes</h3><p>Summarize meeting notes, turn fragments into action items, and clean up drafts.</p></div>
+        <div class="card"><h3>Support</h3><p>Draft helpful answers faster without leaving your help desk or browser.</p></div>
+        <div class="card"><h3>Marketing</h3><p>Generate launch copy, social posts, hooks, and product blurbs in place.</p></div>
+        <div class="card"><h3>Development</h3><p>Improve issue comments, pull request descriptions, release notes, and documentation.</p></div>
+        <div class="card"><h3>Everyday writing</h3><p>Translate, simplify, expand, shorten, polish, or brainstorm text.</p></div>
+      </div>
+    </section>
+    <section class="wrap split">
+      <div class="section-head"><h2>Clear macOS permissions, explained before you grant them</h2><p>SucceedAI needs Accessibility permission because macOS requires it for apps that detect global keyboard input and insert text into other apps.</p></div>
+      <div class="hero-card"><img src="../../ProductHunt/gallery/04-permissions-made-clear-1270x760.jpg" alt="SucceedAI Accessibility permission setup for macOS"></div>
+    </section>
+    <section id="faq" class="wrap faq">
+      <div class="section-head"><h2>FAQ</h2></div>
+      <details><summary>What is SucceedAI?</summary><p>SucceedAI is an AI writing assistant for Mac that replaces typed commands with AI-generated text directly inside the app you are using.</p></details>
+      <details><summary>Does SucceedAI work in any Mac app?</summary><p>SucceedAI is designed for editable macOS text fields, including common writing surfaces like Mail, Notes, browser text fields, messaging apps, and documents.</p></details>
+      <details><summary>Why does SucceedAI need Accessibility permission?</summary><p>macOS requires Accessibility permission for apps that detect global keyboard input and insert text into other apps. SucceedAI uses this permission for command detection and response insertion.</p></details>
+      <details><summary>Can I change the command trigger?</summary><p>Yes. The Settings > Keys panel lets you change the replacement trigger and restore the default.</p></details>
+      <details><summary>How is SucceedAI different from ChatGPT in a browser?</summary><p>SucceedAI is optimized for in-place writing. You do not need to leave the app, paste text into a browser, copy the answer, and return to your original editor.</p></details>
+      <details><summary>Where can I download the app?</summary><p>Use the latest macOS release from <a href="https://github.com/SucceedAI/macOS-Desktop-App/releases/latest">GitHub Releases</a>. The public organization is available at <a href="https://github.com/SucceedAI/">github.com/SucceedAI</a>.</p></details>
+      <details><summary>What happens if the AI request fails?</summary><p>SucceedAI restores the original typed command and leaves your active text field recoverable instead of replacing your work with a raw error message.</p></details>
+    </section>
+  </main>
+  <footer class="wrap">SucceedAI - AI text replacement for macOS. <a href="https://github.com/SucceedAI/macOS-Desktop-App/releases/latest">Download</a> <a href="https://github.com/SucceedAI/">GitHub</a></footer>
+</body>
+</html>
