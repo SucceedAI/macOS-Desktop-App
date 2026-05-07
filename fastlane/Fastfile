@@ -1,0 +1,79 @@
+default_platform(:mac)
+
+ROOT_PATH = File.expand_path("..", __dir__)
+PROJECT_PATH = File.join(ROOT_PATH, "Succeed AI.xcodeproj")
+SCHEME_NAME = "SucceedAI"
+APP_IDENTIFIER = ENV.fetch("APP_IDENTIFIER", "me.ph7.SucceedAI")
+OUTPUT_DIR = File.join(ROOT_PATH, "build/fastlane")
+PKG_PATH = File.join(OUTPUT_DIR, "SucceedAI.pkg")
+METADATA_PATH = File.join(ROOT_PATH, "fastlane/metadata")
+SCREENSHOTS_PATH = File.join(ROOT_PATH, "fastlane/screenshots")
+
+platform :mac do
+  desc "Regenerate App Store screenshots for local review and Fastlane upload"
+  lane :screenshots do
+    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_app_store_screenshots.py")
+  end
+
+  desc "Validate the macOS app compiles without requiring local signing secrets"
+  lane :verify_release_build do
+    sh(
+      "xcodebuild -project '#{PROJECT_PATH}' " \
+      "-scheme '#{SCHEME_NAME}' " \
+      "-configuration Release " \
+      "-destination 'platform=macOS' " \
+      "-derivedDataPath /private/tmp/succeed-ai-fastlane-verify " \
+      "CODE_SIGN_STYLE=Manual " \
+      "CODE_SIGN_IDENTITY=- " \
+      "DEVELOPMENT_TEAM= " \
+      "PROVISIONING_PROFILE_SPECIFIER= " \
+      "build"
+    )
+  end
+
+  desc "Build a signed macOS package for App Store Connect"
+  lane :build_app_store do
+    screenshots
+    build_mac_app(
+      project: PROJECT_PATH,
+      scheme: SCHEME_NAME,
+      configuration: "Release",
+      clean: true,
+      export_method: "app-store",
+      output_directory: OUTPUT_DIR,
+      output_name: File.basename(PKG_PATH),
+      xcargs: ENV["XCODE_XCARGS"],
+      export_team_id: ENV["TEAM_ID"]
+    )
+  end
+
+  desc "Upload metadata and screenshots only, without uploading a binary"
+  lane :upload_metadata do
+    screenshots
+    deliver(
+      platform: "osx",
+      app_identifier: APP_IDENTIFIER,
+      metadata_path: METADATA_PATH,
+      screenshots_path: SCREENSHOTS_PATH,
+      skip_binary_upload: true,
+      skip_app_version_update: true,
+      submit_for_review: false,
+      force: true
+    )
+  end
+
+  desc "Build the macOS package, upload listing assets, and leave review submission manual"
+  lane :release do
+    build_app_store
+    deliver(
+      platform: "osx",
+      app_identifier: APP_IDENTIFIER,
+      metadata_path: METADATA_PATH,
+      screenshots_path: SCREENSHOTS_PATH,
+      pkg: PKG_PATH,
+      submit_for_review: false,
+      automatic_release: false,
+      force: true
+    )
+  end
+end

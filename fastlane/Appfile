@@ -1,0 +1,5 @@
+app_identifier(ENV.fetch("APP_IDENTIFIER", "me.ph7.SucceedAI"))
+
+apple_id(ENV["APPLE_ID"]) if ENV["APPLE_ID"]
+team_id(ENV["TEAM_ID"]) if ENV["TEAM_ID"]
+itc_team_id(ENV["ITC_TEAM_ID"]) if ENV["ITC_TEAM_ID"]
