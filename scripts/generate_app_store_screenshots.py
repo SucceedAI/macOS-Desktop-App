@@ -2,26 +2,43 @@
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import math
+import shutil
 
 W, H = 2880, 1800
-OUT = Path("AppStore/Screenshots/macOS")
-OUT.mkdir(parents=True, exist_ok=True)
+APPSTORE_OUT = Path("AppStore/Screenshots/macOS")
+FASTLANE_OUT = Path("fastlane/screenshots/en-US")
 FONT = Path("/System/Library/Fonts/SFNS.ttf")
 FONT_ROUNDED = Path("/System/Library/Fonts/SFNSRounded.ttf")
 FONT_MONO = Path("/System/Library/Fonts/SFNSMono.ttf")
 ICON = Path("Succeed AI/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png")
 
-INK = (16, 35, 46, 255)
-MUTED = (86, 108, 120, 255)
-TEAL = (0, 176, 168, 255)
-BLUE = (36, 118, 255, 255)
+INK = (13, 28, 35, 255)
+INK_2 = (31, 50, 58, 255)
+MUTED = (83, 104, 113, 255)
+SOFT = (247, 252, 250, 255)
+TEAL = (0, 185, 171, 255)
+BLUE = (26, 105, 255, 255)
 GREEN = (24, 164, 105, 255)
-ORANGE = (230, 138, 36, 255)
+ORANGE = (244, 116, 44, 255)
+GOLD = (246, 178, 64, 255)
+ROSE = (242, 82, 98, 255)
 WHITE = (255, 255, 255, 255)
 
 
+def ensure_dirs():
+    for directory in [APPSTORE_OUT, FASTLANE_OUT]:
+        directory.mkdir(parents=True, exist_ok=True)
+        for existing in directory.glob("*.png"):
+            existing.unlink()
+
+
 def font(size, weight="regular", mono=False):
-    path = FONT_MONO if mono else (FONT_ROUNDED if weight in {"bold", "heavy"} else FONT)
+    if mono:
+        path = FONT_MONO
+    elif weight in {"bold", "heavy"}:
+        path = FONT_ROUNDED
+    else:
+        path = FONT
     return ImageFont.truetype(str(path), size=size)
 
 
@@ -34,9 +51,9 @@ def gradient(size, c1, c2, c3=None):
     pix = img.load()
     for y in range(size[1]):
         for x in range(size[0]):
-            t = (x / size[0] * 0.62) + (y / size[1] * 0.38)
+            t = (x / size[0] * 0.58) + (y / size[1] * 0.42)
             if c3 and t > 0.55:
-                col = lerp(c2, c3, (t - 0.55) / 0.45)
+                col = lerp(c2, c3, min((t - 0.55) / 0.45, 1))
             else:
                 col = lerp(c1, c2, min(t / 0.55, 1))
             pix[x, y] = col
@@ -50,11 +67,48 @@ def draw_blob(img, xy, color, blur=90):
     img.alpha_composite(layer.filter(ImageFilter.GaussianBlur(blur)))
 
 
-def rounded(draw, xy, radius, fill, outline=None, width=1):
-    draw.rounded_rectangle(xy, radius=radius, fill=fill, outline=outline, width=width)
+def draw_grid(img, opacity=22):
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    for x in range(0, W, 96):
+        d.line((x, 0, x, H), fill=(13, 28, 35, opacity), width=1)
+    for y in range(0, H, 96):
+        d.line((0, y, W, y), fill=(13, 28, 35, opacity), width=1)
+    img.alpha_composite(layer)
 
 
-def shadowed_card(img, xy, radius=42, fill=(255, 255, 255, 225), shadow=(0, 72, 92, 36), blur=32, offset=(0, 22), outline=(255, 255, 255, 160)):
+def text(draw, xy, value, size=54, fill=INK, weight="regular", mono=False, anchor=None):
+    draw.text(xy, value, font=font(size, weight, mono), fill=fill, anchor=anchor)
+
+
+def wrap(draw, value, max_width, size, weight="regular", mono=False):
+    f = font(size, weight, mono)
+    lines = []
+    for raw_line in value.split("\n"):
+        words = raw_line.split()
+        line = ""
+        for word in words:
+            test = f"{line} {word}".strip()
+            if draw.textbbox((0, 0), test, font=f)[2] <= max_width:
+                line = test
+            else:
+                if line:
+                    lines.append(line)
+                line = word
+        if line:
+            lines.append(line)
+    return lines
+
+
+def paragraph(draw, xy, value, max_width, size=40, fill=MUTED, leading=1.2, weight="regular"):
+    x, y = xy
+    for line in wrap(draw, value, max_width, size, weight=weight):
+        text(draw, (x, y), line, size=size, fill=fill, weight=weight)
+        y += int(size * leading)
+    return y
+
+
+def rounded_shadow(img, xy, radius=42, fill=(255, 255, 255, 235), shadow=(13, 44, 52, 42), blur=38, offset=(0, 24), outline=(255, 255, 255, 155)):
     x1, y1, x2, y2 = xy
     layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
@@ -64,223 +118,288 @@ def shadowed_card(img, xy, radius=42, fill=(255, 255, 255, 225), shadow=(0, 72, 
     d.rounded_rectangle(xy, radius=radius, fill=fill, outline=outline, width=2)
 
 
-def text(draw, xy, value, size=54, fill=INK, weight="regular", mono=False, anchor=None):
-    draw.text(xy, value, font=font(size, weight, mono), fill=fill, anchor=anchor)
-
-
-def wrap(draw, value, max_width, size, weight="regular", mono=False):
-    f = font(size, weight, mono)
-    words = value.split()
-    lines, line = [], ""
-    for word in words:
-        test = f"{line} {word}".strip()
-        if draw.textbbox((0, 0), test, font=f)[2] <= max_width:
-            line = test
-        else:
-            if line:
-                lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
-    return lines
-
-
-def paragraph(draw, xy, value, max_width, size=40, fill=MUTED, leading=1.18, weight="regular"):
-    x, y = xy
-    for line in wrap(draw, value, max_width, size, weight=weight):
-        text(draw, (x, y), line, size=size, fill=fill, weight=weight)
-        y += int(size * leading)
-    return y
-
-
-def title_block(draw, kicker, title, subtitle):
-    text(draw, (170, 165), kicker.upper(), size=30, fill=TEAL, weight="bold")
-    y = 215
-    lines = title.split("\n")
-    if len(lines) == 1:
-        lines = wrap(draw, title, 1180, 86, weight="heavy")
-    for line in lines:
-        text(draw, (170, y), line, size=86, fill=INK, weight="heavy")
-        y += 98
-    paragraph(draw, (174, y + 22), subtitle, 720, size=34, fill=MUTED)
-
-
-def app_icon(size=96):
+def app_icon(size=120):
     if ICON.exists():
         im = Image.open(ICON).convert("RGBA").resize((size, size), Image.LANCZOS)
     else:
         im = Image.new("RGBA", (size, size), TEAL)
+        d = ImageDraw.Draw(im)
+        text(d, (size // 2, size // 2), "S", size=size // 2, fill=WHITE, weight="heavy", anchor="mm")
     mask = Image.new("L", (size, size), 0)
-    ImageDraw.Draw(mask).rounded_rectangle((0, 0, size, size), radius=size // 5, fill=255)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, size, size), radius=size // 4, fill=255)
     im.putalpha(mask)
     return im
 
 
-def mac_window(img, xy, title="SucceedAI", fill=(250, 255, 253, 245)):
-    x1, y1, x2, y2 = xy
-    shadowed_card(img, xy, radius=34, fill=fill, shadow=(0, 48, 72, 46), blur=42, offset=(0, 28))
-    d = ImageDraw.Draw(img)
-    d.rounded_rectangle((x1, y1, x2, y1 + 82), radius=34, fill=(247, 251, 252, 245))
-    d.rectangle((x1, y1 + 48, x2, y1 + 82), fill=(247, 251, 252, 245))
-    for i, c in enumerate([(255, 95, 87, 255), (255, 189, 46, 255), (39, 201, 63, 255)]):
-        d.ellipse((x1 + 34 + i * 34, y1 + 31, x1 + 52 + i * 34, y1 + 49), fill=c)
-    text(d, ((x1 + x2) // 2, y1 + 43), title, size=26, fill=(85, 96, 104, 255), weight="bold", anchor="mm")
+def badge(draw, xy, label, color=TEAL, fill_alpha=28):
+    x, y = xy
+    f = font(28, "bold")
+    w = draw.textbbox((0, 0), label, font=f)[2] + 56
+    draw.rounded_rectangle((x, y, x + w, y + 58), radius=29, fill=color, outline=color[:3] + (105,), width=2)
+    text(draw, (x + 28, y + 15), label, size=28, fill=WHITE, weight="bold")
+    return x + w + 18
 
 
-def menu_bar(img):
+def title_block(draw, kicker, title, subtitle, width=900, x=170, y=164, title_size=86):
+    text(draw, (x, y), kicker.upper(), size=30, fill=TEAL, weight="bold")
+    y += 54
+    for line in wrap(draw, title, width, title_size, weight="heavy"):
+        text(draw, (x, y), line, size=title_size, fill=INK, weight="heavy")
+        y += int(title_size * 1.05)
+    paragraph(draw, (x + 4, y + 22), subtitle, width - 70, size=34, fill=MUTED)
+
+
+def mac_menu_bar(img):
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle((80, 58, W - 80, 128), radius=24, fill=(255, 255, 255, 150), outline=(255, 255, 255, 130), width=1)
-    img.alpha_composite(app_icon(42), (118, 72))
+    d.rounded_rectangle((76, 56, W - 76, 126), radius=26, fill=(255, 255, 255, 150), outline=(255, 255, 255, 135), width=1)
+    img.alpha_composite(app_icon(42), (118, 70))
     text(d, (176, 84), "SucceedAI", size=28, fill=INK, weight="bold")
-    text(d, (W - 430, 84), "Wed 6 May  20:06", size=28, fill=(75, 90, 98, 255))
-    d.ellipse((W - 140, 78, W - 110, 108), fill=TEAL)
+    for i, label in enumerate(["File", "Edit", "Window", "Help"]):
+        text(d, (338 + i * 112, 86), label, size=25, fill=(72, 91, 100, 255))
+    text(d, (W - 520, 84), "Thu 7 May  9:41", size=28, fill=(72, 91, 100, 255))
+    d.rounded_rectangle((W - 192, 72, W - 112, 112), radius=20, fill=(229, 252, 248, 255), outline=(180, 232, 224, 255), width=1)
+    d.ellipse((W - 166, 82, W - 142, 106), fill=TEAL)
 
 
-def menu_panel(img, xy, configured=True, running=True):
-    x1, y1, x2, y2 = xy
-    d = ImageDraw.Draw(img)
-    shadowed_card(img, xy, radius=42, fill=(255, 255, 255, 238), shadow=(0, 56, 72, 60), blur=42, offset=(0, 24))
-    img.alpha_composite(app_icon(90), (x1 + 42, y1 + 42))
-    text(d, (x1 + 154, y1 + 54), "SucceedAI", size=48, fill=INK, weight="heavy")
-    text(d, (x1 + 154, y1 + 112), "Instant AI in any macOS text field", size=28, fill=MUTED)
-    badge = "Live" if running else "Ready"
-    bfill = (229, 250, 241, 255) if running else (229, 249, 248, 255)
-    bcol = GREEN if running else TEAL
-    d.rounded_rectangle((x2 - 160, y1 + 58, x2 - 62, y1 + 100), radius=20, fill=bfill)
-    text(d, (x2 - 111, y1 + 79), badge, size=24, fill=bcol, weight="bold", anchor="mm")
-    card_y = y1 + 170
-    d.rounded_rectangle((x1 + 42, card_y, x2 - 42, card_y + 160), radius=28, fill=(238, 253, 250, 255), outline=(188, 236, 230, 255), width=2)
-    text(d, (x1 + 78, card_y + 36), "Service running", size=34, fill=INK, weight="bold")
-    paragraph(d, (x1 + 78, card_y + 84), "SucceedAI is listening for /ai commands across macOS.", x2 - x1 - 156, size=25)
-    y = card_y + 205
-    for n, row in enumerate([("1", "Open any app"), ("2", "Type /ai plus your task"), ("3", "Press Return")]):
-        cy = y + n * 64
-        d.ellipse((x1 + 50, cy, x1 + 90, cy + 40), fill=BLUE)
-        text(d, (x1 + 70, cy + 21), row[0], size=22, fill=WHITE, weight="bold", anchor="mm")
-        text(d, (x1 + 112, cy + 5), row[1], size=25, fill=INK, weight="bold")
-    for i, label in enumerate(["Settings", "Support"]):
-        bx = x1 + 42 + i * ((x2 - x1 - 104) // 2 + 20)
-        by = min(y2 - 106, y1 + 610)
-        bw = (x2 - x1 - 124) // 2
-        d.rounded_rectangle((bx, by, bx + bw, by + 66), radius=20, fill=(245, 249, 250, 255), outline=(222, 233, 236, 255), width=2)
-        text(d, (bx + bw // 2, by + 34), label, size=25, fill=INK, weight="bold", anchor="mm")
-
-
-def prompt_window(img, xy, before=True):
-    x1, y1, x2, y2 = xy
-    d = ImageDraw.Draw(img)
-    mac_window(img, xy, "Notes")
-    text(d, (x1 + 76, y1 + 142), "Campaign brief", size=44, fill=INK, weight="bold")
-    if before:
-        body = "/ai turn this rough launch note into a crisp\ncustomer email"
-        fill = (6, 118, 112, 255)
+def base(theme="mint"):
+    if theme == "night":
+        img = gradient((W, H), (19, 38, 48), (21, 83, 92), (255, 247, 222))
+        draw_blob(img, (1870, -260, 2990, 820), (0, 214, 194, 82), 130)
+        draw_blob(img, (-390, 1070, 790, 2180), (36, 104, 255, 48), 140)
+        draw_grid(img, 12)
     else:
-        body = "Subject: Your faster way to write on Mac\n\nHi team,\n\nSucceedAI helps you turn rough ideas into polished text without leaving the app you are already using. Type a short /ai command, press Return, and keep moving."
-        fill = INK
-    y = y1 + 230
-    for line in body.split("\n"):
+        img = gradient((W, H), (239, 254, 249), (228, 245, 255), (255, 248, 232))
+        draw_blob(img, (2040, -250, 2990, 690), (0, 194, 175, 72), 125)
+        draw_blob(img, (-310, 1040, 770, 2140), (36, 104, 255, 42), 125)
+        draw_blob(img, (1180, 1110, 2220, 2180), (246, 178, 64, 42), 140)
+        draw_grid(img, 18)
+    mac_menu_bar(img)
+    return img
+
+
+def mac_window(img, xy, title="SucceedAI", fill=(252, 255, 253, 244)):
+    x1, y1, x2, y2 = xy
+    rounded_shadow(img, xy, radius=36, fill=fill, shadow=(0, 50, 70, 54), blur=44, offset=(0, 30))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((x1, y1, x2, y1 + 86), radius=36, fill=(248, 252, 252, 244))
+    d.rectangle((x1, y1 + 50, x2, y1 + 86), fill=(248, 252, 252, 244))
+    for i, c in enumerate([(255, 95, 87, 255), (255, 189, 46, 255), (39, 201, 63, 255)]):
+        d.ellipse((x1 + 34 + i * 36, y1 + 32, x1 + 54 + i * 36, y1 + 52), fill=c)
+    text(d, ((x1 + x2) // 2, y1 + 44), title, size=26, fill=(82, 96, 104, 255), weight="bold", anchor="mm")
+
+
+def command_editor(img, xy, before=True):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    mac_window(img, xy, "Mail")
+    text(d, (x1 + 74, y1 + 142), "New customer reply", size=44, fill=INK, weight="heavy")
+    d.rounded_rectangle((x1 + 72, y1 + 220, x2 - 72, y1 + 580), radius=28, fill=(255, 255, 255, 218), outline=(224, 236, 238, 255), width=2)
+    if before:
+        lines = [
+            "/ai rewrite this reply so it sounds clear, warm,",
+            "and confident:",
+            "",
+            "thanks for waiting. we fixed it and you can try again",
+        ]
+        colors = [TEAL, TEAL, INK, MUTED]
+    else:
+        lines = [
+            "Thanks for your patience.",
+            "",
+            "We have fixed the issue on our side, so you can try again now. If anything still feels off, reply here and I will take another look right away.",
+        ]
+        colors = [INK, INK, INK]
+    y = y1 + 266
+    for idx, line in enumerate(lines):
         if line:
-            y = paragraph(d, (x1 + 76, y), line, x2 - x1 - 152, size=34, fill=fill if line.startswith("/ai") else INK, weight="regular")
+            y = paragraph(d, (x1 + 112, y), line, x2 - x1 - 224, size=34, fill=colors[min(idx, len(colors) - 1)])
         y += 18
+
+
+def menu_panel(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    rounded_shadow(img, xy, radius=44, fill=(255, 255, 255, 240), shadow=(0, 50, 64, 66), blur=46, offset=(0, 26))
+    img.alpha_composite(app_icon(92), (x1 + 44, y1 + 44))
+    text(d, (x1 + 158, y1 + 56), "SucceedAI", size=48, fill=INK, weight="heavy")
+    text(d, (x1 + 158, y1 + 114), "Ready in every text field", size=28, fill=MUTED)
+    d.rounded_rectangle((x2 - 168, y1 + 60, x2 - 54, y1 + 104), radius=22, fill=(225, 249, 239, 255))
+    text(d, (x2 - 111, y1 + 82), "Live", size=24, fill=GREEN, weight="bold", anchor="mm")
+
+    cards = [
+        ("Service running", "Detects your trigger and replaces the command in place.", GREEN),
+        ("Open Settings", "Change launch behavior, shortcuts, permissions, and support.", BLUE),
+        ("Check for updates", "Keep the menu bar assistant ready for release builds.", TEAL),
+    ]
+    y = y1 + 180
+    for title, desc, col in cards:
+        d.rounded_rectangle((x1 + 44, y, x2 - 44, y + 128), radius=28, fill=SOFT, outline=col[:3] + (85,), width=2)
+        d.ellipse((x1 + 80, y + 42, x1 + 124, y + 86), fill=col)
+        text(d, (x1 + 154, y + 28), title, size=32, fill=INK, weight="bold")
+        text(d, (x1 + 154, y + 76), desc, size=25, fill=MUTED)
+        y += 156
 
 
 def settings_window(img, xy):
     x1, y1, x2, y2 = xy
     d = ImageDraw.Draw(img)
-    mac_window(img, xy, "SucceedAI Settings")
-    img.alpha_composite(app_icon(110), (x1 + 70, y1 + 130))
-    text(d, (x1 + 210, y1 + 132), "SucceedAI Settings", size=54, fill=INK, weight="heavy")
-    paragraph(d, (x1 + 214, y1 + 205), "Tune the menu bar assistant for a fast, focused macOS workflow.", x2 - x1 - 290, size=30)
-    cards = [
-        ("Launch", "Start SucceedAI at login", GREEN),
-        ("Command Trigger", "/ai  Example: rewrite this note more clearly", TEAL),
-        ("macOS Permission", "Accessibility enables command detection and response insertion.", ORANGE),
+    mac_window(img, xy, "Settings")
+    img.alpha_composite(app_icon(106), (x1 + 74, y1 + 126))
+    text(d, (x1 + 210, y1 + 130), "Settings", size=58, fill=INK, weight="heavy")
+    paragraph(d, (x1 + 214, y1 + 202), "A clearer setup panel for permissions, launch behavior, and your replacement trigger.", x2 - x1 - 300, size=30)
+
+    tab_y = y1 + 315
+    d.rounded_rectangle((x1 + 72, tab_y, x1 + 424, tab_y + 64), radius=26, fill=(229, 247, 244, 255))
+    d.rounded_rectangle((x1 + 78, tab_y + 6, x1 + 248, tab_y + 58), radius=22, fill=WHITE)
+    text(d, (x1 + 163, tab_y + 33), "General", size=25, fill=INK, weight="bold", anchor="mm")
+    text(d, (x1 + 337, tab_y + 33), "Keys", size=25, fill=MUTED, weight="bold", anchor="mm")
+
+    rows = [
+        ("Launch at login", "Start automatically when your Mac starts.", GREEN, True),
+        ("Accessibility", "Required for in-place text replacement.", ORANGE, True),
+        ("Replacement trigger", "/ai  - customize in Settings > Keys.", TEAL, False),
     ]
-    y = y1 + 335
-    for title, desc, col in cards:
-        d.rounded_rectangle((x1 + 70, y, x2 - 70, y + 145), radius=28, fill=(255, 255, 255, 232), outline=col[:3] + (55,), width=2)
-        d.rounded_rectangle((x1 + 104, y + 34, x1 + 158, y + 88), radius=18, fill=col[:3] + (28,))
-        d.ellipse((x1 + 120, y + 50, x1 + 142, y + 72), fill=col)
-        text(d, (x1 + 185, y + 36), title, size=34, fill=INK, weight="bold")
-        text(d, (x1 + 185, y + 86), desc, size=28, fill=MUTED, mono=title == "Command Trigger")
-        y += 176
+    y = y1 + 430
+    for title, desc, col, checked in rows:
+        d.rounded_rectangle((x1 + 72, y, x2 - 72, y + 150), radius=30, fill=(255, 255, 255, 235), outline=col[:3] + (65,), width=2)
+        d.rounded_rectangle((x1 + 108, y + 45, x1 + 166, y + 103), radius=18, fill=col[:3] + (32,))
+        if checked:
+            text(d, (x1 + 137, y + 75), "OK", size=21, fill=col, weight="heavy", anchor="mm")
+        else:
+            text(d, (x1 + 137, y + 75), "/", size=34, fill=col, weight="heavy", anchor="mm")
+        text(d, (x1 + 196, y + 36), title, size=34, fill=INK, weight="bold")
+        text(d, (x1 + 196, y + 86), desc, size=27, fill=MUTED, mono=title == "Replacement trigger")
+        y += 178
 
 
-def feature_chips(d, x, y, items):
-    for item, col in items:
-        w = d.textbbox((0, 0), item, font=font(28, "bold"))[2] + 54
-        d.rounded_rectangle((x, y, x + w, y + 56), radius=28, fill=(255, 255, 255, 205), outline=col[:3] + (95,), width=2)
-        text(d, (x + 27, y + 16), item, size=28, fill=col, weight="bold")
-        x += w + 18
+def permission_dialog(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    rounded_shadow(img, xy, radius=54, fill=(255, 255, 255, 244), shadow=(0, 42, 62, 58), blur=48, offset=(0, 30))
+    img.alpha_composite(app_icon(128), ((x1 + x2) // 2 - 64, y1 + 78))
+    text(d, ((x1 + x2) // 2, y1 + 250), "Authorize SucceedAI", size=58, fill=INK, weight="heavy", anchor="mm")
+    paragraph(d, (x1 + 130, y1 + 310), "macOS requires Accessibility permission before SucceedAI can detect your trigger and replace text in the active app.", x2 - x1 - 260, size=32, fill=MUTED)
+    steps = ["System Settings", "Privacy & Security", "Accessibility", "Enable SucceedAI"]
+    y = y1 + 515
+    center = (x1 + x2) // 2
+    for idx, step in enumerate(steps):
+        d.rounded_rectangle((center - 310, y, center + 310, y + 70), radius=35, fill=(236, 249, 247, 255), outline=(84, 185, 210, 255), width=3)
+        text(d, (center, y + 36), step, size=30, fill=INK_2, weight="bold", anchor="mm")
+        if idx < len(steps) - 1:
+            d.line((center, y + 70, center, y + 118), fill=(84, 185, 210, 255), width=5)
+            d.ellipse((center - 8, y + 92, center + 8, y + 108), fill=(84, 185, 210, 255))
+        y += 118
 
 
-def base():
-    img = gradient((W, H), (235, 253, 249), (230, 243, 255), (255, 248, 236))
-    draw_blob(img, (2050, -210, 2920, 640), (0, 190, 170, 60), 105)
-    draw_blob(img, (-250, 1080, 720, 2100), (47, 120, 255, 42), 120)
-    draw_blob(img, (1200, 1120, 2180, 2140), (255, 185, 75, 34), 140)
-    menu_bar(img)
-    return img
-
-
-def save(img, name):
-    path = OUT / name
-    img.convert("RGB").save(path, quality=96)
-    print(path)
+def book_cover(img, xy):
+    x1, y1, x2, y2 = xy
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    d.rounded_rectangle((x1 + 40, y1 + 54, x2 + 40, y2 + 54), radius=60, fill=(16, 48, 58, 52))
+    img.alpha_composite(layer.filter(ImageFilter.GaussianBlur(48)))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((x1, y1, x2, y2), radius=58, fill=(10, 43, 50, 255), outline=(255, 255, 255, 95), width=2)
+    draw_blob(img, (x1 + 360, y1 - 190, x2 + 260, y1 + 680), (0, 210, 188, 75), 80)
+    draw_blob(img, (x1 - 190, y2 - 620, x1 + 650, y2 + 220), (255, 173, 51, 54), 85)
+    img.alpha_composite(app_icon(150), (x1 + 90, y1 + 92))
+    text(d, (x1 + 90, y1 + 300), "AI writing", size=74, fill=WHITE, weight="heavy")
+    text(d, (x1 + 90, y1 + 386), "that stays", size=74, fill=WHITE, weight="heavy")
+    text(d, (x1 + 90, y1 + 472), "inside your", size=74, fill=WHITE, weight="heavy")
+    text(d, (x1 + 90, y1 + 558), "flow.", size=74, fill=(165, 255, 244, 255), weight="heavy")
+    paragraph(d, (x1 + 94, y2 - 220), "Type a command, press Return, and keep writing where the work already is.", x2 - x1 - 190, size=30, fill=(214, 237, 236, 255))
 
 
 def shot1():
-    img = base(); d = ImageDraw.Draw(img)
-    title_block(d, "Menu bar AI", "Instant AI anywhere\non your Mac", "Write, rewrite, summarize, and polish inside the app you are already using. No context switching, no extra window management.")
-    feature_chips(d, 174, 630, [("Works in any text field", TEAL), ("Press Return to replace", BLUE)])
-    prompt_window(img, (900, 500, 2210, 1400), before=True)
-    menu_panel(img, (1820, 250, 2660, 1060), running=True)
+    img = base("mint")
+    d = ImageDraw.Draw(img)
+    title_block(
+        d,
+        "Mac App Store preview",
+        "AI writing without leaving your Mac app",
+        "SucceedAI replaces a typed command with polished text directly in Mail, Notes, browsers, documents, and any editable macOS text field.",
+        width=930,
+    )
+    x = 174
+    for label, col in [("No browser loop", TEAL), ("No copy-paste tax", BLUE), ("Custom trigger", ORANGE)]:
+        x = badge(d, (x, 655), label, col)
+    book_cover(img, (2060, 302, 2680, 1328))
+    command_editor(img, (840, 720, 1980, 1500), before=True)
     save(img, "01-instant-ai-anywhere-2880x1800.png")
 
 
 def shot2():
-    img = base(); d = ImageDraw.Draw(img)
-    title_block(d, "Control center", "A calm home in your menu bar", "See service status, permission state, usage guidance, settings, support, and product news in one polished macOS panel.")
-    menu_panel(img, (1440, 260, 2450, 1040), running=True)
-    shadowed_card(img, (250, 760, 1180, 1290), radius=44, fill=(255, 255, 255, 226))
-    text(d, (320, 835), "Built for focus", size=54, fill=INK, weight="heavy")
-    paragraph(d, (324, 915), "SucceedAI stays out of the way until you need it, then gives you a direct path from rough thought to finished text.", 760, size=36)
-    save(img, "02-menu-bar-control-center-2880x1800.png")
+    img = base("mint")
+    d = ImageDraw.Draw(img)
+    title_block(
+        d,
+        "In-place replacement",
+        "Turn rough prompts into finished text",
+        "Write the instruction exactly where you need the answer. Press Return and SucceedAI replaces the command with the generated response.",
+        width=920,
+    )
+    command_editor(img, (220, 690, 1340, 1420), before=True)
+    command_editor(img, (1510, 535, 2670, 1475), before=False)
+    d.line((1390, 1010, 1490, 1010), fill=TEAL, width=12)
+    d.polygon([(1490, 1010), (1448, 982), (1448, 1038)], fill=TEAL)
+    save(img, "02-in-place-ai-rewrite-2880x1800.png")
 
 
 def shot3():
-    img = base(); d = ImageDraw.Draw(img)
-    title_block(d, "In-place writing", "Replace rough prompts with finished text", "Type a natural-language request, press Return, and SucceedAI replaces the command with the response directly in your active editor.")
-    prompt_window(img, (250, 650, 1320, 1330), before=True)
-    prompt_window(img, (1500, 550, 2640, 1430), before=False)
-    d.line((1370, 980, 1470, 980), fill=TEAL, width=10)
-    d.polygon([(1470, 980), (1438, 958), (1438, 1002)], fill=TEAL)
-    save(img, "03-in-place-ai-rewrite-2880x1800.png")
+    img = base("mint")
+    d = ImageDraw.Draw(img)
+    title_block(
+        d,
+        "Menu bar control",
+        "A focused command center for AI writing",
+        "See service status, open settings, check support, and keep the assistant ready from a clean macOS menu bar experience.",
+        width=880,
+    )
+    menu_panel(img, (1430, 268, 2505, 1168))
+    rounded_shadow(img, (226, 815, 1180, 1325), radius=46, fill=(255, 255, 255, 226))
+    text(d, (302, 892), "Designed to stay quiet", size=54, fill=INK, weight="heavy")
+    paragraph(d, (306, 970), "The app lives in the menu bar, then disappears back into the background so your writing flow remains uninterrupted.", 780, size=35)
+    save(img, "03-menu-bar-control-center-2880x1800.png")
 
 
 def shot4():
-    img = base(); d = ImageDraw.Draw(img)
-    title_block(d, "macOS first", "Clear permissions. Minimal entitlements.", "SucceedAI asks for Accessibility only because macOS requires it to detect your /ai command and type the generated answer into the active app.")
-    shadowed_card(img, (1160, 390, 2520, 1290), radius=52, fill=(255, 255, 255, 232))
-    text(d, (1250, 500), "Privacy-conscious design", size=64, fill=INK, weight="heavy")
-    rows = [("Accessibility", "Detect /ai commands and insert responses", ORANGE), ("Network Client", "Connect to the configured AI service", BLUE), ("Sandboxed", "Runs with a reduced App Store entitlement set", GREEN)]
-    y = 635
-    for title, detail, col in rows:
-        d.rounded_rectangle((1250, y, 2425, y + 150), radius=30, fill=(248, 253, 252, 255), outline=col[:3] + (95,), width=2)
-        d.ellipse((1298, y + 48, 1352, y + 102), fill=col)
-        text(d, (1390, y + 38), title, size=38, fill=INK, weight="bold")
-        text(d, (1390, y + 92), detail, size=30, fill=MUTED)
-        y += 185
+    img = base("mint")
+    d = ImageDraw.Draw(img)
+    title_block(
+        d,
+        "Permission clarity",
+        "Setup that explains exactly what macOS needs",
+        "SucceedAI asks for Accessibility because macOS requires it for trigger detection and text insertion. The setup screen explains the reason before users grant access.",
+        width=950,
+    )
+    permission_dialog(img, (1175, 310, 2525, 1420))
     save(img, "04-privacy-permissions-2880x1800.png")
 
 
 def shot5():
-    img = base(); d = ImageDraw.Draw(img)
-    title_block(d, "Settings", "A friendlier setup\nexperience", "The redesigned settings panel explains the command trigger, launch behavior, macOS permission, and support path without burying users in defaults.")
-    settings_window(img, (1220, 285, 2640, 1460))
+    img = base("mint")
+    d = ImageDraw.Draw(img)
+    title_block(
+        d,
+        "Settings",
+        "Customize the trigger and launch behavior",
+        "A friendlier settings panel gives users control over launch at login, Accessibility status, the replacement trigger, and support links.",
+        width=900,
+    )
+    settings_window(img, (1190, 284, 2640, 1480))
     save(img, "05-settings-experience-2880x1800.png")
 
 
+def save(img, filename):
+    appstore_path = APPSTORE_OUT / filename
+    fastlane_path = FASTLANE_OUT / filename.replace(".png", "_DESKTOP.png")
+    rgb = img.convert("RGB")
+    rgb.save(appstore_path, quality=96, optimize=True)
+    shutil.copyfile(appstore_path, fastlane_path)
+    print(appstore_path)
+    print(fastlane_path)
+
+
 if __name__ == "__main__":
+    ensure_dirs()
     for fn in [shot1, shot2, shot3, shot4, shot5]:
         fn()
