@@ -4,20 +4,20 @@ class WindowManager {
     static let shared = WindowManager()
     private var settingsWindow: NSWindow?
 
-    func openSettings() {
+    func openSettings(viewModel: AppViewModel) {
         DispatchQueue.main.async {
-            self.createSettingsWindowIfNeeded()
+            self.createSettingsWindowIfNeeded(viewModel: viewModel)
             self.settingsWindow?.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
         }
     }
 
-    private func createSettingsWindowIfNeeded() {
+    private func createSettingsWindowIfNeeded(viewModel: AppViewModel) {
         guard settingsWindow == nil else { return }
 
-        let settingsView = UserSettingsView()
+        let settingsView = UserSettingsView(viewModel: viewModel)
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 560, height: 520),
+            contentRect: NSRect(x: 0, y: 0, width: 620, height: 620),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered, defer: false
         )

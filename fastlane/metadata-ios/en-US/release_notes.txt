@@ -1,0 +1,5 @@
+The SucceedAI Keyboard now works as a complete direct workflow. Tap Insert /ai, type the request with its built-in keys, and press AI Return to generate and replace the command in place—no fragile keyboard round trip.
+
+You can choose your own short trigger, such as ;ask, from the app’s Keyboard tab. This update also fixes a critical iOS 26 keyboard startup crash, reduces extension memory pressure, and makes document-safe replacement and Undo more reliable.
+
+Everything still runs locally with Apple’s on-device model. Full Access, an account, a subscription, and a backend are not required.

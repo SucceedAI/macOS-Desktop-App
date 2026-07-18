@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "BrandMark-512.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

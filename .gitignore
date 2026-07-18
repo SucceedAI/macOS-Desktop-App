@@ -89,9 +89,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-# Config 
-Config.swift
-
 # Local developer configuration — contains signing secrets, never commit
 Local.xcconfig
 

@@ -2,7 +2,7 @@
 
 ## Before Launch
 
-- Confirm production API key is configured in local release build.
+- Confirm Apple Intelligence readiness and local model messaging on supported devices.
 - Confirm Accessibility permission flow is clear on a fresh macOS install.
 - Confirm Settings > Keys can change and restore the replacement trigger.
 - Confirm replacement works in Apple Notes, Mail, Safari/Chrome text fields, and at least one messaging app.
@@ -24,7 +24,7 @@
 - Ask for feedback, not upvotes.
 - Track objections and update FAQ copy.
 - Screenshot early positive comments for later social proof.
-- Monitor crash reports, API errors, support emails, and permission confusion.
+- Monitor crash reports, local model readiness, support emails, and permission confusion.
 
 ## First 48 Hours After Launch
 

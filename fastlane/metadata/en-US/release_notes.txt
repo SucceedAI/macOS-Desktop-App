@@ -1,1 +1,0 @@
-Initial App Store release with in-place AI text replacement, guided macOS Accessibility setup, menu bar controls, and customizable replacement trigger settings.

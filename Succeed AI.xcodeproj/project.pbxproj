@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F316F012B94A09800F2ED47 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F316F002B94A09800F2ED47 /* Config.swift */; };
-		8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */; };
+		8F42E2792B94418A0078D9F7 /* LocalFoundationModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2782B94418A0078D9F7 /* LocalFoundationModelProvider.swift */; };
 		8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27A2B94469A0078D9F7 /* UserSettings.swift */; };
 		8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */; };
 		8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */; };
@@ -23,9 +23,8 @@
 		8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */; };
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
-		8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80C7502B97C71A00325157 /* ServerResponse.swift */; };
 		8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FCC2BA05C4B008974C9 /* WindowManager.swift */; };
-		8FB165792BE0E75000BF912A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB165782BE0E75000BF912A /* ContentView.swift */; };
+		A10000022C00000100000001 /* SucceedAITextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012C00000100000001 /* SucceedAITextIntent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,11 +46,10 @@
 
 /* Begin PBXFileReference section */
 		8F316F002B94A09800F2ED47 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerApiProvider.swift; sourceTree = "<group>"; };
+		8F42E2782B94418A0078D9F7 /* LocalFoundationModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFoundationModelProvider.swift; sourceTree = "<group>"; };
 		8F42E27A2B94469A0078D9F7 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
-		8F42E2852B9495C90078D9F7 /* Config.swift.dist */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.swift.dist; sourceTree = "<group>"; };
 		8F636F002B96719F00D01CDC /* SystemUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUtility.swift; sourceTree = "<group>"; };
 		8F654C762B93F25000A8F6E6 /* SucceedAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SucceedAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIApp.swift; sourceTree = "<group>"; };
@@ -68,9 +66,8 @@
 		8F654CA82B940B1F00A8F6E6 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
-		8F80C7502B97C71A00325157 /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
 		8F883FCC2BA05C4B008974C9 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
-		8FB165782BE0E75000BF912A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A10000012C00000100000001 /* SucceedAITextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAITextIntent.swift; sourceTree = "<group>"; };
 		C31D142B8A7747E38D397F9B /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = SOURCE_ROOT; };
 		56A49EABE1604B199202CBF5 /* Local.xcconfig.dist */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig.dist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -126,17 +123,15 @@
 			isa = PBXGroup;
 			children = (
 				8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */,
-				8F42E2852B9495C90078D9F7 /* Config.swift.dist */,
 				8F883FCC2BA05C4B008974C9 /* WindowManager.swift */,
-				8FB165782BE0E75000BF912A /* ContentView.swift */,
 				8F316F002B94A09800F2ED47 /* Config.swift */,
 				8F42E2812B945A5A0078D9F7 /* AppViewModel.swift */,
 				8F42E27A2B94469A0078D9F7 /* UserSettings.swift */,
 				8F636F002B96719F00D01CDC /* SystemUtility.swift */,
-				8F80C7502B97C71A00325157 /* ServerResponse.swift */,
 				8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */,
 				8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */,
-				8F42E2782B94418A0078D9F7 /* ServerApiProvider.swift */,
+				8F42E2782B94418A0078D9F7 /* LocalFoundationModelProvider.swift */,
+				A10000012C00000100000001 /* SucceedAITextIntent.swift */,
 				8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */,
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
 				8F654C7D2B93F25000A8F6E6 /* Item.swift */,
@@ -310,14 +305,13 @@
 				8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */,
 				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
-				8F80C7512B97C71A00325157 /* ServerResponse.swift in Sources */,
 				8F316F012B94A09800F2ED47 /* Config.swift in Sources */,
 				8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */,
 				8F42E27D2B94489A0078D9F7 /* UserSettingsView.swift in Sources */,
-				8F42E2792B94418A0078D9F7 /* ServerApiProvider.swift in Sources */,
+				8F42E2792B94418A0078D9F7 /* LocalFoundationModelProvider.swift in Sources */,
+				A10000022C00000100000001 /* SucceedAITextIntent.swift in Sources */,
 				8F654C7E2B93F25000A8F6E6 /* Item.swift in Sources */,
 				8F42E27B2B94469A0078D9F7 /* UserSettings.swift in Sources */,
-				8FB165792BE0E75000BF912A /* ContentView.swift in Sources */,
 				8F654C7A2B93F25000A8F6E6 /* Succeed_AIApp.swift in Sources */,
 				8F636F012B96719F00D01CDC /* SystemUtility.swift in Sources */,
 			);
@@ -410,7 +404,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -467,7 +461,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -479,12 +473,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -498,7 +493,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ENABLE_APP_SANDBOX = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ph7.SucceedAI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -512,13 +508,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -532,7 +529,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ENABLE_APP_SANDBOX = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ph7.SucceedAI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -544,13 +542,14 @@
 		};
 		8F654CA12B93F25100A8F6E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -562,13 +561,14 @@
 		};
 		8F654CA22B93F25100A8F6E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -580,6 +580,7 @@
 		};
 		8F654CA42B93F25100A8F6E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -596,6 +597,7 @@
 		};
 		8F654CA52B93F25100A8F6E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C31D142B8A7747E38D397F9B /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

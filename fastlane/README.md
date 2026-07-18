@@ -13,6 +13,17 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### configure_store_records
+
+```sh
+[bundle exec] fastlane configure_store_records
+```
+
+Configure truthful first-release App Store declarations for both apps
+
+----
+
+
 ## Mac
 
 ### mac screenshots
@@ -21,7 +32,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane mac screenshots
 ```
 
-Regenerate App Store screenshots for local review and Fastlane upload
+Regenerate App Store screenshots for local review and upload
 
 ### mac verify_release_build
 
@@ -29,7 +40,7 @@ Regenerate App Store screenshots for local review and Fastlane upload
 [bundle exec] fastlane mac verify_release_build
 ```
 
-Validate the macOS app compiles without requiring local signing secrets
+Validate the macOS release target without signing
 
 ### mac build_app_store
 
@@ -39,21 +50,82 @@ Validate the macOS app compiles without requiring local signing secrets
 
 Build a signed macOS package for App Store Connect
 
-### mac upload_metadata
-
-```sh
-[bundle exec] fastlane mac upload_metadata
-```
-
-Upload metadata and screenshots only, without uploading a binary
-
 ### mac release
 
 ```sh
 [bundle exec] fastlane mac release
 ```
 
-Build the macOS package, upload listing assets, and leave review submission manual
+Upload the private local-AI macOS release and submit it for review
+
+### mac publish_built
+
+```sh
+[bundle exec] fastlane mac publish_built
+```
+
+Publish the already-built macOS package, listing, and screenshots
+
+### mac upload_binary
+
+```sh
+[bundle exec] fastlane mac upload_binary
+```
+
+Upload the already-built macOS package without changing listing metadata
+
+----
+
+
+## iOS
+
+### ios refresh_profiles
+
+```sh
+[bundle exec] fastlane ios refresh_profiles
+```
+
+Refresh App Store profiles for the host app and private keyboard App Group
+
+### ios verify_release_build
+
+```sh
+[bundle exec] fastlane ios verify_release_build
+```
+
+Validate the iOS app and keyboard extension without signing
+
+### ios build_app_store
+
+```sh
+[bundle exec] fastlane ios build_app_store
+```
+
+Build a signed iOS archive containing the no-Full-Access keyboard
+
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Upload the private local-AI iOS release and submit it for review
+
+### ios publish_built
+
+```sh
+[bundle exec] fastlane ios publish_built
+```
+
+Publish the already-built iOS package, listing, and screenshots
+
+### ios upload_binary
+
+```sh
+[bundle exec] fastlane ios upload_binary
+```
+
+Upload the already-built iOS package without changing listing metadata
 
 ----
 

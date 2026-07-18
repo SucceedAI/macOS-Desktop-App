@@ -1,0 +1,740 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02622E29FE8B116E79E2AA74 /* SucceedAIiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5224BBE9B556410EA58BB63A /* SucceedAIiOSApp.swift */; };
+		1D315B6DFC9B1452A0B31A46 /* SucceedAIKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		22983402A8DF0F6F9DBD9CE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3ADA9AC2D24CF970E25545F /* Assets.xcassets */; };
+		521EC95E991C4203650ED102 /* LocalFoundationModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99A758CD9438ED36126D2E /* LocalFoundationModelProvider.swift */; };
+		6B518716C016EB89700DD3F0 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */; };
+		786DFC4D433E9B3F53147F78 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */; };
+		7EBD5007F4D285B7B8745C92 /* KeyboardTriggerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8265CE8FF11D1453AB935F8E /* KeyboardTriggerSettings.swift */; };
+		8F773A5D91EAEE33BA7DAAA8 /* iOSComposerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503905DF56F0D92A19937579 /* iOSComposerViewModel.swift */; };
+		A331822C24713F87C10C0477 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E07D78AAD7BC89D0EB0E36 /* KeyboardViewController.swift */; };
+		A49246D98DD28A29656B0EB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 186BDFB16F219FE18340B381 /* Assets.xcassets */; };
+		A4F4C1749764351BBAEBA375 /* KeyboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */; };
+		AF6755931CED51E56F42C813 /* KeyboardReplacementSafety.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFBD2BC049203A426071A7F /* KeyboardReplacementSafety.swift */; };
+		B5975B762EA2824D63DAE0F4 /* SucceedAIKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50BE3A51A499C77AE1DBF1 /* SucceedAIKeyboardView.swift */; };
+		C196EBCB5BE806EE1165FAA3 /* SucceedAITextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39114F60A6312EB4D3BA1A9 /* SucceedAITextIntent.swift */; };
+		CE9E49553318896A6E977854 /* KeyboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */; };
+		DA290401BBC27E16263FD7B6 /* SucceedAIHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163BF99BECD8B6E88F79CE2 /* SucceedAIHomeView.swift */; };
+		EA5276DC99031B761F0C3133 /* SucceedAIiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64134272A61CD5C6F434E1DE /* SucceedAIiOSTests.swift */; };
+		EAFDA0827D6A9EB1E4AB998C /* KeyboardTriggerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8265CE8FF11D1453AB935F8E /* KeyboardTriggerSettings.swift */; };
+		F0370215607E86F6448F95F6 /* LocalFoundationModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99A758CD9438ED36126D2E /* LocalFoundationModelProvider.swift */; };
+		F88B40F77DAE3F3AB41B848C /* SucceedAIKeyboardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179302B4CA1E273422F4F7E4 /* SucceedAIKeyboardUITests.swift */; };
+		FDC3FF46C93545DBDA95DB6B /* KeyboardReplacementSafety.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFBD2BC049203A426071A7F /* KeyboardReplacementSafety.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3ACCF6AE9BAA276852085C4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24DA8CBCE9A33F9D9F8C6B7C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AE946B4D367E49F24DC88ACF;
+			remoteInfo = SucceedAIiOS;
+		};
+		6376740BAB221E8745642D27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24DA8CBCE9A33F9D9F8C6B7C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB38B030201F1D87C975DC75;
+			remoteInfo = SucceedAIKeyboard;
+		};
+		B6FA0C1F19D58F9847EF0508 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 24DA8CBCE9A33F9D9F8C6B7C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AE946B4D367E49F24DC88ACF;
+			remoteInfo = SucceedAIiOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E7747A0731194F463A8AD730 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				1D315B6DFC9B1452A0B31A46 /* SucceedAIKeyboard.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		179302B4CA1E273422F4F7E4 /* SucceedAIKeyboardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAIKeyboardUITests.swift; sourceTree = "<group>"; };
+		186BDFB16F219FE18340B381 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2163BF99BECD8B6E88F79CE2 /* SucceedAIHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAIHomeView.swift; sourceTree = "<group>"; };
+		2EFBD2BC049203A426071A7F /* KeyboardReplacementSafety.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardReplacementSafety.swift; sourceTree = "<group>"; };
+		503905DF56F0D92A19937579 /* iOSComposerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSComposerViewModel.swift; sourceTree = "<group>"; };
+		5224BBE9B556410EA58BB63A /* SucceedAIiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAIiOSApp.swift; sourceTree = "<group>"; };
+		64134272A61CD5C6F434E1DE /* SucceedAIiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAIiOSTests.swift; sourceTree = "<group>"; };
+		80FBC29FAD9FB3A444983472 /* SucceedAIiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SucceedAIiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8265CE8FF11D1453AB935F8E /* KeyboardTriggerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTriggerSettings.swift; sourceTree = "<group>"; };
+		8377895FDC5A97371AB3E4BB /* SucceedAIiOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SucceedAIiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		88E99E74587A5AFCF1F0F98C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8F9C98A5A767015596395DF4 /* SucceedAIKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SucceedAIKeyboard.entitlements; sourceTree = "<group>"; };
+		9F99A758CD9438ED36126D2E /* LocalFoundationModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFoundationModelProvider.swift; sourceTree = "<group>"; };
+		A39114F60A6312EB4D3BA1A9 /* SucceedAITextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAITextIntent.swift; sourceTree = "<group>"; };
+		B3ADA9AC2D24CF970E25545F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C6677DAC5579C0DC9AC4FE30 /* SucceedAIiOSUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SucceedAIiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE50BE3A51A499C77AE1DBF1 /* SucceedAIKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAIKeyboardView.swift; sourceTree = "<group>"; };
+		E35C3A63EC9A3E7F624B38D3 /* SucceedAIiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SucceedAIiOS.entitlements; sourceTree = "<group>"; };
+		E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewModel.swift; sourceTree = "<group>"; };
+		EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SucceedAIKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
+		F6E07D78AAD7BC89D0EB0E36 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		10C337963E962D85C5386FCE /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2EFBD2BC049203A426071A7F /* KeyboardReplacementSafety.swift */,
+				8265CE8FF11D1453AB935F8E /* KeyboardTriggerSettings.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		29FACC6796DA76E01470C1D6 /* Succeed AI */ = {
+			isa = PBXGroup;
+			children = (
+				EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */,
+				9F99A758CD9438ED36126D2E /* LocalFoundationModelProvider.swift */,
+				A39114F60A6312EB4D3BA1A9 /* SucceedAITextIntent.swift */,
+			);
+			name = "Succeed AI";
+			path = "../Succeed AI";
+			sourceTree = "<group>";
+		};
+		642CC40BCD23C3043AF5FFA2 = {
+			isa = PBXGroup;
+			children = (
+				B3ADA9AC2D24CF970E25545F /* Assets.xcassets */,
+				D54AB229E3F16E35A80B53C0 /* App */,
+				72784024C211F0AB2F05CE99 /* Keyboard */,
+				10C337963E962D85C5386FCE /* Shared */,
+				29FACC6796DA76E01470C1D6 /* Succeed AI */,
+				A8E1B7DE417B96C55FE7DCBE /* Tests */,
+				6BEDA1264E47F5E7D3A52824 /* UITests */,
+				E73D99EB84D679E88CE7FFDE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6BEDA1264E47F5E7D3A52824 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				179302B4CA1E273422F4F7E4 /* SucceedAIKeyboardUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		72784024C211F0AB2F05CE99 /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				186BDFB16F219FE18340B381 /* Assets.xcassets */,
+				88E99E74587A5AFCF1F0F98C /* Info.plist */,
+				F6E07D78AAD7BC89D0EB0E36 /* KeyboardViewController.swift */,
+				E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */,
+				8F9C98A5A767015596395DF4 /* SucceedAIKeyboard.entitlements */,
+				CE50BE3A51A499C77AE1DBF1 /* SucceedAIKeyboardView.swift */,
+			);
+			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		A8E1B7DE417B96C55FE7DCBE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				64134272A61CD5C6F434E1DE /* SucceedAIiOSTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		D54AB229E3F16E35A80B53C0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				503905DF56F0D92A19937579 /* iOSComposerViewModel.swift */,
+				2163BF99BECD8B6E88F79CE2 /* SucceedAIHomeView.swift */,
+				E35C3A63EC9A3E7F624B38D3 /* SucceedAIiOS.entitlements */,
+				5224BBE9B556410EA58BB63A /* SucceedAIiOSApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E73D99EB84D679E88CE7FFDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80FBC29FAD9FB3A444983472 /* SucceedAIiOS.app */,
+				8377895FDC5A97371AB3E4BB /* SucceedAIiOSTests.xctest */,
+				C6677DAC5579C0DC9AC4FE30 /* SucceedAIiOSUITests.xctest */,
+				EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		20F990B1851AF77512197E41 /* SucceedAIiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E47ADB328D8A2CAA08D3BC8F /* Build configuration list for PBXNativeTarget "SucceedAIiOSTests" */;
+			buildPhases = (
+				91D23AFBCCE5BD0866884856 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB0117BCA79121F7B17E290F /* PBXTargetDependency */,
+			);
+			name = SucceedAIiOSTests;
+			packageProductDependencies = (
+			);
+			productName = SucceedAIiOSTests;
+			productReference = 8377895FDC5A97371AB3E4BB /* SucceedAIiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AE946B4D367E49F24DC88ACF /* SucceedAIiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6703793F8D38F0D3AB8EE1B8 /* Build configuration list for PBXNativeTarget "SucceedAIiOS" */;
+			buildPhases = (
+				590152C4CC9DAE9A8F49E89E /* Sources */,
+				55B9663FE7110F74C2EC3C22 /* Resources */,
+				E7747A0731194F463A8AD730 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A8688B1237893D8DBFA18CF /* PBXTargetDependency */,
+			);
+			name = SucceedAIiOS;
+			packageProductDependencies = (
+			);
+			productName = SucceedAIiOS;
+			productReference = 80FBC29FAD9FB3A444983472 /* SucceedAIiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EB38B030201F1D87C975DC75 /* SucceedAIKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F8CAF5399AC11D5107660E34 /* Build configuration list for PBXNativeTarget "SucceedAIKeyboard" */;
+			buildPhases = (
+				11332F9BEE0C4B0FF366AF92 /* Sources */,
+				B5942431E7BC509E74C74EFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SucceedAIKeyboard;
+			packageProductDependencies = (
+			);
+			productName = SucceedAIKeyboard;
+			productReference = EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F00F9B880E69A541BB44C02A /* SucceedAIiOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5021C51F790EF84F71CF70E /* Build configuration list for PBXNativeTarget "SucceedAIiOSUITests" */;
+			buildPhases = (
+				1A5E17608A837CCE77C40DFA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3EDE29BD56082DBC53BEF0CD /* PBXTargetDependency */,
+			);
+			name = SucceedAIiOSUITests;
+			packageProductDependencies = (
+			);
+			productName = SucceedAIiOSUITests;
+			productReference = C6677DAC5579C0DC9AC4FE30 /* SucceedAIiOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		24DA8CBCE9A33F9D9F8C6B7C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					20F990B1851AF77512197E41 = {
+						DevelopmentTeam = 2V8LZ2444Y;
+						ProvisioningStyle = Automatic;
+					};
+					AE946B4D367E49F24DC88ACF = {
+						DevelopmentTeam = 2V8LZ2444Y;
+						ProvisioningStyle = Automatic;
+					};
+					EB38B030201F1D87C975DC75 = {
+						DevelopmentTeam = 2V8LZ2444Y;
+						ProvisioningStyle = Automatic;
+					};
+					F00F9B880E69A541BB44C02A = {
+						DevelopmentTeam = 2V8LZ2444Y;
+						ProvisioningStyle = Automatic;
+						TestTargetID = AE946B4D367E49F24DC88ACF;
+					};
+				};
+			};
+			buildConfigurationList = DA23A89F2DB0DD531D6C187B /* Build configuration list for PBXProject "SucceedAI-iOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 642CC40BCD23C3043AF5FFA2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E73D99EB84D679E88CE7FFDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EB38B030201F1D87C975DC75 /* SucceedAIKeyboard */,
+				AE946B4D367E49F24DC88ACF /* SucceedAIiOS */,
+				20F990B1851AF77512197E41 /* SucceedAIiOSTests */,
+				F00F9B880E69A541BB44C02A /* SucceedAIiOSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		55B9663FE7110F74C2EC3C22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22983402A8DF0F6F9DBD9CE9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5942431E7BC509E74C74EFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A49246D98DD28A29656B0EB1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		11332F9BEE0C4B0FF366AF92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B518716C016EB89700DD3F0 /* AIProvideable.swift in Sources */,
+				FDC3FF46C93545DBDA95DB6B /* KeyboardReplacementSafety.swift in Sources */,
+				7EBD5007F4D285B7B8745C92 /* KeyboardTriggerSettings.swift in Sources */,
+				A331822C24713F87C10C0477 /* KeyboardViewController.swift in Sources */,
+				A4F4C1749764351BBAEBA375 /* KeyboardViewModel.swift in Sources */,
+				521EC95E991C4203650ED102 /* LocalFoundationModelProvider.swift in Sources */,
+				B5975B762EA2824D63DAE0F4 /* SucceedAIKeyboardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A5E17608A837CCE77C40DFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F88B40F77DAE3F3AB41B848C /* SucceedAIKeyboardUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		590152C4CC9DAE9A8F49E89E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				786DFC4D433E9B3F53147F78 /* AIProvideable.swift in Sources */,
+				AF6755931CED51E56F42C813 /* KeyboardReplacementSafety.swift in Sources */,
+				EAFDA0827D6A9EB1E4AB998C /* KeyboardTriggerSettings.swift in Sources */,
+				CE9E49553318896A6E977854 /* KeyboardViewModel.swift in Sources */,
+				F0370215607E86F6448F95F6 /* LocalFoundationModelProvider.swift in Sources */,
+				DA290401BBC27E16263FD7B6 /* SucceedAIHomeView.swift in Sources */,
+				C196EBCB5BE806EE1165FAA3 /* SucceedAITextIntent.swift in Sources */,
+				02622E29FE8B116E79E2AA74 /* SucceedAIiOSApp.swift in Sources */,
+				8F773A5D91EAEE33BA7DAAA8 /* iOSComposerViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91D23AFBCCE5BD0866884856 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA5276DC99031B761F0C3133 /* SucceedAIiOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3EDE29BD56082DBC53BEF0CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AE946B4D367E49F24DC88ACF /* SucceedAIiOS */;
+			targetProxy = 3ACCF6AE9BAA276852085C4C /* PBXContainerItemProxy */;
+		};
+		9A8688B1237893D8DBFA18CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB38B030201F1D87C975DC75 /* SucceedAIKeyboard */;
+			targetProxy = 6376740BAB221E8745642D27 /* PBXContainerItemProxy */;
+		};
+		FB0117BCA79121F7B17E290F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AE946B4D367E49F24DC88ACF /* SucceedAIiOS */;
+			targetProxy = B6FA0C1F19D58F9847EF0508 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		27F5B4A4070E2A3648467A9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.Tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SucceedAI.app/SucceedAI";
+			};
+			name = Debug;
+		};
+		406AD0F698B54D80DD599DDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Keyboard/SucceedAIKeyboard.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Keyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "SucceedAI Keyboard";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.Keyboard";
+				PRODUCT_NAME = SucceedAIKeyboard;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7140BEAACF04A922C6683D80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/SucceedAIiOS.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Succeed AI";
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI";
+				PRODUCT_NAME = SucceedAI;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B5D0A5D65523423A192C883 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 8;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2V8LZ2444Y;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8810B7487F225B4EAB55C6FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 8;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2V8LZ2444Y;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C7C88D48F3F29F33DF4EDB78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.UITests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SucceedAIiOS;
+			};
+			name = Debug;
+		};
+		E28F857D5ACAC1016CC8061C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/SucceedAIiOS.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Succeed AI";
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI";
+				PRODUCT_NAME = SucceedAI;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F5728F0353020E8C6F5978FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Keyboard/SucceedAIKeyboard.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Keyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "SucceedAI Keyboard";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.Keyboard";
+				PRODUCT_NAME = SucceedAIKeyboard;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FBCD5240532FF60D5E4EE774 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.UITests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SucceedAIiOS;
+			};
+			name = Release;
+		};
+		FF7C5E85FFA3104BB1F5F5A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "me.ph7.Succeed-AI.Tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SucceedAI.app/SucceedAI";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6703793F8D38F0D3AB8EE1B8 /* Build configuration list for PBXNativeTarget "SucceedAIiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7140BEAACF04A922C6683D80 /* Debug */,
+				E28F857D5ACAC1016CC8061C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D5021C51F790EF84F71CF70E /* Build configuration list for PBXNativeTarget "SucceedAIiOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7C88D48F3F29F33DF4EDB78 /* Debug */,
+				FBCD5240532FF60D5E4EE774 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DA23A89F2DB0DD531D6C187B /* Build configuration list for PBXProject "SucceedAI-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B5D0A5D65523423A192C883 /* Debug */,
+				8810B7487F225B4EAB55C6FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E47ADB328D8A2CAA08D3BC8F /* Build configuration list for PBXNativeTarget "SucceedAIiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27F5B4A4070E2A3648467A9C /* Debug */,
+				FF7C5E85FFA3104BB1F5F5A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F8CAF5399AC11D5107660E34 /* Build configuration list for PBXNativeTarget "SucceedAIKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5728F0353020E8C6F5978FB /* Debug */,
+				406AD0F698B54D80DD599DDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 24DA8CBCE9A33F9D9F8C6B7C /* Project object */;
+}

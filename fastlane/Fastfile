@@ -1,78 +1,246 @@
 default_platform(:mac)
 
 ROOT_PATH = File.expand_path("..", __dir__)
-PROJECT_PATH = File.join(ROOT_PATH, "Succeed AI.xcodeproj")
-SCHEME_NAME = "SucceedAI"
-APP_IDENTIFIER = ENV.fetch("APP_IDENTIFIER", "me.ph7.SucceedAI")
-OUTPUT_DIR = File.join(ROOT_PATH, "build/fastlane")
-PKG_PATH = File.join(OUTPUT_DIR, "SucceedAI.pkg")
-METADATA_PATH = File.join(ROOT_PATH, "fastlane/metadata")
-SCREENSHOTS_PATH = File.join(ROOT_PATH, "fastlane/screenshots")
+TEAM_ID = ENV.fetch("TEAM_ID", "2V8LZ2444Y")
+VERSION = ENV.fetch("APP_VERSION", "1.0")
+
+MAC_PROJECT_PATH = File.join(ROOT_PATH, "Succeed AI.xcodeproj")
+MAC_SCHEME = "SucceedAI"
+MAC_APP_IDENTIFIER = ENV.fetch("MAC_APP_IDENTIFIER", "me.ph7.SucceedAI")
+MAC_BUILD_NUMBER = ENV.fetch("MAC_BUILD_NUMBER", "8")
+MAC_OUTPUT_DIR = File.join(ROOT_PATH, "build/fastlane/mac")
+MAC_PKG_PATH = File.join(MAC_OUTPUT_DIR, "SucceedAI.pkg")
+MAC_METADATA_PATH = File.join(ROOT_PATH, "fastlane/metadata")
+MAC_SCREENSHOTS_PATH = File.join(ROOT_PATH, "fastlane/screenshots")
+MAC_REVIEW_NOTES = File.read(File.join(ROOT_PATH, "fastlane/review-information-mac/notes.txt"))
+
+IOS_PROJECT_PATH = File.join(ROOT_PATH, "iOS/SucceedAI-iOS.xcodeproj")
+IOS_SCHEME = "SucceedAIiOS"
+IOS_APP_IDENTIFIER = ENV.fetch("IOS_APP_IDENTIFIER", "me.ph7.Succeed-AI")
+IOS_BUILD_NUMBER = ENV.fetch("IOS_BUILD_NUMBER", "8")
+IOS_OUTPUT_DIR = File.join(ROOT_PATH, "build/fastlane/ios")
+IOS_IPA_PATH = File.join(IOS_OUTPUT_DIR, "SucceedAI.ipa")
+IOS_METADATA_PATH = File.join(ROOT_PATH, "fastlane/metadata-ios")
+IOS_SCREENSHOTS_PATH = File.join(ROOT_PATH, "fastlane/screenshots-ios")
+IOS_REVIEW_NOTES = File.read(File.join(ROOT_PATH, "fastlane/review-information-ios/notes.txt"))
+
+def asc_api_key
+  @asc_api_key ||= app_store_connect_api_key(
+    key_id: ENV.fetch("ASC_KEY_ID", "QLSK2QDQ67"),
+    issuer_id: ENV.fetch("ASC_ISSUER_ID", "0937aa2d-d63f-411e-928e-0ec39732c589"),
+    key_filepath: File.expand_path(ENV.fetch("ASC_KEY_PATH", "~/.appstoreconnect/AuthKey_QLSK2QDQ67.p8")),
+    duration: 1_200,
+    in_house: false
+  )
+end
+
+def xcode_auth_args
+  key_path = File.expand_path(ENV.fetch("ASC_KEY_PATH", "~/.appstoreconnect/AuthKey_QLSK2QDQ67.p8"))
+  [
+    "-allowProvisioningUpdates",
+    "-authenticationKeyPath '#{key_path}'",
+    "-authenticationKeyID #{ENV.fetch('ASC_KEY_ID', 'QLSK2QDQ67')}",
+    "-authenticationKeyIssuerID #{ENV.fetch('ASC_ISSUER_ID', '0937aa2d-d63f-411e-928e-0ec39732c589')}"
+  ].join(" ")
+end
+
+def review_information(notes)
+  fields = {
+    first_name: ENV["REVIEW_CONTACT_FIRST_NAME"],
+    last_name: ENV["REVIEW_CONTACT_LAST_NAME"],
+    email_address: ENV["REVIEW_CONTACT_EMAIL"],
+    phone_number: ENV["REVIEW_CONTACT_PHONE"]
+  }
+  return nil unless fields.values.all? { |value| value && !value.empty? }
+
+  fields.merge(notes: notes)
+end
+
+desc "Configure truthful first-release App Store declarations for both apps"
+lane :configure_store_records do
+  sh("cd '#{ROOT_PATH}' && ruby scripts/configure_app_store_records.rb")
+end
 
 platform :mac do
-  desc "Regenerate App Store screenshots for local review and Fastlane upload"
+  desc "Regenerate App Store screenshots for local review and upload"
   lane :screenshots do
     sh("cd '#{ROOT_PATH}' && python3 scripts/generate_app_store_screenshots.py")
   end
 
-  desc "Validate the macOS app compiles without requiring local signing secrets"
+  desc "Validate the macOS release target without signing"
   lane :verify_release_build do
     sh(
-      "xcodebuild -project '#{PROJECT_PATH}' " \
-      "-scheme '#{SCHEME_NAME}' " \
-      "-configuration Release " \
-      "-destination 'platform=macOS' " \
-      "-derivedDataPath /private/tmp/succeed-ai-fastlane-verify " \
-      "CODE_SIGN_STYLE=Manual " \
-      "CODE_SIGN_IDENTITY=- " \
-      "DEVELOPMENT_TEAM= " \
-      "PROVISIONING_PROFILE_SPECIFIER= " \
-      "build"
+      "xcodebuild -project '#{MAC_PROJECT_PATH}' " \
+      "-scheme '#{MAC_SCHEME}' -configuration Release " \
+      "-destination 'platform=macOS,arch=arm64' " \
+      "-derivedDataPath /private/tmp/succeed-ai-fastlane-mac-verify " \
+      "CODE_SIGNING_ALLOWED=NO build"
     )
   end
 
   desc "Build a signed macOS package for App Store Connect"
   lane :build_app_store do
+    asc_api_key
     screenshots
     build_mac_app(
-      project: PROJECT_PATH,
-      scheme: SCHEME_NAME,
+      project: MAC_PROJECT_PATH,
+      scheme: MAC_SCHEME,
       configuration: "Release",
+      destination: "generic/platform=macOS",
       clean: true,
       export_method: "app-store",
-      output_directory: OUTPUT_DIR,
-      output_name: File.basename(PKG_PATH),
-      xcargs: ENV["XCODE_XCARGS"],
-      export_team_id: ENV["TEAM_ID"]
+      output_directory: MAC_OUTPUT_DIR,
+      output_name: File.basename(MAC_PKG_PATH, ".pkg"),
+      export_team_id: TEAM_ID,
+      xcargs: [xcode_auth_args, ENV["XCODE_XCARGS"]].compact.join(" ")
     )
   end
 
-  desc "Upload metadata and screenshots only, without uploading a binary"
-  lane :upload_metadata do
-    screenshots
-    deliver(
+  desc "Upload the private local-AI macOS release and submit it for review"
+  lane :release do
+    build_app_store
+    publish_built
+  end
+
+  desc "Publish the already-built macOS package, listing, and screenshots"
+  lane :publish_built do
+    key = asc_api_key
+    skip_binary_upload = ENV["SKIP_BINARY_UPLOAD"] == "1"
+    options = {
+      api_key: key,
       platform: "osx",
-      app_identifier: APP_IDENTIFIER,
-      metadata_path: METADATA_PATH,
-      screenshots_path: SCREENSHOTS_PATH,
-      skip_binary_upload: true,
-      skip_app_version_update: true,
+      app_identifier: MAC_APP_IDENTIFIER,
+      app_version: VERSION,
+      build_number: MAC_BUILD_NUMBER,
+      metadata_path: MAC_METADATA_PATH,
+      screenshots_path: MAC_SCREENSHOTS_PATH,
+      skip_binary_upload: skip_binary_upload,
+      skip_metadata: ENV["SKIP_METADATA"] == "1",
+      skip_screenshots: ENV["SKIP_SCREENSHOTS"] == "1",
+      precheck_include_in_app_purchases: false,
+      submission_information: { export_compliance_uses_encryption: false },
+      submit_for_review: true,
+      automatic_release: true,
+      overwrite_screenshots: true,
+      force: true
+    }
+    options[:pkg] = MAC_PKG_PATH unless skip_binary_upload
+    review = review_information(MAC_REVIEW_NOTES)
+    options[:app_review_information] = review if review
+    deliver(options)
+  end
+
+  desc "Upload the already-built macOS package without changing listing metadata"
+  lane :upload_binary do
+    deliver(
+      api_key: asc_api_key,
+      platform: "osx",
+      app_identifier: MAC_APP_IDENTIFIER,
+      pkg: MAC_PKG_PATH,
+      skip_metadata: true,
+      skip_screenshots: true,
       submit_for_review: false,
+      run_precheck_before_submit: false,
       force: true
     )
   end
+end
 
-  desc "Build the macOS package, upload listing assets, and leave review submission manual"
+platform :ios do
+  desc "Refresh App Store profiles for the host app and private keyboard App Group"
+  lane :refresh_profiles do
+    key = asc_api_key
+    [
+      [IOS_APP_IDENTIFIER, "Succeed AI iOS App Store AppGroup", "SucceedAIHost.mobileprovision"],
+      ["#{IOS_APP_IDENTIFIER}.Keyboard", "Succeed AI Keyboard App Store AppGroup", "SucceedAIKeyboard.mobileprovision"]
+    ].each do |identifier, profile_name, filename|
+      sigh(
+        api_key: key,
+        app_identifier: identifier,
+        team_id: TEAM_ID,
+        force: true,
+        skip_certificate_verification: true,
+        provisioning_name: profile_name,
+        output_path: "/private/tmp",
+        filename: filename
+      )
+    end
+  end
+
+  desc "Validate the iOS app and keyboard extension without signing"
+  lane :verify_release_build do
+    sh("cd '#{File.join(ROOT_PATH, 'iOS')}' && xcodegen generate")
+    sh(
+      "xcodebuild -project '#{IOS_PROJECT_PATH}' " \
+      "-scheme '#{IOS_SCHEME}' -configuration Release " \
+      "-destination 'generic/platform=iOS' " \
+      "-derivedDataPath /private/tmp/succeed-ai-fastlane-ios-verify " \
+      "CODE_SIGNING_ALLOWED=NO build"
+    )
+  end
+
+  desc "Build a signed iOS archive containing the no-Full-Access keyboard"
+  lane :build_app_store do
+    asc_api_key
+    sh("cd '#{File.join(ROOT_PATH, 'iOS')}' && xcodegen generate")
+    build_app(
+      project: IOS_PROJECT_PATH,
+      scheme: IOS_SCHEME,
+      configuration: "Release",
+      clean: true,
+      export_method: "app-store",
+      output_directory: IOS_OUTPUT_DIR,
+      output_name: File.basename(IOS_IPA_PATH),
+      export_team_id: TEAM_ID,
+      xcargs: [xcode_auth_args, ENV["XCODE_XCARGS"]].compact.join(" ")
+    )
+  end
+
+  desc "Upload the private local-AI iOS release and submit it for review"
   lane :release do
     build_app_store
+    publish_built
+  end
+
+  desc "Publish the already-built iOS package, listing, and screenshots"
+  lane :publish_built do
+    key = asc_api_key
+    skip_binary_upload = ENV["SKIP_BINARY_UPLOAD"] == "1"
+    options = {
+      api_key: key,
+      platform: "ios",
+      app_identifier: IOS_APP_IDENTIFIER,
+      app_version: VERSION,
+      build_number: IOS_BUILD_NUMBER,
+      metadata_path: IOS_METADATA_PATH,
+      screenshots_path: IOS_SCREENSHOTS_PATH,
+      skip_binary_upload: skip_binary_upload,
+      skip_metadata: ENV["SKIP_METADATA"] == "1",
+      skip_screenshots: ENV["SKIP_SCREENSHOTS"] == "1",
+      precheck_include_in_app_purchases: false,
+      submission_information: { export_compliance_uses_encryption: false },
+      submit_for_review: true,
+      automatic_release: true,
+      overwrite_screenshots: true,
+      force: true
+    }
+    options[:ipa] = IOS_IPA_PATH unless skip_binary_upload
+    review = review_information(IOS_REVIEW_NOTES)
+    options[:app_review_information] = review if review
+    deliver(options)
+  end
+
+  desc "Upload the already-built iOS package without changing listing metadata"
+  lane :upload_binary do
     deliver(
-      platform: "osx",
-      app_identifier: APP_IDENTIFIER,
-      metadata_path: METADATA_PATH,
-      screenshots_path: SCREENSHOTS_PATH,
-      pkg: PKG_PATH,
+      api_key: asc_api_key,
+      platform: "ios",
+      app_identifier: IOS_APP_IDENTIFIER,
+      ipa: IOS_IPA_PATH,
+      skip_metadata: true,
+      skip_screenshots: true,
       submit_for_review: false,
-      automatic_release: false,
+      run_precheck_before_submit: false,
       force: true
     )
   end

@@ -1,0 +1,39 @@
+Succeed AI brings private, on-device writing to iPhone and iPad. Draft in the app, transform selected text in one tap, or type a custom AI command directly on the optional keyboard inside Mail, Messages, Notes, and other compatible text fields.
+
+No chatbot detour. No account, subscription, API key, analytics, or Succeed AI server. Apple’s on-device language model performs the work locally, even offline once Apple Intelligence is ready.
+
+Write and refine in the app
+
+Start with a rough thought or a complete paragraph. Polish, shorten, summarize, draft a reply, extract action items, make an ordered plan, or translate into nine target languages. Every outcome is visible at once in an adaptive phone and iPad grid. Choosing an outcome never changes the source text already in your draft, and each result remains labeled with the action that produced it. Copy, share, or continue from a finished result, and stop generation at any time without losing what you wrote.
+
+Transform selected text with the optional keyboard
+
+Select text in any compatible field, switch to the Succeed AI keyboard, and tap Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, or Translate. There is no prompt to write and no extra keyboard switch. For completely custom work, tap Insert /ai, type the request with the keyboard’s built-in keys, and press AI Return. The entire command is replaced in place without a fragile keyboard round trip. You can also replace /ai with your own short trigger from the app’s Keyboard tab.
+
+Before editing, SucceedAI re-checks the exact selection or command and its surrounding text. If anything changes, nothing is overwritten and the finished result waits safely until you return or discard it. After a successful replacement, Undo can restore the original for 90 seconds—but only while the exact result, cursor, and surrounding text remain unchanged. You can stop either workflow at any time.
+
+Automate with Shortcuts
+
+Use eight dedicated actions—Transform, Polish, Shorten, Summarize, Action Items, Make a Plan, Draft Reply, and Translate—in Shortcuts, Siri, the Share Sheet, or a multi-step personal automation. Their text inputs automatically accept the previous action’s output and return finished writing without opening the app or contacting a server.
+
+Use SucceedAI to:
+
+- Rewrite email with a clearer, warmer, shorter, or more confident tone.
+- Summarize notes into a concise update or action list.
+- Extract owners, dates, dependencies, and next steps without inventing missing details.
+- Organize rough goals and constraints into a practical numbered plan.
+- Translate while preserving meaning, tone, and formatting.
+- Draft replies, captions, product copy, and documentation.
+- Turn rough ideas into polished text without breaking focus.
+
+Private by design
+
+- AI generation runs on your device.
+- No backend, account, subscription, API key, ads, or analytics SDK.
+- Prompts and results are never persisted; an exact original and replacement may remain in keyboard memory for up to 90 seconds solely for safe Undo.
+- The keyboard works without Full Access.
+- The shared App Group stores only your chosen trigger, never what you type.
+- Delayed results never overwrite a changed document, selection, command, or cursor.
+- Local requests are coordinated when Apple’s model is busy.
+
+Requires iOS or iPadOS 26 and Apple Intelligence enabled on a supported device.

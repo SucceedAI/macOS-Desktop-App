@@ -1,0 +1,21 @@
+SucceedAI is a menu bar utility powered entirely by Apple’s on-device Foundation Models framework. It has no backend or account.
+
+To test quick compose, open the menu bar item, enter a prompt, and choose Generate. Presets preserve the current draft; Summarize and target-language Translate are available. A result can be refined into the next draft. Start another generation and choose Stop generation to verify the draft remains unchanged.
+
+To test in-place replacement, grant Input Monitoring and Accessibility when prompted, type “/ai rewrite this clearly” in an editable field, and press Return. Input Monitoring detects the trigger; Accessibility replaces the command only after local generation succeeds.
+
+To test pasted-source capture, type this instruction in an editable field without pressing Return:
+
+/ai Return only the final word of the pasted sentence:
+
+Then paste this source with Command-V and press Return:
+
+This source arrived through Command-V and ends with ORCHID
+
+The expected response is approximately “ORCHID”. SucceedAI reads the focused editable field after the trigger so pasted and multiline source are included. Before replacement it re-reads and verifies the original process, focused field, command text, cursor, and a document fingerprint. Where supported, it replaces the command directly through Accessibility. If the user switches apps, clicks, moves the cursor, continues typing, stops generation, or generation fails, the original command is left untouched.
+
+To test automation, open Shortcuts and add SucceedAI’s “Transform Text” action. Provide an instruction and source text; the returned value is generated locally without opening the app. In a multi-action shortcut, its Text field automatically connects to the preceding action’s output.
+
+Apple Intelligence must be enabled and the on-device model ready. No login or demo account is required.
+
+While a response is being generated, the menu bar switches to an hourglass and the panel shows “Writing locally.” Local requests are serialized and briefly retried if Apple’s system model reports that it is busy.

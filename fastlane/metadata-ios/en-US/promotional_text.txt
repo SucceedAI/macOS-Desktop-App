@@ -1,0 +1,1 @@
+Type, transform, and finish writing right where you are. Custom triggers and AI Return now work on the private on-device keyboard—without Full Access or cloud AI.

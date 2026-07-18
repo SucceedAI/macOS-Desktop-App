@@ -2,7 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSAccessibilityUsageDescription</key>
-	<string>SucceedAI uses Accessibility permission to detect your configured command trigger and replace it with the generated response in the active app.</string>
+	<string>SucceedAI uses Accessibility permission only to replace your /ai command with text generated privately on this Mac.</string>
+	<key>NSInputMonitoringUsageDescription</key>
+	<string>SucceedAI recognizes your configured /ai trigger so it can run a local writing request. Keystrokes are never stored or transmitted.</string>
 </dict>
 </plist>

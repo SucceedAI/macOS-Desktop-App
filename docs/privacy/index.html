@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SucceedAI Privacy Policy</title>
-  <meta name="description" content="SucceedAI privacy policy for the macOS AI text replacement app.">
+  <meta name="description" content="SucceedAI privacy policy for the local AI writing app on iPhone, iPad, and Mac.">
   <link rel="canonical" href="https://succeed.pierrehenry.dev/privacy/">
   <style>
     body { margin: 0; color: #0b1d24; font-family: Avenir Next, ui-rounded, -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f0fff8, #e6f7ff 55%, #fff8e8); }
@@ -21,16 +21,16 @@
     <p><a href="../">Back to SucceedAI</a></p>
     <div class="card">
       <h1>Privacy Policy</h1>
-      <p>Last updated: May 7, 2026</p>
-      <p>SucceedAI is designed to provide in-place AI writing assistance on macOS while keeping the app workflow simple and transparent.</p>
+      <p>Last updated: July 19, 2026</p>
+      <p>SucceedAI provides private AI writing assistance on iPhone, iPad, and Mac. Its language model runs on your device through Apple Intelligence.</p>
       <h2>Information Processed</h2>
-      <p>When you use the AI replacement feature, the text you ask SucceedAI to process is sent to the configured SucceedAI backend proxy so the request can be completed by the configured AI provider.</p>
-      <h2>macOS Permissions</h2>
-      <p>SucceedAI requests Accessibility permission because macOS requires it for apps that detect global keyboard input and insert generated text into the active app. This permission is used for trigger detection and response insertion.</p>
-      <h2>Backend Proxy</h2>
-      <p>The app connects to the configured SucceedAI proxy API. AI provider API keys are stored on the backend, not entered into the public app interface.</p>
+      <p>The prompt you submit and the generated response are processed locally on your device. SucceedAI does not send prompt content, generated text, or keyboard content to a SucceedAI server or third-party AI provider.</p>
+      <h2>Permissions</h2>
+      <p>On macOS, SucceedAI requests Input Monitoring to detect the configured trigger and Accessibility to replace a command or explicitly selected text in the active field. On iOS and iPadOS, the optional SucceedAI keyboard reads only the selection and nearby text context made available by the system when you explicitly run a writing action or replacement. Full Access is not requested.</p>
+      <h2>No Backend or Tracking</h2>
+      <p>SucceedAI has no backend service, user account, advertising SDK, analytics SDK, or embedded AI provider key. The app does not sell or share personal information.</p>
       <h2>Data Retention</h2>
-      <p>The app should not store your AI prompts locally beyond the active request flow. Backend logging should avoid storing user prompt content unless explicitly enabled for debugging.</p>
+      <p>SucceedAI does not persist prompts or generated responses. To provide Undo after an iOS or iPadOS keyboard replacement, the exact original and replacement may remain in extension memory for up to 90 seconds and are discarded sooner when another action begins. Undo runs only if the exact result, cursor, and surrounding text are unchanged. The iOS App Group stores only the custom keyboard trigger; it never stores what you type. Other on-device preferences include the Mac trigger and launch-at-login choice.</p>
       <h2>Contact</h2>
       <p>For privacy questions, contact support through the <a href="../support/">support page</a>.</p>
     </div>

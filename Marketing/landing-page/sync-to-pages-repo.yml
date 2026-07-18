@@ -1,0 +1,38 @@
+name: Sync landing page to Pages repository
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - docs/**
+
+jobs:
+  sync-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Checkout Pages repository
+        uses: actions/checkout@v4
+        with:
+          repository: SucceedAI/Landing-page
+          token: ${{ secrets.PAGES_REPO_PUSH_TOKEN }}
+          path: landing-page-repo
+
+      - name: Sync docs output into Pages repository
+        run: |
+          rsync -av --delete docs/ landing-page-repo/
+
+      - name: Commit Pages updates
+        working-directory: landing-page-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish landing page updates from app repository"
+          git push origin HEAD:main
