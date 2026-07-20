@@ -102,8 +102,10 @@ enum WritingRequest {
 
 enum WritingAction: String, CaseIterable, Identifiable, Sendable {
     case custom
+    case proofread
     case polish
     case shorten
+    case tone
     case reply
     case summarize
     case actionItems
@@ -111,6 +113,7 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
     case translate
 
     static let quickActions: [WritingAction] = [
+        .proofread,
         .polish,
         .shorten,
         .reply,
@@ -124,8 +127,10 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
     var title: String {
         switch self {
         case .custom: return "Custom"
+        case .proofread: return "Proofread"
         case .polish: return "Polish"
         case .shorten: return "Shorten"
+        case .tone: return "Change Tone"
         case .reply: return "Draft Reply"
         case .summarize: return "Summarize"
         case .actionItems: return "Action Items"
@@ -134,11 +139,28 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    var outcomeTitle: String {
+        switch self {
+        case .custom: return "Write Something"
+        case .proofread: return "Check Before Sending"
+        case .polish: return "Improve Clarity"
+        case .shorten: return "Make It Shorter"
+        case .tone: return "Set the Right Tone"
+        case .reply: return "Write a Reply"
+        case .summarize: return "Summarize It"
+        case .actionItems: return "Find Next Steps"
+        case .plan: return "Build a Plan"
+        case .translate: return "Translate It"
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .custom: return "wand.and.sparkles"
+        case .proofread: return "checkmark.circle"
         case .polish: return "text.badge.checkmark"
         case .shorten: return "arrow.down.right.and.arrow.up.left"
+        case .tone: return "slider.horizontal.3"
         case .reply: return "arrowshape.turn.up.left"
         case .summarize: return "text.alignleft"
         case .actionItems: return "checklist"
@@ -147,14 +169,21 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    func instruction(targetLanguage: WritingLanguage) -> String {
+    func instruction(
+        targetLanguage: WritingLanguage,
+        targetTone: WritingTone = .friendly
+    ) -> String {
         switch self {
         case .custom:
             return ""
+        case .proofread:
+            return "Correct spelling, grammar, punctuation, and obvious typos. Preserve the author's wording, meaning, facts, names, tone, formatting, commitments, and level of formality. Do not rewrite passages that are already correct."
         case .polish:
             return "Polish this writing for clarity, grammar, and natural flow while preserving its meaning, facts, tone, names, commitments, and useful formatting."
         case .shorten:
             return "Make this concise and easy to scan while preserving necessary facts, dates, names, commitments, and the original intent."
+        case .tone:
+            return targetTone.rewriteInstruction
         case .reply:
             return "Write a warm, professional reply that addresses every important point. Preserve facts and do not invent details, promises, dates, or commitments."
         case .summarize:
@@ -168,14 +197,21 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    func guidance(targetLanguage: WritingLanguage) -> String {
+    func guidance(
+        targetLanguage: WritingLanguage,
+        targetTone: WritingTone = .friendly
+    ) -> String {
         switch self {
         case .custom:
             return "Describe exactly what you want SucceedAI to write."
+        case .proofread:
+            return "Fix only objective errors while keeping your wording and voice."
         case .polish:
             return "Improve clarity and flow without changing what you mean."
         case .shorten:
             return "Remove clutter while keeping the details that matter."
+        case .tone:
+            return "Make this sound \(targetTone.guidanceDescription) without changing the message."
         case .reply:
             return "Answer every important point without making up commitments."
         case .summarize:
@@ -189,14 +225,21 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    func promptPlaceholder(targetLanguage: WritingLanguage) -> String {
+    func promptPlaceholder(
+        targetLanguage: WritingLanguage,
+        targetTone: WritingTone = .friendly
+    ) -> String {
         switch self {
         case .custom:
             return "Draft a friendly reply…\nBrainstorm three launch headlines…"
+        case .proofread:
+            return "Paste writing to correct without changing your voice…"
         case .polish:
             return "Paste or type the writing you want to improve…"
         case .shorten:
             return "Paste the text you want to make concise…"
+        case .tone:
+            return "Paste the writing you want to make \(targetTone.guidanceDescription)…"
         case .reply:
             return "Paste the message you need to answer…"
         case .summarize:
@@ -210,11 +253,18 @@ enum WritingAction: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    func request(sourceText: String, targetLanguage: WritingLanguage) -> String {
+    func request(
+        sourceText: String,
+        targetLanguage: WritingLanguage,
+        targetTone: WritingTone = .friendly
+    ) -> String {
         let cleanSource = sourceText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard self != .custom else { return cleanSource }
         return WritingRequest.transformation(
-            instruction: instruction(targetLanguage: targetLanguage),
+            instruction: instruction(
+                targetLanguage: targetLanguage,
+                targetTone: targetTone
+            ),
             sourceText: cleanSource
         )
     }
@@ -249,5 +299,39 @@ enum WritingLanguage: String, CaseIterable, Identifiable, Sendable {
 
     var translationInstruction: String {
         "Translate this into \(displayName) while preserving meaning, tone, names, and useful formatting."
+    }
+}
+
+enum WritingTone: String, CaseIterable, Identifiable, Sendable {
+    case friendly
+    case professional
+    case direct
+    case confident
+    case empathetic
+
+    var id: Self { self }
+
+    var displayName: String {
+        switch self {
+        case .friendly: return "Friendly"
+        case .professional: return "Professional"
+        case .direct: return "Direct"
+        case .confident: return "Confident"
+        case .empathetic: return "Empathetic"
+        }
+    }
+
+    var guidanceDescription: String {
+        switch self {
+        case .friendly: return "friendly and approachable"
+        case .professional: return "polished and professional"
+        case .direct: return "clear and direct"
+        case .confident: return "confident and decisive"
+        case .empathetic: return "empathetic and considerate"
+        }
+    }
+
+    var rewriteInstruction: String {
+        "Rewrite this to sound \(guidanceDescription). Preserve its meaning, facts, names, dates, commitments, intent, and useful formatting. Do not invent claims, promises, or details."
     }
 }

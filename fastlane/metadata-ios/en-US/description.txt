@@ -1,24 +1,26 @@
-Succeed AI brings private, on-device writing to iPhone and iPad. Draft in the app, transform selected text in one tap, or type a custom AI command directly on the optional keyboard inside Mail, Messages, Notes, and other compatible text fields.
+Succeed AI is a privacy-first writing assistant for real work on iPhone and iPad. Reply, proofread, summarize, find next steps, plan, change tone, or translate in the app. You can also transform selected text in one tap or type a custom command on the optional keyboard inside Mail, Messages, Notes, and other compatible text fields.
 
 No chatbot detour. No account, subscription, API key, analytics, or Succeed AI server. Apple’s on-device language model performs the work locally, even offline once Apple Intelligence is ready.
 
 Write and refine in the app
 
-Start with a rough thought or a complete paragraph. Polish, shorten, summarize, draft a reply, extract action items, make an ordered plan, or translate into nine target languages. Every outcome is visible at once in an adaptive phone and iPad grid. Choosing an outcome never changes the source text already in your draft, and each result remains labeled with the action that produced it. Copy, share, or continue from a finished result, and stop generation at any time without losing what you wrote.
+Start with a rough thought or a complete paragraph. Proofread objective errors, polish, shorten, summarize, draft a reply, extract action items, make an ordered plan, change tone, or translate into nine target languages. Every outcome is visible at once in an adaptive phone and iPad grid. Choosing an outcome never changes the source text already in your draft, and each result remains labeled with the action that produced it. Copy, share, edit the draft, or run a finished result through another private local pass. Stop generation at any time without losing what you wrote.
 
 Transform selected text with the optional keyboard
 
-Select text in any compatible field, switch to the Succeed AI keyboard, and tap Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, or Translate. There is no prompt to write and no extra keyboard switch. For completely custom work, tap Insert /ai, type the request with the keyboard’s built-in keys, and press AI Return. The entire command is replaced in place without a fragile keyboard round trip. You can also replace /ai with your own short trigger from the app’s Keyboard tab.
+Select text in any compatible field, switch to the Succeed AI keyboard, and tap Proofread, Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, Change Tone, or Translate. There is no prompt to write and no extra keyboard switch. For completely custom work, tap Insert /ai, type the request with the keyboard’s built-in keys, and press AI Return. The entire command is replaced in place without a fragile keyboard round trip. You can also replace /ai with your own short trigger from the app’s Keyboard tab.
 
-Before editing, SucceedAI re-checks the exact selection or command and its surrounding text. If anything changes, nothing is overwritten and the finished result waits safely until you return or discard it. After a successful replacement, Undo can restore the original for 90 seconds—but only while the exact result, cursor, and surrounding text remain unchanged. You can stop either workflow at any time.
+Before editing, SucceedAI re-checks the exact selection or command and its surrounding text. If anything changes, nothing is overwritten and the finished result waits safely until you return or discard it. After a successful replacement, Undo can restore the original for 90 seconds, but only while the exact result, cursor, and surrounding text remain unchanged. You can stop either workflow at any time.
 
 Automate with Shortcuts
 
-Use eight dedicated actions—Transform, Polish, Shorten, Summarize, Action Items, Make a Plan, Draft Reply, and Translate—in Shortcuts, Siri, the Share Sheet, or a multi-step personal automation. Their text inputs automatically accept the previous action’s output and return finished writing without opening the app or contacting a server.
+Use ten dedicated actions in Shortcuts, Siri, the Share Sheet, or a multi-step personal automation: Transform, Proofread, Polish, Shorten, Summarize, Action Items, Make a Plan, Draft Reply, Change Tone, and Translate. Their text inputs automatically accept the previous action’s output and return finished writing without opening the app or contacting a server.
 
 Use SucceedAI to:
 
+- Proofread objective errors without needlessly rewriting correct passages.
 - Rewrite email with a clearer, warmer, shorter, or more confident tone.
+- Change tone to friendly, professional, direct, confident, or empathetic while preserving facts.
 - Summarize notes into a concise update or action list.
 - Extract owners, dates, dependencies, and next steps without inventing missing details.
 - Organize rough goals and constraints into a practical numbered plan.

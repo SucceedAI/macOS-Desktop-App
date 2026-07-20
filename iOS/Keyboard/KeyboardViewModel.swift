@@ -166,6 +166,33 @@ final class KeyboardViewModel: ObservableObject {
         return false
     }
 
+    @discardableResult
+    func performTone(_ tone: WritingTone) -> Bool {
+        discardPendingResult()
+        discardUndo()
+
+        if let snapshot = currentSelectionSnapshot() {
+            startGeneration(
+                request: WritingAction.tone.request(
+                    sourceText: snapshot.selectedText,
+                    targetLanguage: .english,
+                    targetTone: tone
+                ),
+                progressStatus: "Making your selection \(tone.guidanceDescription) on this device…",
+                makePendingEdit: { .selection(snapshot: snapshot, response: $0) }
+            )
+            return false
+        }
+
+        insertText("\(KeyboardTriggerSettings.commandPrefix(for: trigger))\(tone.rewriteInstruction) ")
+        provider.prepare()
+        isTrackingCommand = true
+        isError = false
+        status = "Add the source text, then press AI Return."
+        UISelectionFeedbackGenerator().selectionChanged()
+        return false
+    }
+
     func replaceCommand() {
         guard !isGenerating else { return }
         if pendingEdit != nil {
@@ -201,7 +228,7 @@ final class KeyboardViewModel: ObservableObject {
         guard isGenerating else { return }
         generationTask?.cancel()
         isError = false
-        status = "Canceled — your original text is unchanged."
+        status = "Canceled. Your original text is unchanged."
         finishGeneration()
     }
 
@@ -243,7 +270,7 @@ final class KeyboardViewModel: ObservableObject {
         discardUndo()
         hasSelection = false
         isError = false
-        status = "Undone — your original text is back."
+        status = "Undone. Your original text is back."
         UINotificationFeedbackGenerator().notificationOccurred(.success)
     }
 
@@ -305,9 +332,9 @@ final class KeyboardViewModel: ObservableObject {
     private func updateIdleStatus(command: KeyboardCommand?) {
         isError = false
         if hasSelection {
-            status = "Selection ready — tap an action to transform it privately."
+            status = "Selection ready. Tap an action to transform it privately."
         } else if command?.request.isEmpty == false {
-            status = "Command ready — press AI Return for an in-place local result."
+            status = "Command ready. Press AI Return for an in-place local result."
         } else if command != nil {
             status = "Type the request, then press AI Return."
         } else {
@@ -428,9 +455,9 @@ private enum PendingKeyboardEdit {
     var successMessage: String {
         switch self {
         case .command:
-            "Done — your AI command was replaced locally. Undo is available while the result and cursor stay unchanged."
+            "Done. Your AI command was replaced locally. Undo is available while the result and cursor stay unchanged."
         case .selection:
-            "Done — your selection was transformed locally. Undo is available while the result and cursor stay unchanged."
+            "Done. Your selection was transformed locally. Undo is available while the result and cursor stay unchanged."
         }
     }
 

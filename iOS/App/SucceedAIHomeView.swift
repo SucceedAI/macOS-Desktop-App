@@ -60,6 +60,7 @@ struct SucceedAIHomeView: View {
                 }
                 .padding()
             }
+            .scrollDismissesKeyboard(.interactively)
             .safeAreaPadding(.bottom, 64)
             .background(pageBackground)
             .onChange(of: viewModel.result) { _, result in
@@ -79,6 +80,15 @@ struct SucceedAIHomeView: View {
         }
         .navigationTitle("Succeed AI")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    isComposerFocused = false
+                }
+                .accessibilityIdentifier("composer-keyboard-done")
+            }
+        }
     }
 
     private var hero: some View {
@@ -111,12 +121,12 @@ struct SucceedAIHomeView: View {
 
     private var heroCopy: some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text("Turn rough thoughts into finished writing.")
+            Text("Handle the writing tasks that slow you down.")
                 .font(.title2.bold())
-            Text("Private, fast, and available offline.")
+            Text("Reply, proofread, plan, summarize, and translate without prompt engineering.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            Text("100% ON-DEVICE")
+            Text("PRIVACY FIRST")
                 .font(.caption2.weight(.black))
                 .foregroundStyle(.teal)
                 .padding(.horizontal, 9)
@@ -159,12 +169,15 @@ struct SucceedAIHomeView: View {
     private var composerCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             composerHeader
-            Text(viewModel.selectedAction.guidance(targetLanguage: viewModel.targetLanguage))
+            Text(viewModel.selectedAction.guidance(
+                targetLanguage: viewModel.targetLanguage,
+                targetTone: viewModel.targetTone
+            ))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("CHOOSE AN OUTCOME")
+                Text("WHAT DO YOU NEED DONE?")
                     .font(.caption2.bold())
                     .foregroundStyle(.secondary)
                 LazyVGrid(columns: actionColumns, spacing: 8) {
@@ -172,6 +185,7 @@ struct SucceedAIHomeView: View {
                     ForEach(WritingAction.quickActions) { action in
                         actionButton(action)
                     }
+                    toneMenu
                     translationMenu
                 }
             }
@@ -185,7 +199,10 @@ struct SucceedAIHomeView: View {
                 .background(.secondary.opacity(0.06), in: RoundedRectangle(cornerRadius: 14))
                 .overlay(alignment: .topLeading) {
                     if viewModel.prompt.isEmpty {
-                        Text(viewModel.selectedAction.promptPlaceholder(targetLanguage: viewModel.targetLanguage))
+                        Text(viewModel.selectedAction.promptPlaceholder(
+                            targetLanguage: viewModel.targetLanguage,
+                            targetTone: viewModel.targetTone
+                        ))
                             .foregroundStyle(.tertiary)
                             .padding(16)
                             .allowsHitTesting(false)
@@ -196,6 +213,7 @@ struct SucceedAIHomeView: View {
                 if viewModel.isGenerating {
                     viewModel.cancelGeneration()
                 } else {
+                    isComposerFocused = false
                     viewModel.generate()
                 }
             } label: {
@@ -238,10 +256,11 @@ struct SucceedAIHomeView: View {
                             Label("Share", systemImage: "square.and.arrow.up")
                         }
                         Button { viewModel.refineResult() } label: {
-                            Label("Continue", systemImage: "arrow.triangle.2.circlepath")
+                            Label("Edit draft", systemImage: "pencil")
                         }
                     }
                     .buttonStyle(.bordered)
+                    resultRefinementMenu
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -293,7 +312,7 @@ struct SucceedAIHomeView: View {
         VStack(alignment: .leading, spacing: 10) {
             Label("Automate with Shortcuts", systemImage: "command")
                 .font(.headline)
-            Text("Use dedicated Polish, Shorten, Summarize, Draft Reply, Action Items, Plan, Translate, or Transform Text actions in Siri and multi-step workflows. Each action accepts the previous step’s output and stays on device.")
+            Text("Use dedicated Proofread, Polish, Shorten, Change Tone, Summarize, Draft Reply, Action Items, Plan, Translate, or Transform Text actions in Siri and multi-step workflows. Each action accepts the previous step’s output and stays on device.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Button {
@@ -335,12 +354,14 @@ struct SucceedAIHomeView: View {
             VStack(alignment: .leading, spacing: 8) {
                 selectedActionLabel
                 if viewModel.selectedAction == .translate { translationLanguageBadge }
+                if viewModel.selectedAction == .tone { toneBadge }
                 onDeviceBadge
             }
         } else {
             HStack(spacing: 8) {
                 selectedActionLabel
                 if viewModel.selectedAction == .translate { translationLanguageBadge }
+                if viewModel.selectedAction == .tone { toneBadge }
                 Spacer()
                 onDeviceBadge
             }
@@ -362,8 +383,17 @@ struct SucceedAIHomeView: View {
             .background(.teal.opacity(0.1), in: Capsule())
     }
 
+    private var toneBadge: some View {
+        Text(viewModel.targetTone.displayName)
+            .font(.caption2.bold())
+            .foregroundStyle(.teal)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(.teal.opacity(0.1), in: Capsule())
+    }
+
     private var onDeviceBadge: some View {
-        Text("ON-DEVICE")
+        Text("PRIVATE ON-DEVICE")
             .font(.caption2.weight(.black))
             .foregroundStyle(.teal)
             .fixedSize(horizontal: false, vertical: true)
@@ -381,7 +411,7 @@ struct SucceedAIHomeView: View {
         Button { viewModel.selectAction(action) } label: {
             HStack(spacing: 10) {
                 Image(systemName: action.systemImage)
-                Text(action.title)
+                Text(action.outcomeTitle)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
                 Spacer(minLength: 2)
@@ -397,7 +427,49 @@ struct SucceedAIHomeView: View {
         .buttonBorderShape(.roundedRectangle(radius: 12))
         .tint(viewModel.selectedAction == action ? .teal : .secondary)
         .accessibilityValue(viewModel.selectedAction == action ? "Selected" : "Not selected")
-        .accessibilityHint(action.guidance(targetLanguage: viewModel.targetLanguage))
+        .accessibilityHint(action.guidance(
+            targetLanguage: viewModel.targetLanguage,
+            targetTone: viewModel.targetTone
+        ))
+    }
+
+    private var toneMenu: some View {
+        Menu {
+            ForEach(WritingTone.allCases) { tone in
+                Button(tone.displayName) {
+                    viewModel.selectTone(tone)
+                }
+            }
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: WritingAction.tone.systemImage)
+                Text(
+                    viewModel.selectedAction == .tone
+                        ? "Tone · \(viewModel.targetTone.displayName)"
+                        : WritingAction.tone.outcomeTitle
+                )
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                Spacer(minLength: 2)
+                if viewModel.selectedAction == .tone {
+                    Image(systemName: "checkmark")
+                        .font(.caption2.bold())
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.roundedRectangle(radius: 12))
+        .tint(viewModel.selectedAction == .tone ? .teal : .secondary)
+        .frame(maxWidth: .infinity)
+        .accessibilityLabel("Change Tone")
+        .accessibilityValue(
+            viewModel.selectedAction == .tone
+                ? "Selected, \(viewModel.targetTone.displayName)"
+                : "Not selected"
+        )
+        .accessibilityHint("Choose the tone for the result")
     }
 
     private var translationMenu: some View {
@@ -413,7 +485,7 @@ struct SucceedAIHomeView: View {
                 Text(
                     viewModel.selectedAction == .translate
                         ? "Translate · \(viewModel.targetLanguage.displayName)"
-                        : "Translate"
+                        : WritingAction.translate.outcomeTitle
                 )
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
@@ -437,6 +509,47 @@ struct SucceedAIHomeView: View {
                 : "Not selected"
         )
         .accessibilityHint("Choose the target language")
+    }
+
+    private var resultRefinementMenu: some View {
+        Menu {
+            Button("Another version") {
+                viewModel.generate()
+            }
+            Divider()
+            Button("Proofread") {
+                viewModel.refineResult(with: .proofread)
+            }
+            Button("Polish") {
+                viewModel.refineResult(with: .polish)
+            }
+            Button("Shorten") {
+                viewModel.refineResult(with: .shorten)
+            }
+            Menu("Change Tone") {
+                ForEach(WritingTone.allCases) { tone in
+                    Button(tone.displayName) {
+                        viewModel.refineResult(with: .tone, targetTone: tone)
+                    }
+                }
+            }
+            Menu("Translate") {
+                ForEach(WritingLanguage.allCases) { language in
+                    Button(language.displayName) {
+                        viewModel.refineResult(
+                            with: .translate,
+                            targetLanguage: language
+                        )
+                    }
+                }
+            }
+        } label: {
+            Label("Refine this result locally", systemImage: "arrow.triangle.2.circlepath")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.teal)
+        .accessibilityHint("Run another local writing pass without copying and pasting")
     }
 }
 
@@ -472,7 +585,7 @@ private struct KeyboardTransformationPreview: View {
                         .font(.caption.bold())
                         .foregroundStyle(.green)
                 }
-                Text("Thanks for your patience—we’ve fixed the issue, and you can try again now.")
+                Text("Thanks for your patience. We have fixed the issue, and you can try again now.")
                     .font(.body.weight(.medium))
                 HStack {
                     Spacer()
@@ -567,7 +680,7 @@ private struct KeyboardTriggerSettingsCard: View {
                     .font(.footnote)
                     .foregroundStyle(.green)
             } else if normalizedDraft == nil {
-                Label("Use 2–12 characters, start with punctuation, and do not include spaces.", systemImage: "exclamationmark.triangle.fill")
+                Label("Use 2 to 12 characters, start with punctuation, and do not include spaces.", systemImage: "exclamationmark.triangle.fill")
                     .font(.footnote)
                     .foregroundStyle(.orange)
             } else {

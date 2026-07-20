@@ -6,6 +6,7 @@ final class iOSComposerViewModel: ObservableObject {
     @Published var prompt = ""
     @Published var selectedAction: WritingAction = .custom
     @Published var targetLanguage: WritingLanguage = .french
+    @Published var targetTone: WritingTone = .friendly
     @Published private(set) var result = ""
     @Published private(set) var resultActionTitle = ""
     @Published private(set) var isGenerating = false
@@ -24,8 +25,8 @@ final class iOSComposerViewModel: ObservableObject {
         if ProcessInfo.processInfo.arguments.contains("--screenshot-compose") ||
             ProcessInfo.processInfo.arguments.contains("--screenshot-actions") {
             self.selectedAction = .polish
-            self.prompt = "Thanks for waiting—we fixed it and you can try again."
-            self.result = "Thanks for your patience—we’ve fixed the issue, and you can try again now."
+            self.prompt = "Thanks for waiting. We fixed it and you can try again."
+            self.result = "Thanks for your patience. We have fixed the issue, and you can try again now."
             self.resultActionTitle = WritingAction.polish.title
         }
         #endif
@@ -41,7 +42,8 @@ final class iOSComposerViewModel: ObservableObject {
         guard !isGenerating else { return }
         let request = selectedAction.request(
             sourceText: prompt,
-            targetLanguage: targetLanguage
+            targetLanguage: targetLanguage,
+            targetTone: targetTone
         )
         guard !request.isEmpty else {
             errorMessage = "Add text or a writing request first."
@@ -52,9 +54,15 @@ final class iOSComposerViewModel: ObservableObject {
         resultActionTitle = ""
         errorMessage = nil
         let requestID = UUID()
-        let completedActionTitle = selectedAction == .translate
-            ? "Translated to \(targetLanguage.displayName)"
-            : selectedAction.title
+        let completedActionTitle: String
+        switch selectedAction {
+        case .translate:
+            completedActionTitle = "Translated to \(targetLanguage.displayName)"
+        case .tone:
+            completedActionTitle = "\(targetTone.displayName) tone"
+        default:
+            completedActionTitle = selectedAction.title
+        }
         activeRequestID = requestID
         generationTask = provider.query(request) { [weak self] response in
             Task { @MainActor in
@@ -98,6 +106,13 @@ final class iOSComposerViewModel: ObservableObject {
         UISelectionFeedbackGenerator().selectionChanged()
     }
 
+    func selectTone(_ tone: WritingTone) {
+        targetTone = tone
+        selectedAction = .tone
+        errorMessage = nil
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+
     func refineResult() {
         guard !result.isEmpty else { return }
         prompt = result
@@ -106,6 +121,23 @@ final class iOSComposerViewModel: ObservableObject {
         resultActionTitle = ""
         errorMessage = nil
         UISelectionFeedbackGenerator().selectionChanged()
+    }
+
+    func refineResult(
+        with action: WritingAction,
+        targetLanguage: WritingLanguage? = nil,
+        targetTone: WritingTone? = nil
+    ) {
+        guard !result.isEmpty, action != .custom else { return }
+        prompt = result
+        selectedAction = action
+        if let targetLanguage { self.targetLanguage = targetLanguage }
+        if let targetTone { self.targetTone = targetTone }
+        result = ""
+        resultActionTitle = ""
+        errorMessage = nil
+        UISelectionFeedbackGenerator().selectionChanged()
+        generate()
     }
 
     private func scheduleTimeout(requestID: UUID) {
@@ -118,7 +150,7 @@ final class iOSComposerViewModel: ObservableObject {
             }
             guard let self, self.activeRequestID == requestID else { return }
             self.generationTask?.cancel()
-            self.errorMessage = "Local generation took too long. Your draft is unchanged—try a shorter request."
+            self.errorMessage = "Local generation took too long. Your draft is unchanged. Try a shorter request."
             self.finishGeneration()
         }
     }

@@ -212,6 +212,33 @@ final class SucceedAIiOSTests: XCTestCase {
     }
 
     @MainActor
+    func testKeyboardChangesTheToneOfASelectionLocally() async {
+        let provider = CapturingProvider()
+        let documentID = UUID()
+        var selectedText: String? = "Do this now."
+        var insertedText: [String] = []
+        let viewModel = KeyboardViewModel(
+            provider: provider,
+            contextBeforeInput: { "Message: " },
+            contextAfterInput: { "" },
+            selectedText: { selectedText },
+            documentIdentifier: { documentID },
+            deleteBackward: {},
+            insertText: {
+                insertedText.append($0)
+                selectedText = nil
+            }
+        )
+
+        XCTAssertFalse(viewModel.performTone(.friendly))
+        await Task.yield()
+
+        XCTAssertTrue(provider.lastQuery?.contains("friendly and approachable") == true)
+        XCTAssertTrue(provider.lastQuery?.hasSuffix("Do this now.") == true)
+        XCTAssertEqual(insertedText, ["- Kim — launch Friday"])
+    }
+
+    @MainActor
     func testKeyboardCanUndoAnUnchangedLocalSelectionReplacement() async {
         let provider = CapturingProvider()
         let documentID = UUID()
@@ -448,6 +475,7 @@ final class SucceedAIiOSTests: XCTestCase {
     }
 
     func testDedicatedShortcutInstructionsAreSafeAndSpecific() {
+        XCTAssertTrue(ProofreadTextWithSucceedAIIntent.writingInstruction.contains("Do not rewrite"))
         XCTAssertTrue(PolishTextWithSucceedAIIntent.writingInstruction.contains("preserving"))
         XCTAssertTrue(SummarizeTextWithSucceedAIIntent.writingInstruction.contains("key facts"))
         XCTAssertTrue(DraftReplyWithSucceedAIIntent.writingInstruction.contains("do not invent"))
@@ -458,11 +486,29 @@ final class SucceedAIiOSTests: XCTestCase {
     func testSharedWritingActionsStayConsistentAcrossEverySurface() {
         XCTAssertEqual(
             WritingAction.quickActions,
-            [.polish, .shorten, .reply, .summarize, .actionItems, .plan]
+            [.proofread, .polish, .shorten, .reply, .summarize, .actionItems, .plan]
         )
         XCTAssertEqual(Set(WritingAction.allCases.map(\.systemImage)).count, WritingAction.allCases.count)
         XCTAssertTrue(WritingAction.actionItems.instruction(targetLanguage: .english).contains("not specified"))
         XCTAssertTrue(WritingAction.plan.instruction(targetLanguage: .english).contains("to confirm"))
+    }
+
+    func testProofreadAndTonePresetsPreserveUserIntent() {
+        XCTAssertEqual(WritingTone.allCases.count, 5)
+        XCTAssertTrue(
+            WritingAction.proofread
+                .instruction(targetLanguage: .english)
+                .contains("Do not rewrite passages that are already correct")
+        )
+
+        let request = WritingAction.tone.request(
+            sourceText: "We launch Friday.",
+            targetLanguage: .english,
+            targetTone: .professional
+        )
+        XCTAssertTrue(request.contains("polished and professional"))
+        XCTAssertTrue(request.contains("Do not invent claims, promises, or details"))
+        XCTAssertTrue(request.hasSuffix("We launch Friday."))
     }
 
     func testWritingActionSeparatesTheOutcomeFromUntrustedSourceContent() {
@@ -515,6 +561,28 @@ final class SucceedAIiOSTests: XCTestCase {
         XCTAssertEqual(viewModel.prompt, "また明日。")
         XCTAssertTrue(viewModel.result.isEmpty)
         XCTAssertTrue(viewModel.resultActionTitle.isEmpty)
+    }
+
+    @MainActor
+    func testComposerChangesToneAndCanRefineTheResultInOneStep() async {
+        let provider = CapturingProvider()
+        let viewModel = iOSComposerViewModel(provider: provider)
+        viewModel.prompt = "Send it today."
+        viewModel.selectTone(.empathetic)
+
+        viewModel.generate()
+        await Task.yield()
+
+        XCTAssertTrue(provider.lastQuery?.contains("empathetic and considerate") == true)
+        XCTAssertEqual(viewModel.resultActionTitle, "Empathetic tone")
+
+        viewModel.refineResult(with: .shorten)
+        await Task.yield()
+
+        XCTAssertEqual(viewModel.prompt, "- Kim — launch Friday")
+        XCTAssertEqual(viewModel.selectedAction, .shorten)
+        XCTAssertTrue(provider.lastQuery?.contains("Make this concise") == true)
+        XCTAssertTrue(provider.lastQuery?.hasSuffix("- Kim — launch Friday") == true)
     }
 
     func testCancelledQueuedGenerationDoesNotBlockTheNextRequest() async {

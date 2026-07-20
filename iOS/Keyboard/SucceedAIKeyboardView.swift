@@ -3,6 +3,7 @@ import SwiftUI
 struct SucceedAIKeyboardView: View {
     @ObservedObject var viewModel: KeyboardViewModel
     let nextKeyboard: () -> Void
+    let dismissKeyboard: () -> Void
 
     var body: some View {
         VStack(spacing: 8) {
@@ -46,6 +47,15 @@ struct SucceedAIKeyboardView: View {
             if !viewModel.hasSelection {
                 presetMenu
             }
+            Button(action: dismissKeyboard) {
+                Image(systemName: "keyboard.chevron.compact.down")
+                    .frame(width: 22, height: 22)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .accessibilityIdentifier("dismiss-keyboard")
+            .accessibilityLabel("Dismiss keyboard")
+            .accessibilityHint("Close SucceedAI Keyboard")
             Button(action: nextKeyboard) {
                 Image(systemName: "globe")
                     .frame(width: 22, height: 22)
@@ -61,6 +71,13 @@ struct SucceedAIKeyboardView: View {
             ForEach(WritingAction.quickActions) { action in
                 Button(action.title) {
                     viewModel.performAction(action)
+                }
+            }
+            Menu("Change Tone") {
+                ForEach(WritingTone.allCases) { tone in
+                    Button(tone.displayName) {
+                        viewModel.performTone(tone)
+                    }
                 }
             }
             Menu("Translate") {
@@ -159,7 +176,7 @@ struct SucceedAIKeyboardView: View {
 
     private var selectionActions: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("TRANSFORM THE UNCHANGED SELECTION — ONE TAP")
+            Text("TRANSFORM THE UNCHANGED SELECTION IN ONE TAP")
                 .font(.caption2.bold())
                 .foregroundStyle(.green)
             LazyVGrid(
@@ -186,9 +203,36 @@ struct SucceedAIKeyboardView: View {
                     .accessibilityLabel(action.title)
                     .accessibilityHint("Transform the selected text locally")
                 }
+                toneMenu
                 translationMenu
             }
         }
+    }
+
+    private var toneMenu: some View {
+        Menu {
+            ForEach(WritingTone.allCases) { tone in
+                Button(tone.displayName) {
+                    viewModel.performTone(tone)
+                }
+            }
+        } label: {
+            VStack(spacing: 3) {
+                Image(systemName: WritingAction.tone.systemImage)
+                Text("Tone")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+            .font(.caption2.bold())
+            .frame(maxWidth: .infinity, minHeight: 36)
+        }
+        .menuStyle(.button)
+        .buttonBorderShape(.roundedRectangle(radius: 9))
+        .controlSize(.small)
+        .frame(maxWidth: .infinity)
+        .disabled(viewModel.isGenerating)
+        .accessibilityLabel("Change Tone")
+        .accessibilityHint("Choose a tone and transform the selected text locally")
     }
 
     private var translationMenu: some View {

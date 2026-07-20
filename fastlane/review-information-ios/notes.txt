@@ -1,6 +1,6 @@
 SucceedAI uses Apple’s on-device Foundation Models framework and has no backend, login, subscription, or demo account.
 
-To test the main app, enter text on the Compose tab and tap Generate. The preset buttons preserve existing draft text. A result can be copied, shared, or moved back into the editor with Refine.
+To test the main app, enter text on the Compose tab and tap Generate. The preset buttons preserve existing draft text. Proofread makes only objective corrections; Change Tone offers Friendly, Professional, Direct, Confident, and Empathetic. A result can be copied, shared, returned to the editor with Edit draft, or sent immediately through another local pass from the Refine menu.
 
 To test cancellation, begin a Compose generation and tap Stop generation. The draft remains unchanged.
 
@@ -17,9 +17,9 @@ To test customization, open SucceedAI’s Keyboard tab, enter a short trigger su
 
 Replacement is context-safe. To test the delayed-result path, begin a replacement and change the cursor or surrounding text while generation is running. SucceedAI leaves changed text untouched and keeps the finished response only in memory. Return to the exact unchanged command and tap Insert result, or tap Discard.
 
-The keyboard also includes one-tap Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, and Translate actions for selected text. Without a selection, presets insert a prepared command that can be completed using the built-in keys and AI Return. While a replacement is running, tap Stop to cancel it; the original command remains present.
+The keyboard also includes one-tap Proofread, Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, Change Tone, and Translate actions for selected text. Without a selection, presets insert a prepared command that can be completed using the built-in keys and AI Return. While a replacement is running, tap Stop to cancel it; the original command remains present.
 
-To test automation, open Shortcuts and add SucceedAI’s “Transform Text” action. Provide an instruction and source text; the returned value is generated locally without opening the app. In a multi-action shortcut, its Text field automatically connects to the preceding action’s output.
+To test automation, open Shortcuts and add any of SucceedAI’s ten actions, including “Proofread Text” or “Change Tone”. Provide source text; the returned value is generated locally without opening the app. In a multi-action shortcut, its Text field automatically connects to the preceding action’s output.
 
 Apple Intelligence must be enabled and the on-device model ready on the review device.
 

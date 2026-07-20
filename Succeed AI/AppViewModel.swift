@@ -11,6 +11,10 @@ final class AppViewModel: ObservableObject {
     @Published private(set) var quickResult = ""
     @Published private(set) var errorMessage: String?
     @Published private(set) var isQuickGenerating = false
+    @Published var quickPrompt = ""
+    @Published var quickSelectedAction: WritingAction = .custom
+    @Published var quickTargetLanguage: WritingLanguage = .french
+    @Published var quickTargetTone: WritingTone = .friendly
     @Published private(set) var capturedSelectionText: String?
     @Published private(set) var selectionResult = ""
     @Published private(set) var selectionErrorMessage: String?
@@ -75,8 +79,22 @@ final class AppViewModel: ObservableObject {
         isMonitoring = globalKeystrokeManager.startMonitoring()
     }
 
+    func generateQuickResult() {
+        generateQuickResult(
+            quickSelectedAction.request(
+                sourceText: quickPrompt,
+                targetLanguage: quickTargetLanguage,
+                targetTone: quickTargetTone
+            )
+        )
+    }
+
     func generateQuickResult(_ request: String) {
         guard !isLoading else { return }
+        guard !request.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            errorMessage = "Add text or a writing request first."
+            return
+        }
         errorMessage = nil
         quickResult = ""
         isQuickGenerating = true
@@ -118,7 +136,8 @@ final class AppViewModel: ObservableObject {
     @discardableResult
     func transformCapturedSelection(
         with action: WritingAction,
-        targetLanguage: WritingLanguage = .english
+        targetLanguage: WritingLanguage = .english,
+        targetTone: WritingTone = .friendly
     ) -> Bool {
         guard !isLoading,
               action != .custom,
@@ -137,7 +156,11 @@ final class AppViewModel: ObservableObject {
         let requestID = UUID()
         activeSelectionRequestID = requestID
         selectionGenerationTask = aiProvider.query(
-            action.request(sourceText: snapshot.selectedText, targetLanguage: targetLanguage)
+            action.request(
+                sourceText: snapshot.selectedText,
+                targetLanguage: targetLanguage,
+                targetTone: targetTone
+            )
         ) { [weak self] result in
             Task { @MainActor in
                 guard let self, self.activeSelectionRequestID == requestID else { return }
@@ -170,7 +193,7 @@ final class AppViewModel: ObservableObject {
     func cancelSelectionGeneration() {
         guard isSelectionGenerating else { return }
         selectionGenerationTask?.cancel()
-        selectionErrorMessage = "Canceled — the original selection is unchanged."
+        selectionErrorMessage = "Canceled. The original selection is unchanged."
         finishSelectionGeneration()
     }
 
@@ -215,6 +238,27 @@ final class AppViewModel: ObservableObject {
     func clearQuickResult() {
         quickResult = ""
         errorMessage = nil
+    }
+
+    func editQuickResult() {
+        guard !quickResult.isEmpty else { return }
+        quickPrompt = quickResult
+        quickSelectedAction = .custom
+        clearQuickResult()
+    }
+
+    func refineQuickResult(
+        with action: WritingAction,
+        targetLanguage: WritingLanguage? = nil,
+        targetTone: WritingTone? = nil
+    ) {
+        guard !quickResult.isEmpty, action != .custom else { return }
+        quickPrompt = quickResult
+        quickSelectedAction = action
+        if let targetLanguage { quickTargetLanguage = targetLanguage }
+        if let targetTone { quickTargetTone = targetTone }
+        clearQuickResult()
+        generateQuickResult()
     }
 
     func copyQuickResult() {
@@ -274,7 +318,7 @@ final class AppViewModel: ObservableObject {
             }
             guard let self, self.activeQuickRequestID == requestID else { return }
             self.quickGenerationTask?.cancel()
-            self.errorMessage = "Local generation took too long. Your draft is unchanged—try a shorter request."
+            self.errorMessage = "Local generation took too long. Your draft is unchanged. Try a shorter request."
             self.finishQuickGeneration()
         }
     }

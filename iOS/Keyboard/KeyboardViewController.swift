@@ -8,7 +8,19 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let provider: AIProvideable
+#if DEBUG
+        if let response = ProcessInfo.processInfo.environment["SUCCEEDAI_UI_TEST_RESPONSE"],
+           !response.isEmpty {
+            provider = KeyboardUITestProvider(response: response)
+        } else {
+            provider = LocalFoundationModelProvider()
+        }
+#else
+        provider = LocalFoundationModelProvider()
+#endif
         let viewModel = KeyboardViewModel(
+            provider: provider,
             contextBeforeInput: { [weak self] in self?.textDocumentProxy.documentContextBeforeInput },
             contextAfterInput: { [weak self] in self?.textDocumentProxy.documentContextAfterInput },
             selectedText: { [weak self] in self?.textDocumentProxy.selectedText },
@@ -25,7 +37,13 @@ final class KeyboardViewController: UIInputViewController {
         )
         let rootView = SucceedAIKeyboardView(
             viewModel: viewModel,
-            nextKeyboard: { [weak self] in self?.advanceToNextInputMode() }
+            nextKeyboard: { [weak self] in self?.advanceToNextInputMode() },
+            dismissKeyboard: { [weak self, weak viewModel] in
+                if viewModel?.isGenerating == true {
+                    viewModel?.cancelGeneration()
+                }
+                self?.dismissKeyboard()
+            }
         )
         let hosting = UIHostingController(rootView: rootView)
         addChild(hosting)
@@ -64,3 +82,34 @@ final class KeyboardViewController: UIInputViewController {
         viewModel?.releasePreparedResources()
     }
 }
+
+#if DEBUG
+private final class KeyboardUITestProvider: AIProvideable {
+    let availability = AIAvailabilityStatus.available
+    private let response: String
+
+    init(response: String) {
+        self.response = response
+    }
+
+    func prepare() {}
+
+    func query(
+        _ query: String,
+        completion: @escaping (Result<String, AIProviderError>) -> Void
+    ) -> Task<Void, Never> {
+        Task { @MainActor [response] in
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled else {
+                completion(.failure(.cancelled))
+                return
+            }
+            completion(.success(response))
+        }
+    }
+
+    func getAiInstructions(_ query: String) -> String {
+        query
+    }
+}
+#endif

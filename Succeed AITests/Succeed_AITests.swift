@@ -264,6 +264,7 @@ final class Succeed_AITests: XCTestCase {
     }
 
     func testDedicatedShortcutInstructionsProtectImportantContent() {
+        XCTAssertTrue(ProofreadTextWithSucceedAIIntent.writingInstruction.contains("Do not rewrite"))
         XCTAssertTrue(PolishTextWithSucceedAIIntent.writingInstruction.contains("facts"))
         XCTAssertTrue(SummarizeTextWithSucceedAIIntent.writingInstruction.contains("action items"))
         XCTAssertTrue(DraftReplyWithSucceedAIIntent.writingInstruction.contains("do not invent"))
@@ -274,11 +275,29 @@ final class Succeed_AITests: XCTestCase {
     func testSharedWritingActionsCoverDailyAutonomousWorkflows() {
         XCTAssertEqual(
             WritingAction.quickActions,
-            [.polish, .shorten, .reply, .summarize, .actionItems, .plan]
+            [.proofread, .polish, .shorten, .reply, .summarize, .actionItems, .plan]
         )
         XCTAssertEqual(Set(WritingAction.allCases.map(\.title)).count, WritingAction.allCases.count)
         XCTAssertTrue(WritingAction.actionItems.guidance(targetLanguage: .english).contains("owners"))
         XCTAssertTrue(WritingAction.plan.guidance(targetLanguage: .english).contains("ordered"))
+    }
+
+    func testProofreadAndToneActionsStayConservativeAndExplicit() {
+        XCTAssertEqual(WritingTone.allCases.count, 5)
+        XCTAssertTrue(
+            WritingAction.proofread
+                .instruction(targetLanguage: .english)
+                .contains("Preserve the author's wording")
+        )
+
+        let request = WritingAction.tone.request(
+            sourceText: "The decision is final.",
+            targetLanguage: .english,
+            targetTone: .empathetic
+        )
+        XCTAssertTrue(request.contains("empathetic and considerate"))
+        XCTAssertTrue(request.contains("Do not invent claims, promises, or details"))
+        XCTAssertTrue(request.hasSuffix("The decision is final."))
     }
 
     func testWritingActionBuildsAStructuredRequestWithoutMutatingTheSource() {
@@ -305,6 +324,37 @@ final class Succeed_AITests: XCTestCase {
 
         XCTAssertTrue(request.contains("Translate this into Japanese"))
         XCTAssertTrue(request.hasSuffix("See you tomorrow."))
+    }
+
+    @MainActor
+    func testMacQuickComposerKeepsItsPrivateInMemoryDraftAcrossPasses() async {
+        let provider = CapturingMacProvider(response: "A polished local result.")
+        let viewModel = AppViewModel(
+            aiProvider: provider,
+            automaticallyStartMonitoring: false
+        )
+        viewModel.quickPrompt = "pls send this today"
+        viewModel.quickSelectedAction = .tone
+        viewModel.quickTargetTone = .professional
+
+        viewModel.generateQuickResult()
+        await Task.yield()
+
+        XCTAssertEqual(viewModel.quickPrompt, "pls send this today")
+        XCTAssertEqual(viewModel.quickResult, "A polished local result.")
+        XCTAssertTrue(provider.lastQuery?.contains("polished and professional") == true)
+
+        viewModel.refineQuickResult(with: .proofread)
+        await Task.yield()
+
+        XCTAssertEqual(viewModel.quickPrompt, "A polished local result.")
+        XCTAssertEqual(viewModel.quickSelectedAction, .proofread)
+        XCTAssertTrue(provider.lastQuery?.contains("Correct spelling, grammar") == true)
+
+        viewModel.editQuickResult()
+        XCTAssertEqual(viewModel.quickPrompt, "A polished local result.")
+        XCTAssertEqual(viewModel.quickSelectedAction, .custom)
+        XCTAssertTrue(viewModel.quickResult.isEmpty)
     }
 
     func testCancelledQueuedGenerationDoesNotOccupyTheGate() async {

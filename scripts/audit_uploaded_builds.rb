@@ -13,12 +13,12 @@ targets = [
   {
     bundle_id: "me.ph7.Succeed-AI",
     platform: Spaceship::ConnectAPI::Platform::IOS,
-    build_number: ENV.fetch("IOS_BUILD_NUMBER", "8")
+    build_number: ENV.fetch("IOS_BUILD_NUMBER", "9")
   },
   {
     bundle_id: "me.ph7.SucceedAI",
     platform: Spaceship::ConnectAPI::Platform::MAC_OS,
-    build_number: ENV.fetch("MAC_BUILD_NUMBER", "8")
+    build_number: ENV.fetch("MAC_BUILD_NUMBER", "9")
   }
 ]
 

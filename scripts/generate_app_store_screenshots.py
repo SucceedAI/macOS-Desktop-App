@@ -223,8 +223,8 @@ def menu_panel(img, xy):
     img.alpha_composite(app_icon(92), (x1 + 44, y1 + 44))
     text(d, (x1 + 158, y1 + 56), "SucceedAI", size=48, fill=INK, weight="heavy")
     text(d, (x1 + 158, y1 + 114), "Private AI, right where you type", size=28, fill=MUTED)
-    d.rounded_rectangle((x2 - 204, y1 + 60, x2 - 54, y1 + 104), radius=22, fill=(228, 251, 248, 255))
-    text(d, (x2 - 129, y1 + 82), "LOCAL", size=23, fill=BLUE, weight="bold", anchor="mm")
+    d.rounded_rectangle((x2 - 292, y1 + 60, x2 - 54, y1 + 104), radius=22, fill=(228, 251, 248, 255))
+    text(d, (x2 - 173, y1 + 82), "PRIVACY FIRST", size=21, fill=BLUE, weight="bold", anchor="mm")
 
     ready_y = y1 + 176
     d.rounded_rectangle((x1 + 44, ready_y, x2 - 44, ready_y + 116), radius=28, fill=(244, 253, 248, 255), outline=GREEN[:3] + (80,), width=2)
@@ -245,34 +245,36 @@ def menu_panel(img, xy):
     text(d, (x1 + 82, selected_y + 108), "Choose an outcome. Only this exact unchanged selection is replaced.", size=23, fill=MUTED)
 
     actions = [
-        ("Polish", "✓"),
-        ("Shorten", "↙"),
-        ("Draft Reply", "↩"),
-        ("Summarize", "≡"),
-        ("Action Items", "☑"),
-        ("Make a Plan", "1."),
+        ("Check Before Sending", "✓"),
+        ("Improve Clarity", "✓"),
+        ("Make It Shorter", "↙"),
+        ("Write a Reply", "↩"),
+        ("Summarize It", "≡"),
+        ("Find Next Steps", "☑"),
+        ("Build a Plan", "1."),
+        ("Set the Right Tone", "A"),
     ]
     action_top = selected_y + 158
     action_gap = 18
     action_width = (x2 - x1 - 174 - action_gap) // 2
-    action_height = 62
+    action_height = 54
     for index, (label, symbol) in enumerate(actions):
         column = index % 2
         row = index // 2
         left = x1 + 78 + column * (action_width + action_gap)
-        top = action_top + row * (action_height + 14)
+        top = action_top + row * (action_height + 10)
         d.rounded_rectangle((left, top, left + action_width, top + action_height), radius=18, fill=WHITE, outline=(221, 211, 236, 255), width=2)
-        text(d, (left + 22, top + 16), symbol, size=25, fill=TEAL, weight="bold")
-        text(d, (left + 62, top + 15), label, size=25, fill=INK_2, weight="bold")
+        text(d, (left + 22, top + 12), symbol, size=24, fill=TEAL, weight="bold")
+        text(d, (left + 62, top + 11), label, size=24, fill=INK_2, weight="bold")
 
-    translate_y = action_top + 3 * (action_height + 14)
-    d.rounded_rectangle((x1 + 78, translate_y, x2 - 78, translate_y + 62), radius=18, fill=(243, 237, 255, 255), outline=TEAL[:3] + (72,), width=2)
-    text(d, ((x1 + x2) // 2, translate_y + 31), "Translate  ·  9 languages", size=25, fill=TEAL, weight="bold", anchor="mm")
+    translate_y = action_top + 4 * (action_height + 10)
+    d.rounded_rectangle((x1 + 78, translate_y, x2 - 78, translate_y + 54), radius=18, fill=(243, 237, 255, 255), outline=TEAL[:3] + (72,), width=2)
+    text(d, ((x1 + x2) // 2, translate_y + 27), "Translate  ·  9 languages", size=24, fill=TEAL, weight="bold", anchor="mm")
 
     compose_y = card_bottom + 28
     d.rounded_rectangle((x1 + 44, compose_y, x2 - 44, compose_y + 116), radius=28, fill=(242, 249, 255, 255), outline=BLUE[:3] + (70,), width=2)
-    text(d, (x1 + 82, compose_y + 20), "Quick Compose", size=29, fill=INK, weight="bold")
-    text(d, (x1 + 82, compose_y + 63), "Need something custom? Describe it here—still entirely on device.", size=23, fill=MUTED)
+    text(d, (x1 + 82, compose_y + 20), "Finish a writing task", size=29, fill=INK, weight="bold")
+    text(d, (x1 + 82, compose_y + 63), "Choose an outcome, paste the source, and let SucceedAI handle the prompt.", size=23, fill=MUTED)
     text(d, ((x1 + x2) // 2, compose_y + 154), "The panel steps aside while SucceedAI works locally.", size=22, fill=TEAL, weight="bold", anchor="mm")
 
     footer_y = y2 - 136
@@ -297,7 +299,7 @@ def settings_window(img, xy):
 
     rows = [
         ("Launch at login", "Start automatically when your Mac starts.", GREEN, True),
-        ("Local AI", "Ready — processing stays on this Mac.", GREEN, True),
+        ("Local AI", "Ready. Processing stays on this Mac.", GREEN, True),
         ("Replacement trigger", "/ai  - customize in Settings > Trigger.", TEAL, False),
     ]
     y = y1 + 430
@@ -395,7 +397,7 @@ def shot2():
     d = ImageDraw.Draw(img)
     title_block(
         d,
-        "100% on-device",
+        "Privacy first",
         "Private AI writing in every Mac app",
         "Succeed AI uses Apple’s local model directly in Mail, Notes, browsers, documents, and other editable fields.",
         width=950,
@@ -415,7 +417,7 @@ def shot3():
         d,
         "One tap from the menu bar",
         "Select text. Choose an outcome. Stay in flow.",
-        "Polish, reply, summarize, extract actions, plan, or translate without writing a prompt or leaving the app you are using.",
+        "Proofread, polish, change tone, reply, summarize, plan, or translate without writing a prompt or leaving the app you are using.",
         width=980,
     )
     menu_panel(img, (1390, 220, 2690, 1510))

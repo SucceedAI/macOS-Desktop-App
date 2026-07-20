@@ -10,7 +10,7 @@ Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
 
 bundle_id = "me.ph7.Succeed-AI"
 platform = Spaceship::ConnectAPI::Platform::IOS
-replacement_number = ENV.fetch("IOS_BUILD_NUMBER", "8")
+replacement_number = ENV.fetch("IOS_BUILD_NUMBER", "9")
 
 app = Spaceship::ConnectAPI::App.find(bundle_id)
 abort("App Store Connect app not found: #{bundle_id}") unless app

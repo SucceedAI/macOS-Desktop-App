@@ -40,13 +40,14 @@ private struct StatusPanelView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AppViewModel
     @AppStorage(UserSettings.commandTriggerKey) private var commandTrigger = UserSettings.defaultCommandTrigger
-    @State private var quickPrompt = ""
-    @State private var selectedAction: WritingAction = .custom
-    @State private var targetLanguage: WritingLanguage = .french
 
     private var displayTrigger: String {
         UserSettings.validatedCommandTrigger(commandTrigger).trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
+    private var selectedAction: WritingAction { viewModel.quickSelectedAction }
+    private var targetLanguage: WritingLanguage { viewModel.quickTargetLanguage }
+    private var targetTone: WritingTone { viewModel.quickTargetTone }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -86,14 +87,14 @@ private struct StatusPanelView: View {
                 HStack(spacing: 7) {
                     Text("SucceedAI")
                         .font(.system(.title2, design: .rounded, weight: .bold))
-                    Text("LOCAL")
+                    Text("PRIVACY FIRST")
                         .font(.system(size: 9, weight: .black, design: .rounded))
                         .foregroundStyle(.teal)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
                         .background(.teal.opacity(0.12), in: Capsule())
                 }
-                Text("Private AI, right where you type.")
+                Text("Finish writing where the work already is.")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .foregroundStyle(.secondary)
                 Text("No account · No cloud · Works offline")
@@ -176,7 +177,7 @@ private struct StatusPanelView: View {
                     tint: viewModel.isReadyEverywhere ? .green : .teal,
                     badge: viewModel.isReadyEverywhere ? "LIVE" : "IDLE"
                 )
-                Text("Select text and open SucceedAI for one-tap outcomes—or type \(displayTrigger), add an instruction, and press Return.")
+                Text("Select text and open SucceedAI for one-tap outcomes. Or type \(displayTrigger), add an instruction, and press Return.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -273,7 +274,7 @@ private struct StatusPanelView: View {
                             Button {
                                 runSelectionAction(action)
                             } label: {
-                                Label(action.title, systemImage: action.systemImage)
+                                Label(action.outcomeTitle, systemImage: action.systemImage)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .buttonStyle(.bordered)
@@ -282,6 +283,7 @@ private struct StatusPanelView: View {
                             .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)
                             .accessibilityHint("Transform the selected text locally")
                         }
+                        selectionToneMenu
                         selectionTranslationMenu
                     }
 
@@ -299,10 +301,10 @@ private struct StatusPanelView: View {
     private var quickComposer: some View {
         PanelCard(tint: .blue) {
             HStack {
-                Label("Quick Compose", systemImage: "wand.and.sparkles")
+                Label("Finish a writing task", systemImage: "wand.and.sparkles")
                     .font(.system(.headline, design: .rounded, weight: .bold))
                 Spacer()
-                Text("ON-DEVICE")
+                Text("PRIVATE ON-DEVICE")
                     .font(.system(size: 9, weight: .black, design: .rounded))
                     .foregroundStyle(.blue)
             }
@@ -319,11 +321,26 @@ private struct StatusPanelView: View {
                         .padding(.vertical, 3)
                         .background(.teal.opacity(0.1), in: Capsule())
                 }
+                if selectedAction == .tone {
+                    Text(targetTone.displayName)
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(.teal)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(.teal.opacity(0.1), in: Capsule())
+                }
                 Spacer()
             }
-            Text(selectedAction.guidance(targetLanguage: targetLanguage))
+            Text(selectedAction.guidance(
+                targetLanguage: targetLanguage,
+                targetTone: targetTone
+            ))
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            Text("Choose the result you need, paste what you have, and let SucceedAI handle the instruction.")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.blue)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 7) {
@@ -331,14 +348,18 @@ private struct StatusPanelView: View {
                     ForEach(WritingAction.quickActions) { action in
                         ActionChip(action)
                     }
+                    toneMenu
                     translationMenu
                 }
             }
 
             TextField(
-                selectedAction.promptPlaceholder(targetLanguage: targetLanguage)
+                selectedAction.promptPlaceholder(
+                    targetLanguage: targetLanguage,
+                    targetTone: targetTone
+                )
                     .replacingOccurrences(of: "\n", with: " "),
-                text: $quickPrompt,
+                text: $viewModel.quickPrompt,
                 axis: .vertical
             )
                 .textFieldStyle(.plain)
@@ -367,7 +388,7 @@ private struct StatusPanelView: View {
             .tint(viewModel.isQuickGenerating ? .orange : .teal)
             .disabled(
                 !viewModel.isQuickGenerating && (
-                    quickPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+                    viewModel.quickPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
                     viewModel.isLoading ||
                     !viewModel.aiAvailability.isAvailable
                 )
@@ -396,12 +417,9 @@ private struct StatusPanelView: View {
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.small)
-                        Button {
-                            quickPrompt = viewModel.quickResult
-                            selectedAction = .custom
-                            viewModel.clearQuickResult()
-                        } label: {
-                            Label("Continue", systemImage: "arrow.triangle.2.circlepath")
+                        quickRefinementMenu
+                        Button { viewModel.editQuickResult() } label: {
+                            Label("Edit draft", systemImage: "pencil")
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.small)
@@ -419,7 +437,7 @@ private struct StatusPanelView: View {
         HStack(spacing: 9) {
             Image(systemName: "lightbulb.max.fill")
                 .foregroundStyle(.yellow)
-            Text("Select text for one-tap Polish, Reply, Summary, Actions, Plan, or Translate—entirely on device.")
+            Text("Select text for one-tap proofreading, replies, summaries, next steps, plans, tone changes, or translation. Everything runs on device.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -448,12 +466,7 @@ private struct StatusPanelView: View {
     }
 
     private func generate() {
-        viewModel.generateQuickResult(
-            selectedAction.request(
-                sourceText: quickPrompt,
-                targetLanguage: targetLanguage
-            )
-        )
+        viewModel.generateQuickResult()
     }
 
     private func openURL(_ urlString: String) {
@@ -463,13 +476,15 @@ private struct StatusPanelView: View {
 
     private func runSelectionAction(
         _ action: WritingAction,
-        targetLanguage: WritingLanguage = .english
+        targetLanguage: WritingLanguage = .english,
+        targetTone: WritingTone = .friendly
     ) {
         dismiss()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
             _ = viewModel.transformCapturedSelection(
                 with: action,
-                targetLanguage: targetLanguage
+                targetLanguage: targetLanguage,
+                targetTone: targetTone
             )
         }
     }
@@ -483,7 +498,7 @@ private struct StatusPanelView: View {
 
     private func ActionChip(_ action: WritingAction) -> some View {
         Button {
-            selectedAction = action
+            viewModel.quickSelectedAction = action
         } label: {
             HStack(spacing: 5) {
                 Label(action.title, systemImage: action.systemImage)
@@ -504,8 +519,8 @@ private struct StatusPanelView: View {
         Menu {
             ForEach(WritingLanguage.allCases) { language in
                 Button(language.displayName) {
-                    targetLanguage = language
-                    selectedAction = .translate
+                    viewModel.quickTargetLanguage = language
+                    viewModel.quickSelectedAction = .translate
                 }
             }
         } label: {
@@ -527,19 +542,107 @@ private struct StatusPanelView: View {
         .accessibilityHint("Choose the target language")
     }
 
+    private var toneMenu: some View {
+        Menu {
+            ForEach(WritingTone.allCases) { tone in
+                Button(tone.displayName) {
+                    viewModel.quickTargetTone = tone
+                    viewModel.quickSelectedAction = .tone
+                }
+            }
+        } label: {
+            HStack(spacing: 5) {
+                Label(
+                    selectedAction == .tone ? targetTone.displayName : "Tone",
+                    systemImage: WritingAction.tone.systemImage
+                )
+                if selectedAction == .tone {
+                    Image(systemName: "checkmark")
+                        .font(.caption2.bold())
+                }
+            }
+        }
+        .menuStyle(.button)
+        .controlSize(.small)
+        .fixedSize()
+        .tint(selectedAction == .tone ? .teal : .secondary)
+        .accessibilityHint("Choose the tone for the result")
+    }
+
+    private var quickRefinementMenu: some View {
+        Menu {
+            Button("Another version") {
+                viewModel.generateQuickResult()
+            }
+            Divider()
+            Button("Proofread") {
+                viewModel.refineQuickResult(with: .proofread)
+            }
+            Button("Polish") {
+                viewModel.refineQuickResult(with: .polish)
+            }
+            Button("Shorten") {
+                viewModel.refineQuickResult(with: .shorten)
+            }
+            Menu("Change Tone") {
+                ForEach(WritingTone.allCases) { tone in
+                    Button(tone.displayName) {
+                        viewModel.refineQuickResult(with: .tone, targetTone: tone)
+                    }
+                }
+            }
+            Menu("Translate") {
+                ForEach(WritingLanguage.allCases) { language in
+                    Button(language.displayName) {
+                        viewModel.refineQuickResult(
+                            with: .translate,
+                            targetLanguage: language
+                        )
+                    }
+                }
+            }
+        } label: {
+            Label("Refine", systemImage: "arrow.triangle.2.circlepath")
+        }
+        .menuStyle(.button)
+        .controlSize(.small)
+        .accessibilityHint("Run another local pass on this result")
+    }
+
+    private var selectionToneMenu: some View {
+        Menu {
+            ForEach(WritingTone.allCases) { tone in
+                Button(tone.displayName) {
+                    viewModel.quickTargetTone = tone
+                    runSelectionAction(.tone, targetTone: tone)
+                }
+            }
+        } label: {
+            Label("Change Tone", systemImage: WritingAction.tone.systemImage)
+                .frame(width: 160, alignment: .leading)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.roundedRectangle(radius: 8))
+        .controlSize(.small)
+        .frame(maxWidth: .infinity)
+        .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)
+        .accessibilityHint("Choose a tone and transform the selected text locally")
+    }
+
     private var selectionTranslationMenu: some View {
         Menu {
             ForEach(WritingLanguage.allCases) { language in
                 Button(language.displayName) {
-                    targetLanguage = language
+                    viewModel.quickTargetLanguage = language
                     runSelectionAction(.translate, targetLanguage: language)
                 }
             }
         } label: {
             Label("Translate", systemImage: WritingAction.translate.systemImage)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(width: 160, alignment: .leading)
         }
-        .menuStyle(.button)
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.roundedRectangle(radius: 8))
         .controlSize(.small)
         .frame(maxWidth: .infinity)
         .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)

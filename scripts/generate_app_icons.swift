@@ -2,6 +2,8 @@
 
 import AppKit
 import Foundation
+import ImageIO
+import UniformTypeIdentifiers
 
 private struct IconSpec {
     let filename: String
@@ -82,10 +84,40 @@ private func write(_ bitmap: NSBitmapImageRep, to destination: URL) {
 }
 
 private func renderIOS(source: NSImage) {
-    let result = bitmap(size: 1024) { canvas in
-        source.draw(in: canvas, from: .zero, operation: .copy, fraction: 1)
+    let size = 1024
+    var proposedRect = NSRect(x: 0, y: 0, width: size, height: size)
+    guard let sourceImage = source.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) else {
+        fail("Could not create a Core Graphics source image")
     }
-    write(result, to: iosURL)
+    guard let context = CGContext(
+        data: nil,
+        width: size,
+        height: size,
+        bitsPerComponent: 8,
+        bytesPerRow: size * 4,
+        space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.noneSkipLast.rawValue
+    ) else {
+        fail("Could not allocate the opaque iOS icon")
+    }
+
+    context.interpolationQuality = .high
+    context.draw(sourceImage, in: CGRect(x: 0, y: 0, width: size, height: size))
+    guard let result = context.makeImage() else {
+        fail("Could not render the opaque iOS icon")
+    }
+    guard let destination = CGImageDestinationCreateWithURL(
+        iosURL as CFURL,
+        UTType.png.identifier as CFString,
+        1,
+        nil
+    ) else {
+        fail("Could not create the iOS icon destination")
+    }
+    CGImageDestinationAddImage(destination, result, nil)
+    guard CGImageDestinationFinalize(destination) else {
+        fail("Could not write \(iosURL.path)")
+    }
 }
 
 private func renderMac(source: NSImage, spec: IconSpec) {

@@ -1,10 +1,12 @@
-Succeed AI turns selected text or a short /ai command into finished writing directly inside Mail, Notes, browsers, documents, and other editable Mac fields. Select text and choose a one-tap outcome from the menu bar, or type an instruction, optionally paste the source, and press Return. SucceedAI replaces only the exact, unchanged source in place.
+Succeed AI is a privacy-first writing assistant for real work in Mail, Notes, browsers, documents, and other editable Mac fields. Select text and choose the result you need, or type a short /ai instruction and press Return. SucceedAI handles the prompt and replaces only the exact, unchanged source in place.
 
 No chatbot tab. No copy-and-paste loop. No account, subscription, API key, or server. Apple’s on-device language model performs the work locally, even offline.
 
 Use SucceedAI to:
 
+- Proofread objective errors without needlessly rewriting correct passages.
 - Rewrite emails so they are clearer, warmer, shorter, or more confident.
+- Change tone to friendly, professional, direct, confident, or empathetic while preserving facts.
 - Summarize long notes without losing key facts or commitments.
 - Extract action items with owners, dates, and dependencies kept intact.
 - Turn rough goals and constraints into an ordered plan with clear next steps.
@@ -13,7 +15,7 @@ Use SucceedAI to:
 - Draft customer support replies inside your browser or help desk.
 - Polish product copy, social posts, issue comments, release notes, and documentation.
 - Turn rough thoughts into finished writing without breaking focus.
-- Select existing text and choose Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, or Translate without writing a prompt.
+- Select existing text and choose Proofread, Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, Change Tone, or Translate without writing a prompt.
 
 Private by design:
 
@@ -26,9 +28,9 @@ Private by design:
 - Lets you customize the replacement trigger from Settings.
 - Includes a quick composer for writing directly from the menu bar.
 - Shows every selected-text outcome at once in a compact one-tap action grid.
-- Includes non-destructive Polish, Shorten, Summarize, Draft Reply, Action Items, Make a Plan, and target-language Translate workflows.
-- Lets you stop generation or refine a completed result into the next draft.
-- Adds eight dedicated Shortcuts actions that automatically accept the previous action’s output for private local automations.
+- Includes non-destructive Proofread, Polish, Shorten, Summarize, Draft Reply, Action Items, Make a Plan, five-tone Change Tone, and target-language Translate workflows.
+- Lets you stop generation or run a completed result through another private local refinement pass.
+- Adds ten dedicated Shortcuts actions that automatically accept the previous action’s output for private local automations.
 - Shows a clear hourglass while a local response is being written.
 - Reads the current editable field only after you invoke the trigger so pasted text is included accurately.
 - Re-checks the app, field, exact command or selection, cursor, and document fingerprint before replacing anything.

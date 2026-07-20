@@ -16,6 +16,17 @@ extension WritingLanguage: AppEnum {
     ]
 }
 
+extension WritingTone: AppEnum {
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Writing Tone")
+    static let caseDisplayRepresentations: [WritingTone: DisplayRepresentation] = [
+        .friendly: "Friendly",
+        .professional: "Professional",
+        .direct: "Direct",
+        .confident: "Confident",
+        .empathetic: "Empathetic",
+    ]
+}
+
 struct TransformTextWithSucceedAIIntent: AppIntent {
     static let title: LocalizedStringResource = "Transform Text with SucceedAI"
     static let description = IntentDescription(
@@ -73,6 +84,30 @@ struct PolishTextWithSucceedAIIntent: AppIntent {
     }
 }
 
+struct ProofreadTextWithSucceedAIIntent: AppIntent {
+    static let title: LocalizedStringResource = "Proofread Text with SucceedAI"
+    static let description = IntentDescription(
+        "Fix objective writing errors without unnecessarily changing the original wording or voice."
+    )
+    static let supportedModes: IntentModes = .background
+    static let writingInstruction = WritingAction.proofread.instruction(targetLanguage: .english)
+
+    @Parameter(
+        title: "Text",
+        description: "The writing to proofread privately on this device.",
+        inputConnectionBehavior: .connectToPreviousIntentResult
+    )
+    var text: String
+
+    func perform() async throws -> some IntentResult & ReturnsValue<String> {
+        let response = try await LocalTextIntentRunner.transform(
+            instruction: Self.writingInstruction,
+            text: text
+        )
+        return .result(value: response)
+    }
+}
+
 struct ShortenTextWithSucceedAIIntent: AppIntent {
     static let title: LocalizedStringResource = "Shorten Text with SucceedAI"
     static let description = IntentDescription(
@@ -91,6 +126,35 @@ struct ShortenTextWithSucceedAIIntent: AppIntent {
     func perform() async throws -> some IntentResult & ReturnsValue<String> {
         let response = try await LocalTextIntentRunner.transform(
             instruction: Self.writingInstruction,
+            text: text
+        )
+        return .result(value: response)
+    }
+}
+
+struct ChangeToneWithSucceedAIIntent: AppIntent {
+    static let title: LocalizedStringResource = "Change Tone with SucceedAI"
+    static let description = IntentDescription(
+        "Rewrite text in a chosen tone while preserving its meaning, facts, and commitments."
+    )
+    static let supportedModes: IntentModes = .background
+
+    @Parameter(
+        title: "Text",
+        description: "The writing whose tone should change privately on this device.",
+        inputConnectionBehavior: .connectToPreviousIntentResult
+    )
+    var text: String
+
+    @Parameter(
+        title: "Tone",
+        description: "How the rewritten result should sound."
+    )
+    var tone: WritingTone
+
+    func perform() async throws -> some IntentResult & ReturnsValue<String> {
+        let response = try await LocalTextIntentRunner.transform(
+            instruction: tone.rewriteInstruction,
             text: text
         )
         return .result(value: response)
@@ -244,6 +308,15 @@ struct SucceedAIShortcuts: AppShortcutsProvider {
             systemImageName: "text.badge.checkmark"
         )
         AppShortcut(
+            intent: ProofreadTextWithSucceedAIIntent(),
+            phrases: [
+                "Proofread text with \(.applicationName)",
+                "Fix typos with \(.applicationName)",
+            ],
+            shortTitle: "Proofread Text",
+            systemImageName: "checkmark.circle"
+        )
+        AppShortcut(
             intent: ShortenTextWithSucceedAIIntent(),
             phrases: [
                 "Shorten text with \(.applicationName)",
@@ -251,6 +324,15 @@ struct SucceedAIShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "Shorten Text",
             systemImageName: "arrow.down.right.and.arrow.up.left"
+        )
+        AppShortcut(
+            intent: ChangeToneWithSucceedAIIntent(),
+            phrases: [
+                "Change tone with \(.applicationName)",
+                "Make this \(\.$tone) with \(.applicationName)",
+            ],
+            shortTitle: "Change Tone",
+            systemImageName: "slider.horizontal.3"
         )
         AppShortcut(
             intent: SummarizeTextWithSucceedAIIntent(),

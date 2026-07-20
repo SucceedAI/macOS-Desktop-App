@@ -7,14 +7,17 @@ final class SucceedAIKeyboardUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    func testCustomKeyboardTypesAndRunsACommandInPlace() throws {
+    func testKeyboardTypesRunsAndDismissesACommandInPlace() throws {
         try enableSucceedAIKeyboardIfNeeded()
 
-        let trigger = ";ask"
+        // Keep this extension-runtime test independent of App Group signing.
+        // Custom trigger sharing is covered by the signed app and unit suite.
+        let trigger = "/ai"
         app.launchArguments = [
             "--screenshot-keyboard-surface",
             "--ui-test-keyboard-trigger", trigger
         ]
+        app.launchEnvironment["SUCCEEDAI_UI_TEST_RESPONSE"] = "Your reply is clear, concise, and ready to send."
         app.launch()
 
         let editor = app.textViews["composer-editor"]
@@ -41,6 +44,17 @@ final class SucceedAIKeyboardUITests: XCTestCase {
         expectation(for: commandWasReplaced, evaluatedWith: editor)
         waitForExpectations(timeout: 60)
         XCTAssertTrue(app.buttons["Undo"].waitForExistence(timeout: 3))
+
+        let dismissKeyboard = app.buttons["dismiss-keyboard"]
+        XCTAssertTrue(dismissKeyboard.waitForExistence(timeout: 3))
+        let completedReplacement = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        completedReplacement.name = "SucceedAI keyboard completed local replacement"
+        completedReplacement.lifetime = .keepAlways
+        add(completedReplacement)
+        dismissKeyboard.tap()
+        let keyboardClosed = NSPredicate { _, _ in !insertTrigger.exists }
+        expectation(for: keyboardClosed, evaluatedWith: insertTrigger)
+        waitForExpectations(timeout: 5)
     }
 
     private func enableSucceedAIKeyboardIfNeeded() throws {
