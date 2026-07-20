@@ -59,10 +59,18 @@ report = targets.map do |bundle_id, platform|
     nil
   end
 
-  privacy = begin
-    Spaceship::ConnectAPI::AppDataUsagesPublishState.get(app_id: app.id)
-  rescue Spaceship::UnexpectedResponse, RuntimeError
-    nil
+  privacy_publish_state = begin
+    state = Spaceship::ConnectAPI::AppDataUsagesPublishState.get(app_id: app.id)
+    {
+      available: true,
+      published: state&.published,
+      last_published: state&.last_published
+    }
+  rescue Spaceship::UnexpectedResponse, RuntimeError => error
+    {
+      available: false,
+      error: error.message
+    }
   end
 
   review_submissions = begin
@@ -100,7 +108,7 @@ report = targets.map do |bundle_id, platform|
       notes_present: !review_detail.notes.to_s.strip.empty?,
       demo_account_required: review_detail.demo_account_required
     },
-    privacy_published: privacy&.published,
+    privacy_publish_state: privacy_publish_state,
     localizations: localizations,
     review_submissions: review_submissions
   }
