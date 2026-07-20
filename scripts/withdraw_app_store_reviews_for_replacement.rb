@@ -59,7 +59,8 @@ targets.each do |target|
   end
 
   selected_build = version.get_build
-  if selected_build&.version == target[:build_number]
+  allow_selected_build = ENV["ALLOW_SELECTED_BUILD_WITHDRAWAL"] == "1"
+  if selected_build&.version == target[:build_number] && !allow_selected_build
     puts "#{target[:name]} build #{target[:build_number]} is already selected; no withdrawal performed."
     next
   end
