@@ -140,7 +140,7 @@ SucceedAI calls Apple’s OS-provided [`SystemLanguageModel`](https://developer.
 
 ## Author
 
-**[Pierre-Henry Soria ツ](https://ph7.me)**: A super passionate & enthusiastic Problem-Solver and AI Software Engineer with data scientist background. Also, a real Roquefort 🧀, ristretto ☕️, and dark chocolate lover! 😋
+**[Pierre-Henry Soria ツ](https://ph7.me)** – A super passionate & enthusiastic Problem-Solver and AI Software Engineer with data scientist background. Also, a real Roquefort 🧀, ristretto ☕️, and dark chocolate lover! 😋
 
 [![Pierre-Henry Soria](https://avatars0.githubusercontent.com/u/1325411?s=200)](https://ph7.me "Pierre-Henry Soria, Software Developer")
 
@@ -154,4 +154,4 @@ See the original vision behind SucceedAI and its in-place AI writing experience:
 
 ## License
 
-Distributed under the [MIT](license.md) license 🎉 Copyright © 2026 Pierre-Henry Soria. Wish you happy, happy coding! 🤠
+Distributed under the [MIT](LICENSE.md) license 🎉 Copyright © 2026 Pierre-Henry Soria. Wish you happy, happy coding! 🤠
