@@ -23,6 +23,11 @@ targets = [
   }
 ]
 
+if ENV["TARGET_BUNDLE_ID"]
+  targets.select! { |target| target[:bundle_id] == ENV["TARGET_BUNDLE_ID"] }
+  abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
+end
+
 targets.each do |target|
   app = Spaceship::ConnectAPI::App.find(target[:bundle_id])
   abort("App Store Connect app not found: #{target[:bundle_id]}") unless app
@@ -69,4 +74,12 @@ targets.each do |target|
   previous_build = selected_build&.version || "none"
   puts "Withdrew #{target[:name]} submission #{submission.id} " \
        "(build #{previous_build}) for valid replacement build #{target[:build_number]}: #{canceled.state}"
+
+  60.times do
+    sleep 2
+    break unless app.get_in_progress_review_submission(platform: target[:platform])
+  end
+  if app.get_in_progress_review_submission(platform: target[:platform])
+    abort("Timed out waiting for #{target[:name]} review withdrawal")
+  end
 end

@@ -283,6 +283,69 @@ def menu_panel(img, xy):
     text(d, (x1 + 82, footer_y + 57), "Apple’s model runs here. No backend, account, API key, or prompt logs.", size=23, fill=MUTED)
 
 
+def outcome_panel(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    rounded_shadow(img, xy, radius=40, fill=(255, 255, 255, 248), shadow=(8, 23, 55, 72), blur=48, offset=(0, 28))
+
+    img.alpha_composite(app_icon(82), (x1 + 44, y1 + 40))
+    text(d, (x1 + 150, y1 + 44), "SucceedAI", size=43, fill=INK, weight="heavy")
+    text(d, (x1 + 152, y1 + 96), "Private AI, right where you type", size=25, fill=MUTED)
+    label_pill(d, (x2 - 244, y1 + 52), "PRIVACY FIRST", BLUE, (230, 250, 250, 255))
+
+    ready_y = y1 + 154
+    d.rounded_rectangle((x1 + 44, ready_y, x2 - 44, ready_y + 94), radius=25, fill=(242, 253, 247, 255), outline=GREEN[:3] + (86,), width=2)
+    d.ellipse((x1 + 72, ready_y + 25, x1 + 116, ready_y + 69), fill=GREEN)
+    text(d, (x1 + 144, ready_y + 19), "Ready in every app", size=29, fill=INK, weight="bold")
+    text(d, (x1 + 144, ready_y + 56), "Choose an outcome for the selected text.", size=23, fill=MUTED)
+
+    card_y = ready_y + 120
+    card_bottom = y2 - 154
+    d.rounded_rectangle((x1 + 44, card_y, x2 - 44, card_bottom), radius=30, fill=(252, 248, 255, 255), outline=TEAL[:3] + (98,), width=3)
+    text(d, (x1 + 78, card_y + 28), "Selection ready", size=33, fill=TEAL, weight="heavy")
+    label_pill(d, (x2 - 210, card_y + 22), "ONE TAP", TEAL)
+
+    selected_y = card_y + 82
+    d.rounded_rectangle((x1 + 76, selected_y, x2 - 76, selected_y + 78), radius=19, fill=(244, 237, 252, 255))
+    text(d, (x1 + 104, selected_y + 25), "we can still ship Friday if the final copy arrives today", size=24, fill=INK_2)
+
+    actions = [
+        ("Check Before Sending", "✓"),
+        ("Improve Clarity", "✓"),
+        ("Make It Shorter", "↙"),
+        ("Write a Reply", "↩"),
+        ("Summarize It", "≡"),
+        ("Find Next Steps", "☑"),
+        ("Build a Plan", "1."),
+        ("Set the Right Tone", "A"),
+    ]
+    action_top = selected_y + 110
+    gap = 16
+    action_width = (x2 - x1 - 168 - gap) // 2
+    for index, (label, symbol) in enumerate(actions):
+        column = index % 2
+        row = index // 2
+        left = x1 + 76 + column * (action_width + gap)
+        top = action_top + row * 62
+        d.rounded_rectangle((left, top, left + action_width, top + 52), radius=16, fill=WHITE, outline=(220, 210, 235, 255), width=2)
+        text(d, (left + 19, top + 12), symbol, size=22, fill=TEAL, weight="bold")
+        text(d, (left + 54, top + 11), label, size=22, fill=INK_2, weight="bold")
+
+    translate_y = action_top + 4 * 62
+    d.rounded_rectangle((x1 + 76, translate_y, x2 - 76, translate_y + 52), radius=17, fill=(242, 235, 255, 255), outline=TEAL[:3] + (75,), width=2)
+    text(d, ((x1 + x2) // 2, translate_y + 26), "Translate  ·  9 languages", size=23, fill=TEAL, weight="bold", anchor="mm")
+
+    safety_y = card_bottom - 116
+    d.rounded_rectangle((x1 + 76, safety_y, x2 - 76, safety_y + 78), radius=20, fill=(245, 241, 255, 255), outline=TEAL[:3] + (52,), width=2)
+    text(d, (x1 + 104, safety_y + 15), "Context-safe replacement", size=24, fill=INK, weight="bold")
+    text(d, (x1 + 104, safety_y + 47), "Only the exact unchanged selection is replaced. Undo stays ready.", size=20, fill=MUTED)
+
+    footer_y = y2 - 118
+    d.rounded_rectangle((x1 + 44, footer_y, x2 - 44, y2 - 38), radius=24, fill=(239, 248, 255, 255), outline=BLUE[:3] + (62,), width=2)
+    text(d, (x1 + 76, footer_y + 14), "Nothing uploaded", size=25, fill=INK, weight="bold")
+    text(d, (x1 + 76, footer_y + 47), "Apple’s model runs on this Mac.", size=21, fill=MUTED)
+
+
 def settings_window(img, xy):
     x1, y1, x2, y2 = xy
     d = ImageDraw.Draw(img)
@@ -375,83 +438,367 @@ def book_cover(img, xy):
     paragraph(d, (x1 + 94, y2 - 220), "Type a command, press Return, and keep writing where the work already is.", x2 - x1 - 190, size=30, fill=(214, 237, 236, 255))
 
 
-def shot1():
-    img = base("mint")
-    d = ImageDraw.Draw(img)
-    title_block(
-        d,
-        "No context switching",
-        "Type. Press Return. Keep writing.",
-        "Turn a rough /ai command into finished text inside the app you are already using.",
-        width=920,
+def campaign_base(theme="light"):
+    if theme == "dark":
+        img = gradient((W, H), (5, 12, 38), (10, 31, 83), (39, 18, 85))
+        draw_blob(img, (1760, -430, 3220, 930), (119, 73, 255, 78), 150)
+        draw_blob(img, (-420, 980, 940, 2250), (0, 190, 255, 48), 150)
+    else:
+        img = gradient((W, H), (246, 248, 252), (235, 241, 250), (246, 238, 253))
+        draw_blob(img, (2050, -520, 3230, 650), (123, 85, 255, 34), 155)
+        draw_blob(img, (-500, 1150, 820, 2300), (0, 174, 255, 28), 155)
+
+    stripe = gradient((W, 18), (0, 191, 255), (93, 64, 255), (244, 77, 214))
+    img.alpha_composite(stripe, (0, 0))
+    return img
+
+
+def campaign_header(draw, kicker, title, subtitle, dark=False):
+    primary = WHITE if dark else INK
+    secondary = (204, 214, 239, 255) if dark else MUTED
+    accent = (92, 220, 255, 255) if dark else TEAL
+
+    text(draw, (150, 92), kicker.upper(), size=29, fill=accent, weight="bold")
+    y = 146
+    for line in wrap(draw, title, 1800, 64, weight="heavy"):
+        text(draw, (150, y), line, size=64, fill=primary, weight="heavy")
+        y += 69
+
+    paragraph(
+        draw,
+        (1960, 126),
+        subtitle,
+        760,
+        size=31,
+        fill=secondary,
+        leading=1.24,
+        weight="regular",
     )
-    command_editor(img, (220, 690, 1340, 1420), before=True)
-    command_editor(img, (1510, 535, 2670, 1475), before=False)
-    d.line((1390, 1010, 1490, 1010), fill=TEAL, width=12)
-    d.polygon([(1490, 1010), (1448, 982), (1448, 1038)], fill=TEAL)
+
+
+def label_pill(draw, xy, label, color=TEAL, fill=(242, 238, 255, 255)):
+    x, y = xy
+    f = font(24, "bold")
+    width = draw.textbbox((0, 0), label, font=f)[2] + 50
+    draw.rounded_rectangle((x, y, x + width, y + 52), radius=26, fill=fill, outline=color[:3] + (78,), width=2)
+    text(draw, (x + 25, y + 13), label, size=24, fill=color, weight="bold")
+    return width
+
+
+def result_check(draw, xy, label, detail, color=TEAL):
+    x, y = xy
+    draw.rounded_rectangle((x, y, x + 575, y + 104), radius=25, fill=(249, 250, 255, 255), outline=color[:3] + (58,), width=2)
+    draw.ellipse((x + 25, y + 28, x + 73, y + 76), fill=color)
+    text(draw, (x + 49, y + 52), "✓", size=27, fill=WHITE, weight="heavy", anchor="mm")
+    text(draw, (x + 94, y + 21), label, size=28, fill=INK, weight="bold")
+    text(draw, (x + 94, y + 60), detail, size=23, fill=MUTED)
+
+
+def transformation_workspace(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    mac_window(img, xy, "Mail · Customer Reply")
+
+    toolbar_y = y1 + 86
+    d.rectangle((x1, toolbar_y, x2, toolbar_y + 82), fill=(245, 247, 251, 255))
+    for index, label in enumerate(["Send", "Attach", "Format"]):
+        left = x1 + 44 + index * 126
+        d.rounded_rectangle((left, toolbar_y + 17, left + 108, toolbar_y + 65), radius=17, fill=WHITE, outline=(217, 224, 232, 255), width=2)
+        text(d, (left + 54, toolbar_y + 41), label, size=21, fill=INK_2, weight="bold", anchor="mm")
+    text(d, (x2 - 54, toolbar_y + 41), "To: Jamie · Subject: Your account is ready", size=23, fill=MUTED, anchor="rm")
+
+    content_y = toolbar_y + 116
+    midpoint = (x1 + x2) // 2
+    left_card = (x1 + 66, content_y, midpoint - 82, y2 - 72)
+    right_card = (midpoint + 82, content_y, x2 - 66, y2 - 72)
+
+    d.rounded_rectangle(left_card, radius=30, fill=(251, 252, 254, 255), outline=(216, 223, 232, 255), width=2)
+    d.rounded_rectangle(right_card, radius=30, fill=(255, 255, 255, 255), outline=TEAL[:3] + (86,), width=3)
+    label_pill(d, (left_card[0] + 38, left_card[1] + 34), "ROUGH DRAFT", MUTED, (239, 242, 246, 255))
+    label_pill(d, (right_card[0] + 38, right_card[1] + 34), "READY TO SEND", TEAL)
+
+    paragraph(
+        d,
+        (left_card[0] + 44, left_card[1] + 128),
+        "/ai make this clear, warm and confident",
+        left_card[2] - left_card[0] - 88,
+        size=31,
+        fill=TEAL,
+        weight="bold",
+    )
+    paragraph(
+        d,
+        (left_card[0] + 44, left_card[1] + 250),
+        "hey jamie, thanks for waiting. we fixed it and your account should work now. try again and tell us if it doesn't.",
+        left_card[2] - left_card[0] - 88,
+        size=35,
+        fill=(68, 81, 91, 255),
+        leading=1.38,
+    )
+
+    paragraph(
+        d,
+        (right_card[0] + 44, right_card[1] + 128),
+        "Hi Jamie,",
+        right_card[2] - right_card[0] - 88,
+        size=35,
+        fill=INK,
+        weight="bold",
+    )
+    paragraph(
+        d,
+        (right_card[0] + 44, right_card[1] + 218),
+        "Thanks for your patience. We have fixed the issue, and your account is ready to use.",
+        right_card[2] - right_card[0] - 88,
+        size=35,
+        fill=INK_2,
+        leading=1.38,
+    )
+    paragraph(
+        d,
+        (right_card[0] + 44, right_card[1] + 405),
+        "Please try again. If anything still feels off, reply here and I will take another look right away.",
+        right_card[2] - right_card[0] - 88,
+        size=35,
+        fill=INK_2,
+        leading=1.38,
+    )
+    text(d, (right_card[0] + 44, right_card[3] - 104), "Best,\nAlex", size=31, fill=MUTED)
+
+    d.ellipse((midpoint - 58, content_y + 320, midpoint + 58, content_y + 436), fill=TEAL)
+    text(d, (midpoint, content_y + 378), "→", size=58, fill=WHITE, weight="heavy", anchor="mm")
+
+
+def notes_to_plan_workspace(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    mac_window(img, xy, "Notes · Product Launch")
+
+    sidebar_w = 360
+    d.rectangle((x1, y1 + 86, x1 + sidebar_w, y2), fill=(245, 246, 250, 255))
+    text(d, (x1 + 42, y1 + 132), "Folders", size=26, fill=MUTED, weight="bold")
+    folders = [("All iCloud", "18"), ("Work", "7"), ("Ideas", "11")]
+    for index, (name, count) in enumerate(folders):
+        top = y1 + 188 + index * 82
+        selected = index == 1
+        if selected:
+            d.rounded_rectangle((x1 + 22, top - 12, x1 + sidebar_w - 22, top + 52), radius=18, fill=(233, 227, 255, 255))
+        text(d, (x1 + 48, top), name, size=26, fill=TEAL if selected else INK_2, weight="bold" if selected else "regular")
+        text(d, (x1 + sidebar_w - 52, top + 2), count, size=22, fill=MUTED, anchor="ra")
+
+    content_x = x1 + sidebar_w
+    midpoint = content_x + (x2 - content_x) // 2
+    d.line((midpoint, y1 + 136, midpoint, y2 - 54), fill=(219, 224, 233, 255), width=2)
+
+    text(d, (content_x + 60, y1 + 138), "Launch meeting notes", size=39, fill=INK, weight="heavy")
+    text(d, (content_x + 62, y1 + 194), "Today, 10:30", size=23, fill=MUTED)
+    rough_notes = [
+        "launch maybe next Thursday",
+        "Maya needs final screenshots",
+        "pricing page still unfinished",
+        "email customers before launch",
+        "ask Sam about App Store copy",
+        "support guide needs review",
+    ]
+    for index, note in enumerate(rough_notes):
+        top = y1 + 280 + index * 105
+        d.ellipse((content_x + 66, top + 12, content_x + 80, top + 26), fill=(133, 145, 155, 255))
+        text(d, (content_x + 106, top), note, size=30, fill=(75, 86, 95, 255))
+
+    label_pill(d, (midpoint + 52, y1 + 126), "SUCCEEDAI PLAN", TEAL)
+    text(d, (midpoint + 54, y1 + 202), "Launch plan", size=43, fill=INK, weight="heavy")
+    text(d, (midpoint + 56, y1 + 258), "Clear owners, priorities and next steps", size=25, fill=MUTED)
+
+    tasks = [
+        ("Today", "Maya · Export final App Store screenshots", True),
+        ("Today", "Sam · Approve product page copy", True),
+        ("Tomorrow", "Alex · Finish pricing page", False),
+        ("Before launch", "Team · Review customer email", False),
+        ("Before launch", "Support · Publish setup guide", False),
+    ]
+    for index, (when, task, done) in enumerate(tasks):
+        top = y1 + 332 + index * 128
+        d.rounded_rectangle((midpoint + 52, top, x2 - 54, top + 104), radius=24, fill=WHITE, outline=(220, 224, 236, 255), width=2)
+        box_fill = GREEN if done else WHITE
+        d.rounded_rectangle((midpoint + 78, top + 28, midpoint + 124, top + 74), radius=13, fill=box_fill, outline=GREEN, width=3)
+        if done:
+            text(d, (midpoint + 101, top + 51), "✓", size=26, fill=WHITE, weight="heavy", anchor="mm")
+        text(d, (midpoint + 150, top + 20), when.upper(), size=19, fill=TEAL, weight="bold")
+        text(d, (midpoint + 150, top + 53), task, size=27, fill=INK_2, weight="bold")
+
+    d.rounded_rectangle((content_x + 58, y2 - 134, midpoint - 58, y2 - 60), radius=26, fill=(244, 239, 255, 255))
+    text(d, ((content_x + midpoint) // 2, y2 - 97), "SucceedAI turns the selection into a plan", size=25, fill=TEAL, weight="bold", anchor="mm")
+
+
+def selection_workspace(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    mac_window(img, xy, "Mail · Inbox")
+
+    sidebar = x1 + 410
+    d.rectangle((x1, y1 + 86, sidebar, y2), fill=(242, 245, 249, 255))
+    text(d, (x1 + 40, y1 + 136), "Mailboxes", size=25, fill=MUTED, weight="bold")
+    for index, label in enumerate(["Inbox  12", "VIP", "Sent", "Drafts  3", "Archive"]):
+        top = y1 + 202 + index * 74
+        if index == 0:
+            d.rounded_rectangle((x1 + 20, top - 12, sidebar - 22, top + 48), radius=18, fill=(230, 225, 255, 255))
+        text(d, (x1 + 48, top), label, size=27, fill=TEAL if index == 0 else INK_2, weight="bold" if index == 0 else "regular")
+
+    content_x = sidebar + 54
+    text(d, (content_x, y1 + 142), "Re: Project timeline", size=42, fill=INK, weight="heavy")
+    text(d, (content_x, y1 + 202), "From Jamie Chen · 9:17 AM", size=25, fill=MUTED)
+    paragraph(d, (content_x, y1 + 286), "Hi team,\n\nCan you send a concise update on what is complete, what is blocked, and what you need from me before Friday?", 1020, size=34, fill=INK_2, leading=1.36)
+
+    selected_top = y1 + 650
+    d.rounded_rectangle((content_x - 12, selected_top - 18, content_x + 1040, selected_top + 174), radius=22, fill=(230, 222, 255, 255), outline=TEAL[:3] + (90,), width=2)
+    paragraph(
+        d,
+        (content_x + 20, selected_top + 12),
+        "we finished the prototype but onboarding is blocked because we need the final copy. i think we can still ship friday if it arrives today.",
+        970,
+        size=31,
+        fill=INK,
+        leading=1.35,
+    )
+    text(d, (content_x, selected_top + 226), "Selected text stays in place until you choose an outcome.", size=25, fill=MUTED)
+
+    outcome_panel(img, (1510, y1 + 112, x2 - 48, y2 - 38))
+
+
+def privacy_workspace(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    rounded_shadow(img, xy, radius=42, fill=(10, 19, 48, 244), shadow=(0, 0, 0, 110), blur=56, offset=(0, 28), outline=(116, 135, 255, 80))
+
+    img.alpha_composite(app_icon(128), (x1 + 72, y1 + 68))
+    text(d, (x1 + 236, y1 + 78), "Private by architecture", size=52, fill=WHITE, weight="heavy")
+    text(d, (x1 + 238, y1 + 144), "Local intelligence. No data pipeline.", size=29, fill=(181, 197, 228, 255))
+
+    center_x = (x1 + x2) // 2
+    source_x = x1 + 160
+    model_x = center_x - 280
+    cloud_x = x2 - 620
+    card_y = y1 + 340
+    card_w = 560
+    card_h = 330
+
+    for left, title, detail, color in [
+        (source_x, "Your writing", "Mail, Notes, documents\nand browser text fields", BLUE),
+        (model_x, "Apple local model", "Runs directly on your Mac\nwith Foundation Models", TEAL),
+        (cloud_x, "The cloud", "No prompt upload\nNo account or API key", ROSE),
+    ]:
+        d.rounded_rectangle((left, card_y, left + card_w, card_y + card_h), radius=36, fill=(23, 36, 75, 255), outline=color[:3] + (115,), width=3)
+        d.ellipse((left + 42, card_y + 42, left + 112, card_y + 112), fill=color)
+        symbol = "✓" if title != "The cloud" else "×"
+        text(d, (left + 77, card_y + 77), symbol, size=39, fill=WHITE, weight="heavy", anchor="mm")
+        text(d, (left + 42, card_y + 148), title, size=38, fill=WHITE, weight="heavy")
+        paragraph(d, (left + 42, card_y + 205), detail, card_w - 84, size=27, fill=(194, 206, 233, 255), leading=1.25)
+
+    d.line((source_x + card_w, card_y + card_h // 2, model_x - 24, card_y + card_h // 2), fill=(92, 220, 255, 255), width=8)
+    d.polygon([(model_x - 24, card_y + card_h // 2), (model_x - 58, card_y + card_h // 2 - 20), (model_x - 58, card_y + card_h // 2 + 20)], fill=(92, 220, 255, 255))
+    d.line((model_x + card_w, card_y + card_h // 2, cloud_x - 32, card_y + card_h // 2), fill=(242, 82, 98, 255), width=7)
+    text(d, ((model_x + card_w + cloud_x) // 2, card_y + card_h // 2 - 28), "NEVER SENT", size=22, fill=(255, 127, 143, 255), weight="bold", anchor="mm")
+    d.line((cloud_x - 174, card_y + 80, cloud_x - 52, card_y + 250), fill=(255, 94, 119, 255), width=13)
+
+    benefits_y = y1 + 810
+    result_check(d, (x1 + 150, benefits_y), "Works offline", "No connection required", BLUE)
+    result_check(d, (x1 + 765, benefits_y), "No prompt logs", "Nothing stored remotely", TEAL)
+    result_check(d, (x1 + 1380, benefits_y), "No account", "Open the app and write", GREEN)
+    result_check(d, (x1 + 1995, benefits_y), "No API bill", "No token fees or keys", ORANGE)
+
+    text(d, (center_x, y2 - 92), "Your words stay yours.", size=39, fill=(169, 238, 255, 255), weight="heavy", anchor="mm")
+
+
+def settings_showcase(img, xy):
+    x1, y1, x2, y2 = xy
+    d = ImageDraw.Draw(img)
+    settings_window(img, (x1, y1, x2 - 740, y2))
+
+    panel_x1 = x2 - 650
+    rounded_shadow(img, (panel_x1, y1 + 36, x2, y2 - 36), radius=42, fill=(13, 23, 58, 248), shadow=(14, 18, 50, 80), blur=46, offset=(0, 28), outline=(118, 91, 255, 105))
+    img.alpha_composite(app_icon(126), (panel_x1 + 58, y1 + 104))
+    text(d, (panel_x1 + 58, y1 + 270), "Ready when you are", size=45, fill=WHITE, weight="heavy")
+    paragraph(d, (panel_x1 + 60, y1 + 338), "Keep SucceedAI in the menu bar and use it wherever you write.", x2 - panel_x1 - 120, size=28, fill=(194, 207, 235, 255), leading=1.3)
+
+    steps = [
+        ("1", "Select text"),
+        ("2", "Choose an outcome"),
+        ("3", "Keep writing"),
+    ]
+    for index, (number, label) in enumerate(steps):
+        top = y1 + 540 + index * 150
+        d.ellipse((panel_x1 + 60, top, panel_x1 + 126, top + 66), fill=TEAL if index < 2 else BLUE)
+        text(d, (panel_x1 + 93, top + 34), number, size=29, fill=WHITE, weight="heavy", anchor="mm")
+        text(d, (panel_x1 + 154, top + 14), label, size=31, fill=WHITE, weight="bold")
+
+    d.rounded_rectangle((panel_x1 + 58, y2 - 260, x2 - 58, y2 - 150), radius=30, fill=(33, 49, 93, 255), outline=(118, 201, 255, 100), width=2)
+    text(d, ((panel_x1 + x2) // 2, y2 - 224), "PRIVACY FIRST", size=22, fill=(108, 222, 255, 255), weight="bold", anchor="mm")
+    text(d, ((panel_x1 + x2) // 2, y2 - 184), "Nothing uploaded", size=29, fill=WHITE, weight="heavy", anchor="mm")
+
+
+def shot1():
+    img = campaign_base("light")
+    d = ImageDraw.Draw(img)
+    campaign_header(
+        d,
+        "AI writing assistant · built for macOS",
+        "Turn rough thoughts into writing worth sending",
+        "Rewrite, proofread and refine inside the Mac apps you already use.",
+    )
+    transformation_workspace(img, (150, 370, 2730, 1690))
     save(img, "01-type-return-done-2880x1800.png")
 
 
 def shot2():
-    img = base("mint")
+    img = campaign_base("light")
     d = ImageDraw.Draw(img)
-    title_block(
+    campaign_header(
         d,
-        "Privacy first",
-        "Private AI writing in every Mac app",
-        "Succeed AI uses Apple’s local model directly in Mail, Notes, browsers, documents, and other editable fields.",
-        width=950,
+        "From notes to next steps",
+        "Turn meeting notes into a plan you can act on",
+        "Find actions, assign owners and create structure without writing a complicated prompt.",
     )
-    x = 174
-    for label, col in [("Works offline", TEAL), ("No account", BLUE), ("No cloud", ORANGE)]:
-        x = badge(d, (x, 655), label, col)
-    book_cover(img, (2060, 302, 2680, 1328))
-    command_editor(img, (840, 720, 1980, 1500), before=True)
+    notes_to_plan_workspace(img, (150, 370, 2730, 1690))
     save(img, "02-private-ai-in-every-app-2880x1800.png")
 
 
 def shot3():
-    img = base("mint")
+    img = campaign_base("light")
     d = ImageDraw.Draw(img)
-    title_block(
+    campaign_header(
         d,
-        "One tap from the menu bar",
-        "Select text. Choose an outcome. Stay in flow.",
-        "Proofread, polish, change tone, reply, summarize, plan, or translate without writing a prompt or leaving the app you are using.",
-        width=980,
+        "One selection · every writing task",
+        "Proofread, rewrite and reply without leaving your app",
+        "Choose a useful outcome from the menu bar. SucceedAI handles the prompt for you.",
     )
-    menu_panel(img, (1390, 220, 2690, 1510))
-    rounded_shadow(img, (226, 835, 1190, 1305), radius=46, fill=(255, 255, 255, 226))
-    text(d, (302, 912), "No prompt to write", size=54, fill=INK, weight="heavy")
-    paragraph(d, (306, 990), "Select existing text in Mail, Notes, a browser, or a document. SucceedAI steps aside while the local model works, then changes only the selection you left untouched.", 790, size=35)
+    selection_workspace(img, (150, 370, 2730, 1690))
     save(img, "03-menu-bar-control-center-2880x1800.png")
 
 
 def shot4():
-    img = base("mint")
+    img = campaign_base("dark")
     d = ImageDraw.Draw(img)
-    title_block(
+    campaign_header(
         d,
-        "Private by architecture",
-        "Your words never leave your Mac",
-        "No cloud processing, prompt uploads, user account, API bill, analytics profile, or tracking SDK.",
-        width=930,
+        "Privacy first · by design",
+        "Private AI that never sends your words away",
+        "Apple Foundation Models run on your Mac. No backend, prompt uploads, account or API key.",
+        dark=True,
     )
-    privacy_panel(img, (1160, 292, 2585, 1430))
+    privacy_workspace(img, (150, 370, 2730, 1690))
     save(img, "04-on-device-privacy-2880x1800.png")
 
 
 def shot5():
-    img = base("mint")
+    img = campaign_base("light")
     d = ImageDraw.Draw(img)
-    title_block(
+    campaign_header(
         d,
-        "Made to fit your flow",
-        "Customize the trigger and launch behavior",
-        "Keep the app quiet in the menu bar, choose your own command, and see exactly what macOS needs during setup.",
-        width=900,
+        "Designed to disappear into your workflow",
+        "Set it once. Use it everywhere you write.",
+        "Choose your trigger, launch at login and keep practical local AI one selection away.",
     )
-    settings_window(img, (1190, 284, 2640, 1480))
+    settings_showcase(img, (150, 370, 2730, 1690))
     save(img, "05-customize-your-flow-2880x1800.png")
 
 
