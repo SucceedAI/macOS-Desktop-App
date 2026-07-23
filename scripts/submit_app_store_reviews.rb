@@ -13,6 +13,11 @@ targets = [
   ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS]
 ]
 
+if ENV["TARGET_BUNDLE_ID"]
+  targets.select! { |bundle_id, _platform| bundle_id == ENV["TARGET_BUNDLE_ID"] }
+  abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
+end
+
 targets.each do |bundle_id, platform|
   app = Spaceship::ConnectAPI::App.find(bundle_id)
   abort("App Store Connect app not found: #{bundle_id}") unless app
@@ -46,6 +51,16 @@ targets.each do |bundle_id, platform|
   submission = app.get_ready_review_submission(platform: platform, includes: "items")
   unless submission
     submission = app.create_review_submission(platform: platform)
+  end
+
+  items = Spaceship::ConnectAPI::ReviewSubmissionItem.all(
+    review_submission_id: submission.id,
+    includes: "appStoreVersion"
+  )
+  version_is_attached = items.any? do |item|
+    item.app_store_version&.id == version.id
+  end
+  unless version_is_attached
     submission.add_app_store_version_to_review_items(app_store_version_id: version.id)
   end
 
