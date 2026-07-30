@@ -6,7 +6,7 @@
 
 SucceedAI is a **local AI writing assistant** powered by Apple’s **on-device** language model. It keeps your writing **private** and works **offline** once Apple Intelligence is ready. On macOS, copy the text you want to improve, choose **Use Copied Text**, select a practical outcome, and copy the finished result. On iPhone or iPad, write in the app, transform selected text in one tap with the optional keyboard, or type `/ai`, or your own trigger, directly on the SucceedAI keyboard and press AI Return. Prompts never need a SucceedAI server, account, or API key.
 
-![SucceedAI private local AI writing workspace for macOS](AppStore/Screenshots/macOS/01-polish-copied-text-2880x1800.png)
+![SucceedAI private local AI writing workspace for macOS](AppStore/Screenshots/macOS/01-rough-text-to-finished-work-2880x1800.png)
 
 ## Why It Exists
 
@@ -75,13 +75,13 @@ On iPhone and iPad, select text in any compatible field, switch to the SucceedAI
 
 The macOS app does not request Accessibility or Input Monitoring permission. It does not install a global event monitor, observe keystrokes, or write into other apps. Clipboard text is imported only after the user chooses **Use Copied Text**, and generated text is copied only after the user chooses **Copy Result**.
 
-![SucceedAI privacy-first local AI architecture for macOS](AppStore/Screenshots/macOS/04-private-local-ai-2880x1800.png)
+![SucceedAI privacy-first local AI architecture for macOS](AppStore/Screenshots/macOS/04-private-by-architecture-2880x1800.png)
 
 ## Settings Panel
 
 _Launch at Login, private clipboard workflow, app version, and support._
 
-![SucceedAI macOS settings and permission-free copy, transform, paste workflow](AppStore/Screenshots/macOS/05-copy-transform-paste-2880x1800.png)
+![SucceedAI macOS settings and permission-free copy, transform, paste workflow](AppStore/Screenshots/macOS/04-private-by-architecture-2880x1800.png)
 
 
 ## Get Started For Development
@@ -111,12 +111,11 @@ cd iOS && xcodebuild -project SucceedAI-iOS.xcodeproj -scheme SucceedAIiOS -dest
 ## Generate Store And Launch Assets
 
 ```bash
-python3 scripts/generate_app_store_screenshots.py
-python3 scripts/generate_ios_app_store_screenshots.py
+python3 scripts/generate_app_store_screenshots_v3.py --publish
 python3 scripts/generate_product_hunt_assets.py
 ```
 
-The macOS generator writes both `AppStore/Screenshots/macOS/` and `fastlane/screenshots/en-AU/`. The iOS generator keeps its raw simulator captures in `AppStore/Screenshots/iOS/Raw/` and recreates the complete five-image iPhone and three-image iPad campaign in `fastlane/screenshots-ios/en-US/`.
+The unified App Store generator frames real running-app and simulator captures with decorative brand artwork. It recreates the five-image Mac, five-image iPhone, and four-image iPad campaigns in the Fastlane delivery folders.
 
 ## Fastlane Release Checks
 

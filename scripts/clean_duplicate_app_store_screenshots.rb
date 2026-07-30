@@ -16,16 +16,17 @@ targets = [
     locale: "en-US",
     sets: {
       "APP_IPHONE_67" => [
-        "01-write-better-1320x2868.png",
-        "02-ai-keyboard-1320x2868.png",
-        "03-polish-a-reply-1320x2868.png",
-        "04-private-by-design-1320x2868.png",
-        "05-ten-useful-outcomes-1320x2868.png"
+        "01-rough-draft-to-ready-1320x2868.png",
+        "02-ai-where-you-type-1320x2868.png",
+        "03-your-words-never-leave-1320x2868.png",
+        "04-ten-outcomes-1320x2868.png",
+        "05-notes-to-next-steps-1320x2868.png"
       ],
       "APP_IPAD_PRO_3GEN_129" => [
-        "01-focused-writing-ipad-2064x2752.png",
-        "02-useful-outcomes-ipad-2064x2752.png",
-        "03-private-local-ai-ipad-2064x2752.png"
+        "01-private-writing-workspace-2064x2752.png",
+        "02-choose-the-outcome-2064x2752.png",
+        "03-ai-in-any-app-2064x2752.png",
+        "04-private-by-architecture-2064x2752.png"
       ]
     }
   },
@@ -36,11 +37,11 @@ targets = [
     locale: "en-AU",
     sets: {
       "APP_DESKTOP" => [
-        "01-polish-copied-text-2880x1800_DESKTOP.png",
-        "02-notes-to-plan-2880x1800_DESKTOP.png",
-        "03-focused-writing-workspace-2880x1800_DESKTOP.png",
-        "04-private-local-ai-2880x1800_DESKTOP.png",
-        "05-copy-transform-paste-2880x1800_DESKTOP.png"
+        "01-rough-text-to-finished-work-2880x1800_DESKTOP.png",
+        "02-ten-outcomes-one-click-2880x1800_DESKTOP.png",
+        "03-copy-transform-paste-2880x1800_DESKTOP.png",
+        "04-private-by-architecture-2880x1800_DESKTOP.png",
+        "05-notes-to-next-steps-2880x1800_DESKTOP.png"
       ]
     }
   }

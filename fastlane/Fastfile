@@ -64,7 +64,7 @@ end
 platform :mac do
   desc "Regenerate App Store screenshots for local review and upload"
   lane :screenshots do
-    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_app_store_screenshots.py")
+    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_app_store_screenshots_v3.py --publish")
   end
 
   desc "Validate the macOS release target without signing"
@@ -118,7 +118,7 @@ platform :mac do
       skip_screenshots: ENV["SKIP_SCREENSHOTS"] == "1",
       precheck_include_in_app_purchases: false,
       submission_information: { export_compliance_uses_encryption: false },
-      submit_for_review: true,
+      submit_for_review: ENV.fetch("SUBMIT_FOR_REVIEW", "1") == "1",
       automatic_release: true,
       overwrite_screenshots: true,
       force: true
@@ -152,7 +152,7 @@ end
 platform :ios do
   desc "Regenerate the use-case-led iPhone and iPad App Store campaign"
   lane :screenshots do
-    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_ios_app_store_screenshots.py")
+    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_app_store_screenshots_v3.py --publish")
   end
 
   desc "Refresh App Store profiles for the host app and private keyboard App Group"
@@ -227,7 +227,7 @@ platform :ios do
       skip_screenshots: ENV["SKIP_SCREENSHOTS"] == "1",
       precheck_include_in_app_purchases: false,
       submission_information: { export_compliance_uses_encryption: false },
-      submit_for_review: true,
+      submit_for_review: ENV.fetch("SUBMIT_FOR_REVIEW", "1") == "1",
       automatic_release: true,
       overwrite_screenshots: true,
       force: true

@@ -14,7 +14,7 @@ targets = [
     platform: Spaceship::ConnectAPI::Platform::IOS,
     expected: {
       "APP_IPHONE_67" => 5,
-      "APP_IPAD_PRO_3GEN_129" => 3
+      "APP_IPAD_PRO_3GEN_129" => 4
     }
   },
   {
@@ -49,6 +49,11 @@ targets.each do |target|
       break unless app.get_in_progress_review_submission(platform: target[:platform])
     end
     abort("Timed out withdrawing #{target[:bundle_id]}") if app.get_in_progress_review_submission(platform: target[:platform])
+  end
+
+  if ENV["WITHDRAW_ONLY"] == "1"
+    puts "Review submission withdrawn for #{target[:bundle_id]}; screenshot replacement can proceed."
+    next
   end
 
   version = app.get_app_store_versions(includes: "build", limit: 20).find do |candidate|
