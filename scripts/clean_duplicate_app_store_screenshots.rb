@@ -16,11 +16,17 @@ targets = [
     locale: "en-US",
     sets: {
       "APP_IPHONE_67" => [
-        "01-compose-1320x2868.png",
-        "02-keyboard-1320x2868.png",
-        "03-privacy-1320x2868.png"
+        "01-write-better-1320x2868.png",
+        "02-ai-keyboard-1320x2868.png",
+        "03-polish-a-reply-1320x2868.png",
+        "04-private-by-design-1320x2868.png",
+        "05-ten-useful-outcomes-1320x2868.png"
       ],
-      "APP_IPAD_PRO_3GEN_129" => ["01-compose-ipad-2064x2752.png"]
+      "APP_IPAD_PRO_3GEN_129" => [
+        "01-focused-writing-ipad-2064x2752.png",
+        "02-useful-outcomes-ipad-2064x2752.png",
+        "03-private-local-ai-ipad-2064x2752.png"
+      ]
     }
   },
   {
@@ -30,11 +36,11 @@ targets = [
     locale: "en-AU",
     sets: {
       "APP_DESKTOP" => [
-        "01-type-return-done-2880x1800_DESKTOP.png",
-        "02-private-ai-in-every-app-2880x1800_DESKTOP.png",
-        "03-menu-bar-control-center-2880x1800_DESKTOP.png",
-        "04-on-device-privacy-2880x1800_DESKTOP.png",
-        "05-customize-your-flow-2880x1800_DESKTOP.png"
+        "01-polish-copied-text-2880x1800_DESKTOP.png",
+        "02-notes-to-plan-2880x1800_DESKTOP.png",
+        "03-focused-writing-workspace-2880x1800_DESKTOP.png",
+        "04-private-local-ai-2880x1800_DESKTOP.png",
+        "05-copy-transform-paste-2880x1800_DESKTOP.png"
       ]
     }
   }

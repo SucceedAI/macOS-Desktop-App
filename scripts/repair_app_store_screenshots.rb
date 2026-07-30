@@ -13,8 +13,8 @@ targets = [
     bundle_id: "me.ph7.Succeed-AI",
     platform: Spaceship::ConnectAPI::Platform::IOS,
     expected: {
-      "APP_IPHONE_67" => 3,
-      "APP_IPAD_PRO_3GEN_129" => 1
+      "APP_IPHONE_67" => 5,
+      "APP_IPAD_PRO_3GEN_129" => 3
     }
   },
   {
