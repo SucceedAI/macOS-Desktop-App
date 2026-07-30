@@ -7,53 +7,51 @@ SucceedAI
 ## Subtitle Options
 
 Preferred:
-AI writing in any Mac app
+Local AI for Everyday Writing
 
 Alternatives:
-- AI text replacement for Mac
-- Write faster with AI on Mac
-- Menu bar AI writing assistant
+- Private Writing Assistant
+- Offline AI Writing Tools
+- Private AI for Daily Writing
 
 ## Promotional Text
 
-Use AI wherever you write on your Mac. Type a command in any editable text field, press Return, and SucceedAI replaces it with polished text.
+Copy text, choose an outcome, and finish the job with private local AI. No account, cloud service, invasive permissions, or subscription.
 
 ## Short Description
 
-SucceedAI is an AI text replacement assistant for macOS. Type a configurable command in any editable Mac text field, describe what you need, press Return, and replace the command with AI-generated text without switching apps.
+SucceedAI is a private writing assistant for macOS. Copy text, choose an outcome, generate locally, and paste the finished result wherever you need it.
 
 ## Full Description
 
-SucceedAI brings AI writing into the Mac apps you already use.
+SucceedAI turns copied text or a fresh draft into useful finished work without sending it to a cloud AI service.
 
-Instead of copying text into a browser chatbot, type a short command in any editable text field, describe what you want, and press Return. SucceedAI replaces the command with a generated response in place, helping you rewrite emails, polish notes, summarize rough text, translate messages, draft replies, and clean up everyday writing without breaking focus.
+Copy text from another app and choose Use Copied Text, or type directly in the menu bar composer. Select an outcome, generate locally, then copy the result wherever it belongs.
 
 Why it helps:
-- Use AI inside your existing Mac workflow.
-- Replace rough prompts with polished text directly in the active app.
-- Customize the replacement trigger from Settings > Keys.
+- Import copied text only when you choose to.
+- Turn rough writing into polished, useful outcomes.
 - Start from a clear menu bar control center.
-- Follow a guided macOS Accessibility permission setup.
+- Use the app without Accessibility or Input Monitoring permission.
+- Build repeatable private automations with ten Shortcuts actions.
 - Keep the app lightweight, focused, and easy to understand.
 
-SucceedAI is useful for founders, writers, marketers, developers, support teams, students, consultants, and anyone who writes across many Mac apps during the day.
-
-Note: SucceedAI requires macOS Accessibility permission so it can detect your configured command trigger and insert the generated response into the active app.
+SucceedAI is useful for founders, writers, marketers, developers, support teams, students, consultants, and anyone who writes throughout the day.
 
 ## Keyword Field
 
-AI,writing,assistant,macOS,Mac,rewrite,summarize,translate,email,notes,text,productivity
+AI,writing,assistant,rewrite,summarize,translate,email,notes,text,productivity,offline
 
 Character count: 88
 
 ## Screenshot Order
 
-1. Instant AI anywhere on your Mac.
-2. Calm menu bar control center.
-3. In-place AI rewrite workflow.
-4. Clear permission explanation.
-5. Friendly settings and custom trigger.
+1. Turn rough writing into a message worth sending.
+2. Turn copied meeting notes into an actionable plan.
+3. Proofread, rewrite, and reply from one focused workspace.
+4. Private local processing with no invasive permissions.
+5. Copy, transform, paste, or automate with Shortcuts.
 
 ## Review Notes Draft
 
-SucceedAI is a menu bar macOS productivity app. It requires Accessibility permission to detect a configured text command trigger and insert generated text into the currently active editable text field. The app includes a guided permission explanation and a Settings > Keys panel for changing the command trigger.
+SucceedAI is a menu bar writing app powered by the on-device Foundation Models framework. It requests no Accessibility or Input Monitoring permission, does not monitor keystrokes, and does not control other apps. Users explicitly copy text, choose Use Copied Text, generate an outcome locally, and copy the result.

@@ -1,21 +1,20 @@
-SucceedAI is a menu bar utility powered entirely by Apple’s on-device Foundation Models framework. It has no backend or account.
+This build directly addresses the previous Guideline 2.4.5 rejection.
 
-To test quick compose, open the menu bar item, enter a prompt, and choose Generate. Presets preserve the current draft. Proofread makes only objective corrections; Change Tone offers Friendly, Professional, Direct, Confident, and Empathetic. A finished result can be sent through another local pass from the Refine menu or returned to the editor with Edit draft. Close and reopen the panel to verify the unfinished draft remains available for this app session but is not persisted to disk. Start another generation and choose Stop generation to verify the draft remains unchanged.
+SucceedAI no longer requests or uses Accessibility or Input Monitoring access. The cross-application /ai trigger and automatic text replacement have been removed. The binary no longer contains the previous CGEvent tap, AXUIElement access, event-listening permission requests, generated keystroke posting, or the related usage-description keys. SucceedAI does not monitor keystrokes or control other apps.
 
-To test in-place replacement, grant Input Monitoring and Accessibility when prompted, type “/ai rewrite this clearly” in an editable field, and press Return. Input Monitoring detects the trigger; Accessibility replaces the command only after local generation succeeds.
+The replacement workflow is now entirely user initiated:
 
-To test pasted-source capture, type this instruction in an editable field without pressing Return:
+1. Copy text in any application.
+2. Open SucceedAI from its menu bar item.
+3. Choose Use Copied Text. The app reads the clipboard only at this moment.
+4. Select Proofread, Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, Change Tone, Translate, or Custom.
+5. Choose Generate.
+6. Choose Copy and paste the result where desired.
 
-/ai Return only the final word of the pasted sentence:
+You can also type or paste directly into the composer. Command-Return activates Generate only while the SucceedAI panel is active and is implemented with the standard SwiftUI keyboard shortcut API.
 
-Then paste this source with Command-V and press Return:
+To test local automation, open Shortcuts and add any of SucceedAI’s ten actions, including Proofread Text or Change Tone. Provide source text; the returned value is generated locally. In a multi-action shortcut, the Text field can accept the preceding action’s output.
 
-This source arrived through Command-V and ends with ORCHID
+The app is powered by the on-device Foundation Models framework and has no backend, analytics SDK, account, API key, network entitlement, or subscription. Apple Intelligence must be enabled and the on-device model ready. No login or demo account is required.
 
-The expected response is approximately “ORCHID”. SucceedAI reads the focused editable field after the trigger so pasted and multiline source are included. Before replacement it re-reads and verifies the original process, focused field, command text, cursor, and a document fingerprint. Where supported, it replaces the command directly through Accessibility. If the user switches apps, clicks, moves the cursor, continues typing, stops generation, or generation fails, the original command is left untouched.
-
-To test automation, open Shortcuts and add any of SucceedAI’s ten actions, including “Proofread Text” or “Change Tone”. Provide source text; the returned value is generated locally without opening the app. In a multi-action shortcut, its Text field automatically connects to the preceding action’s output.
-
-Apple Intelligence must be enabled and the on-device model ready. No login or demo account is required.
-
-While a response is being generated, the menu bar switches to an hourglass and the panel shows “Writing locally.” Local requests are serialized and briefly retried if Apple’s system model reports that it is busy.
+This submission also addresses Guideline 5.2.5. The subtitle has been changed from “Rewrite text in every Mac app” to “Local AI for Everyday Writing,” removing the rejected Mac trademark usage and accurately describing the revised feature set.
