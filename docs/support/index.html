@@ -3,39 +3,142 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SucceedAI Support</title>
-  <meta name="description" content="Get support for SucceedAI, the private local AI writing assistant.">
+  <title>SucceedAI Support | Help for iPhone, iPad and Mac</title>
+  <meta name="description" content="Get SucceedAI setup help, troubleshooting guidance and direct support for the private on-device AI writing assistant.">
   <link rel="canonical" href="https://succeed.pierrehenry.dev/support/">
   <style>
-    body { margin: 0; color: #0b1d24; font-family: Avenir Next, ui-rounded, -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f0fff8, #e6f7ff 55%, #fff8e8); }
-    main { width: min(860px, calc(100% - 42px)); margin: 0 auto; padding: 74px 0 96px; }
-    a { color: #006f68; font-weight: 800; }
-    h1 { font-size: clamp(44px, 7vw, 76px); line-height: .95; letter-spacing: -.06em; margin: 0 0 24px; }
-    h2 { margin-top: 38px; font-size: 26px; }
-    p, li { color: #52676f; font-size: 18px; line-height: 1.7; }
-    .card { padding: 34px; border-radius: 30px; background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.86); box-shadow: 0 24px 70px rgba(11,29,36,.10); }
+    :root {
+      color-scheme: light;
+      --ink: #10162f;
+      --muted: #59627a;
+      --blue: #0969da;
+      --purple: #7657ff;
+      --cyan: #00a8c8;
+      --border: rgba(61, 72, 116, .15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Avenir Next, ui-rounded, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0, 192, 255, .18), transparent 32rem),
+        radial-gradient(circle at 90% 18%, rgba(143, 73, 255, .18), transparent 34rem),
+        linear-gradient(145deg, #f7f9ff, #eef3ff 52%, #fff7fe);
+    }
+    main { width: min(980px, calc(100% - 36px)); margin: 0 auto; padding: 54px 0 88px; }
+    a { color: var(--blue); font-weight: 750; }
+    h1 { font-size: clamp(44px, 7vw, 74px); line-height: .98; letter-spacing: -.055em; margin: 14px 0 18px; }
+    h2 { margin: 0 0 14px; font-size: 27px; letter-spacing: -.025em; }
+    p, li { color: var(--muted); font-size: 18px; line-height: 1.65; }
+    .eyebrow { color: var(--purple); font-size: 14px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .lead { max-width: 760px; font-size: 21px; }
+    .card {
+      padding: 30px;
+      border-radius: 28px;
+      background: rgba(255,255,255,.83);
+      border: 1px solid rgba(255,255,255,.94);
+      box-shadow: 0 22px 68px rgba(22, 30, 70, .09);
+    }
+    .hero { padding: 38px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 8px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 15px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--purple), #267cff);
+      color: white;
+      box-shadow: 0 10px 24px rgba(76, 90, 240, .22);
+    }
+    .button.secondary { color: var(--blue); background: #eef5ff; box-shadow: none; border: 1px solid #d7e6ff; }
+    .meta { font-size: 15px; margin-top: 14px; }
+    .steps { padding-left: 24px; }
+    .steps li { margin: 10px 0; }
+    code { padding: 2px 7px; border-radius: 7px; background: #eef1f8; color: #343d5b; }
+    footer { margin-top: 24px; text-align: center; color: var(--muted); }
+    @media (max-width: 720px) {
+      main { padding-top: 32px; }
+      .grid { grid-template-columns: 1fr; }
+      .hero, .card { padding: 24px; border-radius: 22px; }
+      .button { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <main>
     <p><a href="../">Back to SucceedAI</a></p>
-    <div class="card">
-      <h1>Support</h1>
-      <p>Use this page as the support destination for the App Store listing and GitHub Pages launch site.</p>
-      <h2>Common Setup Steps</h2>
-      <ul>
-        <li>Open SucceedAI from the macOS menu bar.</li>
-        <li>Copy the text you want to proofread, rewrite, summarize, translate, or turn into a plan.</li>
-        <li>Choose <strong>Use Copied Text</strong>. Clipboard text is read only after you choose this button.</li>
-        <li>Choose an outcome, select <strong>Generate</strong>, review the result, then choose <strong>Copy Result</strong>.</li>
-        <li>Confirm Apple Intelligence is enabled if the local model is unavailable.</li>
-      </ul>
-      <h2>Permissions</h2>
-      <p>SucceedAI does not require Accessibility or Input Monitoring permission on macOS. It does not monitor keystrokes or control other apps.</p>
-      <h2>Need Help?</h2>
-      <p>Open a GitHub issue with your macOS version, SucceedAI version, the outcome you selected, and any error shown by the app. Do not include private source text.</p>
-      <p><a href="https://github.com/SucceedAI/macOS-Desktop-App/issues">Open a SucceedAI support issue</a></p>
+
+    <section class="card hero">
+      <div class="eyebrow">SucceedAI Support</div>
+      <h1>How can we help?</h1>
+      <p class="lead">Get direct help with SucceedAI on iPhone, iPad or Mac. Tell us what happened and we will help you get back to private, on-device writing.</p>
+      <div class="actions">
+        <a class="button" href="mailto:hi@ph7.me?subject=SucceedAI%20Support">Email SucceedAI Support</a>
+        <a class="button secondary" href="https://github.com/SucceedAI/macOS-Desktop-App/issues/new">Report a technical issue</a>
+      </div>
+      <p class="meta">Support email: <a href="mailto:hi@ph7.me">hi@ph7.me</a>. Please allow up to two business days for a reply. Do not include confidential source text, prompts or generated results.</p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Before you contact us</h2>
+        <ul class="steps">
+          <li>Include your SucceedAI version and operating-system version.</li>
+          <li>Tell us whether you use iPhone, iPad or Mac.</li>
+          <li>Describe the action you selected and the exact error message.</li>
+          <li>Do not send private writing or personal information.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Device requirements</h2>
+        <p>SucceedAI requires iOS, iPadOS or macOS 26 on a device that supports Apple Intelligence. Apple Intelligence must be enabled and its on-device model must be ready.</p>
+        <p>Generation happens locally. SucceedAI has no account, subscription, backend server or third-party AI key.</p>
+      </section>
+
+      <section class="card">
+        <h2>Mac setup</h2>
+        <ol class="steps">
+          <li>Open SucceedAI from the menu bar.</li>
+          <li>Copy the text you want to improve.</li>
+          <li>Choose <strong>Use Copied Text</strong>.</li>
+          <li>Select Proofread, Polish, Shorten, Draft Reply, Summarize, Action Items, Make a Plan, Change Tone or Translate.</li>
+          <li>Choose <strong>Generate</strong>, then <strong>Copy</strong> when the result is ready.</li>
+        </ol>
+        <p>SucceedAI does not request Accessibility or Input Monitoring permission and does not monitor keystrokes.</p>
+      </section>
+
+      <section class="card">
+        <h2>iPhone and iPad setup</h2>
+        <p>Write directly in the app or enable the optional SucceedAI keyboard in Settings. The keyboard does not request Full Access.</p>
+        <p>To dismiss the keyboard in the main app, tap <strong>Done</strong> above the keyboard or tap outside the editor.</p>
+      </section>
+
+      <section class="card">
+        <h2>Local AI is unavailable</h2>
+        <ul class="steps">
+          <li>Confirm Apple Intelligence is enabled in Settings or System Settings.</li>
+          <li>Connect the device to power and Wi-Fi if the model is still downloading.</li>
+          <li>Restart SucceedAI after Apple Intelligence reports that it is ready.</li>
+          <li>Try a shorter source text if generation cannot finish.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Privacy and source code</h2>
+        <p>Prompts and results stay on the device. Read the <a href="../privacy/">privacy policy</a> for details.</p>
+        <p>Developers can inspect the project, report a reproducible issue or contribute through the <a href="https://github.com/SucceedAI/macOS-Desktop-App">SucceedAI GitHub repository</a>.</p>
+      </section>
     </div>
+
+    <footer>
+      <p>© 2026 Pierre-Henry Soria. SucceedAI support for iPhone, iPad and Mac.</p>
+    </footer>
   </main>
 </body>
 </html>
