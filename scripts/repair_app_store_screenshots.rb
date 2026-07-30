@@ -35,7 +35,11 @@ targets.each do |target|
 
   submission = app.get_in_progress_review_submission(platform: target[:platform])
   if submission
-    abort("Cannot safely withdraw #{target[:bundle_id]} while state is #{submission.state}") unless submission.state == "WAITING_FOR_REVIEW"
+    allowed_states = ["WAITING_FOR_REVIEW"]
+    allowed_states << "UNRESOLVED_ISSUES" if ENV["ALLOW_UNRESOLVED_ISSUES"] == "1"
+    unless allowed_states.include?(submission.state)
+      abort("Cannot safely withdraw #{target[:bundle_id]} while state is #{submission.state}")
+    end
 
     canceled = submission.cancel_submission
     puts "Withdrawing #{target[:bundle_id]} review submission: #{canceled.state}"
