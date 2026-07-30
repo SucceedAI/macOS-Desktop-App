@@ -9,14 +9,10 @@ struct SucceedAIApp: App {
         let provider = LocalFoundationModelProvider()
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--screenshot-selection") {
-            let previewSelection = FocusedSelectionSnapshot(
-                selectedText: "Thanks for waiting we fixed it and you can try again"
-            ) { _ in true }
             _viewModel = StateObject(
                 wrappedValue: AppViewModel(
                     aiProvider: provider,
-                    selectionCapture: { previewSelection },
-                    automaticallyStartMonitoring: false
+                    initialDraft: "Thanks for waiting. We fixed the issue and you can try again."
                 )
             )
             return
@@ -37,13 +33,7 @@ struct SucceedAIApp: App {
 }
 
 private struct StatusPanelView: View {
-    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: AppViewModel
-    @AppStorage(UserSettings.commandTriggerKey) private var commandTrigger = UserSettings.defaultCommandTrigger
-
-    private var displayTrigger: String {
-        UserSettings.validatedCommandTrigger(commandTrigger).trimmingCharacters(in: .whitespacesAndNewlines)
-    }
 
     private var selectedAction: WritingAction { viewModel.quickSelectedAction }
     private var targetLanguage: WritingLanguage { viewModel.quickTargetLanguage }
@@ -55,7 +45,7 @@ private struct StatusPanelView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     hero
                     readinessCard
-                    selectionActionCard
+                    clipboardWorkflowCard
                     quickComposer
                     tipStrip
                     footer
@@ -94,7 +84,7 @@ private struct StatusPanelView: View {
                         .padding(.vertical, 3)
                         .background(.teal.opacity(0.12), in: Capsule())
                 }
-                Text("Finish writing where the work already is.")
+                Text("Turn rough text into finished work.")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .foregroundStyle(.secondary)
                 Text("No account · No cloud · Works offline")
@@ -121,7 +111,7 @@ private struct StatusPanelView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 8) {
                     ProgressView().controlSize(.small)
-                    Text("Keep the original field unchanged until the response appears.")
+                    Text("You can stop generation at any time without losing your draft.")
                         .font(.caption.weight(.medium))
                         .foregroundStyle(.blue)
                 }
@@ -146,48 +136,26 @@ private struct StatusPanelView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.orange)
             }
-        } else if !viewModel.permissions.isComplete {
-            PanelCard(tint: .orange) {
-                StatusHeading(
-                    title: "Finish one-time setup",
-                    systemImage: "hand.raised.fill",
-                    tint: .orange,
-                    badge: permissionBadge
-                )
-                Text("Allow SucceedAI to recognize your trigger and replace it with locally generated text. Keystrokes are never stored or sent anywhere.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                PermissionRow(title: "Recognize the trigger", isGranted: viewModel.permissions.canListen)
-                PermissionRow(title: "Insert the response", isGranted: viewModel.permissions.canInsert)
-                Button {
-                    viewModel.startGlobalKeystrokeMonitoring()
-                } label: {
-                    Label("Grant Permissions", systemImage: "lock.open.fill")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.orange)
-            }
         } else {
             PanelCard(tint: .green) {
                 StatusHeading(
-                    title: viewModel.isReadyEverywhere ? "Ready in every app" : "Ready to start",
-                    systemImage: viewModel.isReadyEverywhere ? "checkmark.seal.fill" : "bolt.fill",
-                    tint: viewModel.isReadyEverywhere ? .green : .teal,
-                    badge: viewModel.isReadyEverywhere ? "LIVE" : "IDLE"
+                    title: "Ready when you are",
+                    systemImage: "checkmark.seal.fill",
+                    tint: .green,
+                    badge: "NO PERMISSIONS"
                 )
-                Text("Select text and open SucceedAI for one-tap outcomes. Or type \(displayTrigger), add an instruction, and press Return.")
+                Text("Paste or import copied text, choose the result you need, and generate privately. SucceedAI never monitors your keyboard or controls other apps.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 6) {
-                    Text("\(displayTrigger) rewrite this warmly")
-                        .font(.system(.caption, design: .monospaced, weight: .semibold))
-                        .lineLimit(1)
-                    Spacer()
-                    Image(systemName: "return")
+                    Label("Copy", systemImage: "doc.on.doc")
+                    Image(systemName: "chevron.right")
+                    Label("Transform", systemImage: "wand.and.sparkles")
+                    Image(systemName: "chevron.right")
+                    Label("Paste", systemImage: "doc.on.clipboard")
                 }
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(.teal)
                 .padding(9)
                 .background(.teal.opacity(0.09), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
@@ -195,106 +163,27 @@ private struct StatusPanelView: View {
         }
     }
 
-    @ViewBuilder
-    private var selectionActionCard: some View {
-        if let selectedText = viewModel.capturedSelectionText {
-            PanelCard(tint: .purple) {
-                StatusHeading(
-                    title: "Selection ready",
-                    systemImage: "selection.pin.in.out",
-                    tint: .purple,
-                    badge: "ONE TAP"
-                )
-
-                Text(selectedText)
-                    .font(.callout)
-                    .lineLimit(3)
-                    .textSelection(.enabled)
-                    .padding(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.purple.opacity(0.065), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-
-                if viewModel.isSelectionGenerating {
-                    HStack(spacing: 8) {
-                        ProgressView().controlSize(.small)
-                        Text("Transforming the unchanged selection locally…")
-                            .font(.caption.weight(.medium))
-                            .foregroundStyle(.purple)
-                        Spacer()
-                        Button("Stop") { viewModel.cancelSelectionGeneration() }
-                            .controlSize(.small)
-                    }
-                } else if !viewModel.selectionResult.isEmpty {
-                    if let message = viewModel.selectionErrorMessage {
-                        Label(message, systemImage: "exclamationmark.triangle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.orange)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Text(viewModel.selectionResult)
-                        .font(.callout)
-                        .textSelection(.enabled)
-                        .padding(10)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.orange.opacity(0.06), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    HStack {
-                        Button("Discard") { viewModel.discardSelectionResult() }
-                            .controlSize(.small)
-                        Spacer()
-                        Button {
-                            viewModel.copySelectionResult()
-                        } label: {
-                            Label("Copy", systemImage: "doc.on.doc")
-                        }
-                        .controlSize(.small)
-                        Button {
-                            retryPendingSelectionAfterDismissal()
-                        } label: {
-                            Label("Insert ready result", systemImage: "text.badge.checkmark")
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.purple)
-                        .controlSize(.small)
-                    }
-                } else {
-                    Text("Choose an outcome. The panel closes while the local model works, then only this unchanged selection is replaced.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    LazyVGrid(
-                        columns: [
-                            GridItem(.flexible(), spacing: 7),
-                            GridItem(.flexible(), spacing: 7),
-                        ],
-                        alignment: .leading,
-                        spacing: 7
-                    ) {
-                        ForEach(WritingAction.quickActions) { action in
-                            Button {
-                                runSelectionAction(action)
-                            } label: {
-                                Label(action.outcomeTitle, systemImage: action.systemImage)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .buttonStyle(.bordered)
-                            .buttonBorderShape(.roundedRectangle(radius: 8))
-                            .controlSize(.small)
-                            .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)
-                            .accessibilityHint("Transform the selected text locally")
-                        }
-                        selectionToneMenu
-                        selectionTranslationMenu
-                    }
-
-                    if let message = viewModel.selectionErrorMessage {
-                        Label(message, systemImage: "exclamationmark.triangle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.orange)
-                    }
-                }
+    private var clipboardWorkflowCard: some View {
+        PanelCard(tint: .purple) {
+            StatusHeading(
+                title: "Bring in copied text",
+                systemImage: "doc.on.clipboard.fill",
+                tint: .purple,
+                badge: "USER CONTROLLED"
+            )
+            Text("Copy text from Mail, Notes, a document, or a browser. SucceedAI reads the clipboard only when you choose the button below.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button {
+                viewModel.importClipboardText()
+            } label: {
+                Label("Use Copied Text", systemImage: "doc.on.clipboard")
+                    .frame(maxWidth: .infinity)
             }
-            .id("selection-actions")
+            .buttonStyle(.borderedProminent)
+            .tint(.purple)
+            .disabled(viewModel.isLoading)
         }
     }
 
@@ -402,6 +291,13 @@ private struct StatusPanelView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            if let clipboardNotice = viewModel.clipboardNotice {
+                Label(clipboardNotice, systemImage: "checkmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.green)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             if !viewModel.quickResult.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(viewModel.quickResult)
@@ -437,7 +333,7 @@ private struct StatusPanelView: View {
         HStack(spacing: 9) {
             Image(systemName: "lightbulb.max.fill")
                 .foregroundStyle(.yellow)
-            Text("Select text for one-tap proofreading, replies, summaries, next steps, plans, tone changes, or translation. Everything runs on device.")
+            Text("Tip: use Shortcuts for repeatable workflows, or copy text and use the menu bar for quick proofreading, replies, summaries, plans, tone changes, and translation.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -460,11 +356,6 @@ private struct StatusPanelView: View {
         }
     }
 
-    private var permissionBadge: String {
-        let count = [viewModel.permissions.canListen, viewModel.permissions.canInsert].filter { $0 }.count
-        return "\(count)/2"
-    }
-
     private func generate() {
         viewModel.generateQuickResult()
     }
@@ -472,28 +363,6 @@ private struct StatusPanelView: View {
     private func openURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         NSWorkspace.shared.open(url)
-    }
-
-    private func runSelectionAction(
-        _ action: WritingAction,
-        targetLanguage: WritingLanguage = .english,
-        targetTone: WritingTone = .friendly
-    ) {
-        dismiss()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
-            _ = viewModel.transformCapturedSelection(
-                with: action,
-                targetLanguage: targetLanguage,
-                targetTone: targetTone
-            )
-        }
-    }
-
-    private func retryPendingSelectionAfterDismissal() {
-        dismiss()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
-            _ = viewModel.insertPendingSelectionResult()
-        }
     }
 
     private func ActionChip(_ action: WritingAction) -> some View {
@@ -609,46 +478,6 @@ private struct StatusPanelView: View {
         .accessibilityHint("Run another local pass on this result")
     }
 
-    private var selectionToneMenu: some View {
-        Menu {
-            ForEach(WritingTone.allCases) { tone in
-                Button(tone.displayName) {
-                    viewModel.quickTargetTone = tone
-                    runSelectionAction(.tone, targetTone: tone)
-                }
-            }
-        } label: {
-            Label("Change Tone", systemImage: WritingAction.tone.systemImage)
-                .frame(width: 160, alignment: .leading)
-        }
-        .buttonStyle(.bordered)
-        .buttonBorderShape(.roundedRectangle(radius: 8))
-        .controlSize(.small)
-        .frame(maxWidth: .infinity)
-        .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)
-        .accessibilityHint("Choose a tone and transform the selected text locally")
-    }
-
-    private var selectionTranslationMenu: some View {
-        Menu {
-            ForEach(WritingLanguage.allCases) { language in
-                Button(language.displayName) {
-                    viewModel.quickTargetLanguage = language
-                    runSelectionAction(.translate, targetLanguage: language)
-                }
-            }
-        } label: {
-            Label("Translate", systemImage: WritingAction.translate.systemImage)
-                .frame(width: 160, alignment: .leading)
-        }
-        .buttonStyle(.bordered)
-        .buttonBorderShape(.roundedRectangle(radius: 8))
-        .controlSize(.small)
-        .frame(maxWidth: .infinity)
-        .disabled(viewModel.isLoading || !viewModel.aiAvailability.isAvailable)
-        .accessibilityHint("Choose a target language and translate the selected text locally")
-    }
-
     private var panelBackground: some View {
         ZStack {
             Rectangle().fill(.ultraThinMaterial)
@@ -697,23 +526,6 @@ private struct StatusHeading: View {
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(tint.opacity(0.11), in: Capsule())
-        }
-    }
-}
-
-private struct PermissionRow: View {
-    let title: String
-    let isGranted: Bool
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: isGranted ? "checkmark.circle.fill" : "circle")
-                .foregroundStyle(isGranted ? .green : .secondary)
-            Text(title).font(.caption)
-            Spacer()
-            Text(isGranted ? "Allowed" : "Required")
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(isGranted ? .green : .secondary)
         }
     }
 }

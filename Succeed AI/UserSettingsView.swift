@@ -6,20 +6,14 @@ struct UserSettingsView: View {
     private enum SettingsTab: String, CaseIterable, Identifiable {
         case general = "General"
         case localAI = "Local AI"
-        case trigger = "Trigger"
         var id: String { rawValue }
     }
 
     @ObservedObject var viewModel: AppViewModel
     @AppStorage("startAtLogin") private var startAtLogin = false
-    @AppStorage(UserSettings.commandTriggerKey) private var commandTrigger = UserSettings.defaultCommandTrigger
     @State private var selectedTab: SettingsTab = .general
-    @State private var commandTriggerDraft = UserSettings.defaultCommandTrigger
     @State private var loginItemErrorMessage: String?
     @State private var isSyncingLoginItemState = false
-
-    private var normalizedTrigger: String { UserSettings.normalizedCommandTrigger(commandTriggerDraft) }
-    private var triggerIsValid: Bool { UserSettings.isValidCommandTrigger(commandTriggerDraft) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,15 +32,12 @@ struct UserSettingsView: View {
                     switch selectedTab {
                     case .general:
                         launchCard
-                        permissionsCard
+                        workflowCard
                         linksCard
                     case .localAI:
                         localAICard
                         privacyCard
                         compatibilityCard
-                    case .trigger:
-                        triggerCard
-                        examplesCard
                     }
                 }
                 .padding(22)
@@ -56,7 +47,6 @@ struct UserSettingsView: View {
         .background(Color(nsColor: .windowBackgroundColor))
         .onAppear {
             syncLoginItemStatus()
-            commandTriggerDraft = UserSettings.validatedCommandTrigger(commandTrigger)
             viewModel.refreshState()
         }
     }
@@ -72,7 +62,7 @@ struct UserSettingsView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("SucceedAI Settings")
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                Text("Fast, private writing help across your Mac")
+                Text("Fast, private writing help without invasive permissions")
                     .foregroundStyle(.secondary)
             }
             Spacer()
@@ -101,21 +91,17 @@ struct UserSettingsView: View {
         }
     }
 
-    private var permissionsCard: some View {
-        SettingsCard(tint: viewModel.permissions.isComplete ? .green : .orange, icon: "hand.raised.fill", title: "Type-anywhere access") {
-            Text("These two macOS permissions let SucceedAI recognize your trigger and replace it with a response. Input is held only in memory while you type a command.")
+    private var workflowCard: some View {
+        SettingsCard(tint: .purple, icon: "doc.on.clipboard.fill", title: "Copy, transform, paste") {
+            Text("Copy text from any app, choose Use Copied Text in SucceedAI, generate the outcome you need, then copy the finished result. SucceedAI never monitors keystrokes or controls other apps.")
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            SettingsPermissionRow(title: "Input Monitoring", detail: "Recognize the configured trigger", granted: viewModel.permissions.canListen)
-            SettingsPermissionRow(title: "Accessibility", detail: "Insert generated text in the active app", granted: viewModel.permissions.canInsert)
-            HStack {
-                Button("Grant or Check Again") { viewModel.startGlobalKeystrokeMonitoring() }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.orange)
-                Button("Input Settings") { viewModel.openInputMonitoringSettings() }
-                Button("Accessibility Settings") { viewModel.openAccessibilitySettings() }
+            HStack(spacing: 8) {
+                FeatureBadge(icon: "doc.on.doc", title: "Copy")
+                FeatureBadge(icon: "wand.and.sparkles", title: "Transform")
+                FeatureBadge(icon: "doc.on.clipboard", title: "Paste")
+                FeatureBadge(icon: "command", title: "Shortcuts")
             }
-            .buttonStyle(.bordered)
         }
     }
 
@@ -168,49 +154,6 @@ struct UserSettingsView: View {
         }
     }
 
-    private var triggerCard: some View {
-        SettingsCard(tint: .teal, icon: "keyboard.fill", title: "Your replacement trigger") {
-            Text("Choose a short, uncommon command. SucceedAI listens only after this exact trigger appears.")
-                .foregroundStyle(.secondary)
-            TextField("Trigger", text: $commandTriggerDraft)
-                .textFieldStyle(.roundedBorder)
-                .font(.body.monospaced())
-                .onSubmit(saveTrigger)
-            Text(triggerIsValid ? "Saved form: \(normalizedTrigger)" : "Use at least two characters with no spaces, such as /ai or ;ask.")
-                .font(.caption)
-                .foregroundStyle(triggerIsValid ? Color.secondary : Color.red)
-            HStack {
-                Button("Save Trigger", action: saveTrigger)
-                    .buttonStyle(.borderedProminent)
-                    .tint(.teal)
-                    .disabled(!triggerIsValid || normalizedTrigger == UserSettings.validatedCommandTrigger(commandTrigger))
-                Button("Restore /ai") {
-                    commandTrigger = UserSettings.defaultCommandTrigger
-                    commandTriggerDraft = UserSettings.defaultCommandTrigger
-                }
-            }
-        }
-    }
-
-    private var examplesCard: some View {
-        SettingsCard(tint: .blue, icon: "text.cursor", title: "Try it anywhere") {
-            ForEach([
-                "rewrite this email to sound warmer",
-                "translate this to French: See you tomorrow",
-                "turn these notes into three action items"
-            ], id: \.self) { example in
-                HStack(spacing: 8) {
-                    Text("\(normalizedTrigger)\(example)")
-                        .font(.system(.caption, design: .monospaced))
-                    Spacer()
-                    Image(systemName: "return").foregroundStyle(.secondary)
-                }
-                .padding(9)
-                .background(.blue.opacity(0.07), in: RoundedRectangle(cornerRadius: 8))
-            }
-        }
-    }
-
     private var appVersion: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
@@ -239,12 +182,6 @@ struct UserSettingsView: View {
         DispatchQueue.main.async { isSyncingLoginItemState = false }
     }
 
-    private func saveTrigger() {
-        guard triggerIsValid else { return }
-        commandTrigger = normalizedTrigger
-        commandTriggerDraft = commandTrigger
-    }
-
     private func openURL(_ value: String) {
         guard let url = URL(string: value) else { return }
         NSWorkspace.shared.open(url)
@@ -268,27 +205,6 @@ private struct SettingsCard<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay { RoundedRectangle(cornerRadius: 14).stroke(tint.opacity(0.16)) }
-    }
-}
-
-private struct SettingsPermissionRow: View {
-    let title: String
-    let detail: String
-    let granted: Bool
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: granted ? "checkmark.circle.fill" : "circle.dashed")
-                .foregroundStyle(granted ? .green : .orange)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title).font(.callout.weight(.semibold))
-                Text(detail).font(.caption).foregroundStyle(.secondary)
-            }
-            Spacer()
-            Text(granted ? "Allowed" : "Required")
-                .font(.caption.bold())
-                .foregroundStyle(granted ? .green : .orange)
-        }
     }
 }
 

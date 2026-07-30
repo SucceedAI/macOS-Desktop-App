@@ -20,7 +20,7 @@
 		8F654C8E2B93F25100A8F6E6 /* Succeed_AITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C8D2B93F25100A8F6E6 /* Succeed_AITests.swift */; };
 		8F654C982B93F25100A8F6E6 /* Succeed_AIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C972B93F25100A8F6E6 /* Succeed_AIUITests.swift */; };
 		8F654C9A2B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654C992B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift */; };
-		8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */; };
+		8F654CA72B940B1000A8F6E6 /* ClipboardTextImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA62B940B1000A8F6E6 /* ClipboardTextImporter.swift */; };
 		8F654CA92B940B1F00A8F6E6 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CA82B940B1F00A8F6E6 /* AIService.swift */; };
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
 		8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FCC2BA05C4B008974C9 /* WindowManager.swift */; };
@@ -62,7 +62,7 @@
 		8F654C932B93F25100A8F6E6 /* Succeed AIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Succeed AIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F654C972B93F25100A8F6E6 /* Succeed_AIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIUITests.swift; sourceTree = "<group>"; };
 		8F654C992B93F25100A8F6E6 /* Succeed_AIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Succeed_AIUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalKeystrokeManager.swift; sourceTree = "<group>"; };
+		8F654CA62B940B1000A8F6E6 /* ClipboardTextImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardTextImporter.swift; sourceTree = "<group>"; };
 		8F654CA82B940B1F00A8F6E6 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
 		8F654CAA2B940EE300A8F6E6 /* Succeed-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Succeed-AI-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 				8F42E27C2B94489A0078D9F7 /* UserSettingsView.swift */,
 				8F42E2782B94418A0078D9F7 /* LocalFoundationModelProvider.swift */,
 				A10000012C00000100000001 /* SucceedAITextIntent.swift */,
-				8F654CA62B940B1000A8F6E6 /* GlobalKeystrokeManager.swift */,
+				8F654CA62B940B1000A8F6E6 /* ClipboardTextImporter.swift */,
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
 				8F654C7D2B93F25000A8F6E6 /* Item.swift */,
 				8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */,
@@ -303,7 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F42E2822B945A5A0078D9F7 /* AppViewModel.swift in Sources */,
-				8F654CA72B940B1000A8F6E6 /* GlobalKeystrokeManager.swift in Sources */,
+				8F654CA72B940B1000A8F6E6 /* ClipboardTextImporter.swift in Sources */,
 				8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */,
 				8F316F012B94A09800F2ED47 /* Config.swift in Sources */,
 				8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */,
@@ -479,7 +479,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -515,7 +515,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Succeed AI/Succeed_AI.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Succeed AI/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;

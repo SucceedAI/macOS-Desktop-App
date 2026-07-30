@@ -4,9 +4,5 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSAccessibilityUsageDescription</key>
-	<string>SucceedAI uses Accessibility permission only to replace your /ai command with text generated privately on this Mac.</string>
-	<key>NSInputMonitoringUsageDescription</key>
-	<string>SucceedAI recognizes your configured /ai trigger so it can run a local writing request. Keystrokes are never stored or transmitted.</string>
 </dict>
 </plist>

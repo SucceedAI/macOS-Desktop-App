@@ -60,176 +60,36 @@ final class Succeed_AITests: XCTestCase {
         XCTAssertNotEqual(Config.appIconSymbolName, Config.loadingIconSymbolName)
     }
 
-    func testGlobalReplacementOnlyAppliesToTheOriginalUnchangedContext() {
-        XCTAssertTrue(GlobalKeystrokeManager.shouldApplyReplacement(
-            sourceProcessIdentifier: 101,
-            currentProcessIdentifier: 101,
-            wasInterrupted: false
-        ))
-        XCTAssertFalse(GlobalKeystrokeManager.shouldApplyReplacement(
-            sourceProcessIdentifier: 101,
-            currentProcessIdentifier: 202,
-            wasInterrupted: false
-        ))
-        XCTAssertFalse(GlobalKeystrokeManager.shouldApplyReplacement(
-            sourceProcessIdentifier: 101,
-            currentProcessIdentifier: 101,
-            wasInterrupted: true
-        ))
-        XCTAssertFalse(GlobalKeystrokeManager.shouldApplyReplacement(
-            sourceProcessIdentifier: nil,
-            currentProcessIdentifier: 101,
-            wasInterrupted: false
-        ))
-    }
-
-    func testFocusedTextContextIncludesPastedSourceText() {
-        let command = "/ai make this email warmer:\n\nHello team,\nThe launch moved to Friday."
-        let document = "Existing note\n\(command)"
-        let selection = NSRange(location: (document as NSString).length, length: 0)
-
-        let context = TextCommandContext.find(
-            in: document,
-            selectionRange: selection,
-            trigger: "/ai ",
-            expectedCommandText: command
-        )
-
-        XCTAssertEqual(context?.commandText, command)
+    func testClipboardImporterRequiresAnExplicitNonemptyString() {
+        XCTAssertEqual(ClipboardTextImporter.validate(nil), .empty)
+        XCTAssertEqual(ClipboardTextImporter.validate(" \n "), .empty)
         XCTAssertEqual(
-            context?.utf16Range,
-            NSRange(
-                location: ("Existing note\n" as NSString).length,
-                length: (command as NSString).length
-            )
+            ClipboardTextImporter.validate("  Keep meaningful spacing  "),
+            .success("  Keep meaningful spacing  ")
         )
     }
 
-    func testBufferedCommandDisambiguatesTriggerTextInsidePastedContent() {
-        let command = "/ai explain this example:\nThe literal text /ai should stay in the source."
-        let document = "\(command)"
-        let selection = NSRange(location: (document as NSString).length, length: 0)
-
-        let context = TextCommandContext.find(
-            in: document,
-            selectionRange: selection,
-            trigger: "/ai ",
-            expectedCommandText: command
-        )
-
-        XCTAssertEqual(context?.commandText, command)
-        XCTAssertEqual(context?.utf16Range, NSRange(location: 0, length: selection.location))
-    }
-
-    func testTypedAnchorSurvivesPastedLineEndingNormalization() {
-        let typedAnchor = "/ai summarize this: "
-        let bufferedCommand = "\(typedAnchor)First line\r\nSecond line with /ai inside."
-        let actualCommand = "\(typedAnchor)First line\nSecond line with /ai inside."
-        let document = "Before\n\(actualCommand)"
-        let selection = NSRange(location: (document as NSString).length, length: 0)
-
-        let context = TextCommandContext.find(
-            in: document,
-            selectionRange: selection,
-            trigger: "/ai ",
-            expectedCommandText: bufferedCommand,
-            expectedCommandAnchorText: typedAnchor
-        )
-
-        XCTAssertEqual(context?.commandText, actualCommand)
-    }
-
-    func testFocusedTextContextRejectsASelectionInsteadOfACaret() {
-        XCTAssertNil(TextCommandContext.find(
-            in: "/ai rewrite this",
-            selectionRange: NSRange(location: 4, length: 3),
-            trigger: "/ai ",
-            expectedCommandText: nil
-        ))
-    }
-
-    func testMacSelectionContextPreservesExactRangeAndBoundaryWhitespace() throws {
-        let document = "Before\n  Rough selected draft  \nAfter"
-        let selectedText = "\n  Rough selected draft  \n"
-        let range = (document as NSString).range(of: selectedText)
-        let context = try XCTUnwrap(TextSelectionContext.find(
-            in: document,
-            selectionRange: range
-        ))
-
-        XCTAssertEqual(context.selectedText, selectedText)
-        XCTAssertEqual(context.utf16Range, range)
-        XCTAssertEqual(
-            context.replacementPreservingBoundaryWhitespace("  Polished result\n"),
-            "\n  Polished result  \n"
-        )
-        XCTAssertNil(TextSelectionContext.find(
-            in: document,
-            selectionRange: NSRange(location: range.location, length: 0)
-        ))
+    func testClipboardImporterRejectsOversizedText() {
+        let oversized = String(repeating: "a", count: ClipboardTextImporter.maximumUTF16Length + 1)
+        XCTAssertEqual(ClipboardTextImporter.validate(oversized), .tooLong)
     }
 
     @MainActor
-    func testMacSelectionActionBuildsTheSharedRequestAndReplacesDirectly() async {
-        let provider = CapturingMacProvider(response: "- Kim — launch Friday")
-        var replacements: [String] = []
-        let snapshot = FocusedSelectionSnapshot(
-            selectedText: "Owner: Kim. Launch is Friday.",
-            replacement: {
-                replacements.append($0)
-                return true
-            }
-        )
+    func testQuickActionTransformsImportedDraftWithoutCrossAppControl() async {
+        let provider = CapturingMacProvider(response: "- Kim: launch Friday")
         let viewModel = AppViewModel(
             aiProvider: provider,
-            selectionCapture: { snapshot },
-            automaticallyStartMonitoring: false
+            initialDraft: "Owner: Kim. Launch is Friday."
         )
+        viewModel.quickSelectedAction = .actionItems
 
-        viewModel.captureFocusedSelection()
-        XCTAssertEqual(viewModel.capturedSelectionText, "Owner: Kim. Launch is Friday.")
-        XCTAssertTrue(viewModel.transformCapturedSelection(with: .actionItems))
+        viewModel.generateQuickResult()
         await Task.yield()
 
         XCTAssertTrue(provider.lastQuery?.contains("Extract the actionable next steps") == true)
         XCTAssertTrue(provider.lastQuery?.hasSuffix("Owner: Kim. Launch is Friday.") == true)
-        XCTAssertEqual(replacements, ["- Kim — launch Friday"])
-        XCTAssertNil(viewModel.capturedSelectionText)
-        XCTAssertTrue(viewModel.selectionResult.isEmpty)
-        XCTAssertFalse(viewModel.isSelectionGenerating)
-    }
-
-    @MainActor
-    func testMacSelectionReadyResultWaitsWhenContextChangedAndCanRetry() async {
-        let provider = CapturingMacProvider(response: "Ready local result")
-        var canReplace = false
-        var replacements: [String] = []
-        let snapshot = FocusedSelectionSnapshot(
-            selectedText: "Original selection",
-            replacement: {
-                guard canReplace else { return false }
-                replacements.append($0)
-                return true
-            }
-        )
-        let viewModel = AppViewModel(
-            aiProvider: provider,
-            selectionCapture: { snapshot },
-            automaticallyStartMonitoring: false
-        )
-
-        viewModel.captureFocusedSelection()
-        XCTAssertTrue(viewModel.transformCapturedSelection(with: .shorten))
-        await Task.yield()
-
-        XCTAssertTrue(replacements.isEmpty)
-        XCTAssertEqual(viewModel.selectionResult, "Ready local result")
-        XCTAssertTrue(viewModel.selectionErrorMessage?.contains("Nothing was overwritten") == true)
-
-        canReplace = true
-        XCTAssertTrue(viewModel.insertPendingSelectionResult())
-        XCTAssertEqual(replacements, ["Ready local result"])
-        XCTAssertTrue(viewModel.selectionResult.isEmpty)
+        XCTAssertEqual(viewModel.quickResult, "- Kim: launch Friday")
+        XCTAssertFalse(viewModel.isQuickGenerating)
     }
 
     func testShortcutIntentKeepsInstructionAndSourceTextDistinct() {
@@ -329,10 +189,7 @@ final class Succeed_AITests: XCTestCase {
     @MainActor
     func testMacQuickComposerKeepsItsPrivateInMemoryDraftAcrossPasses() async {
         let provider = CapturingMacProvider(response: "A polished local result.")
-        let viewModel = AppViewModel(
-            aiProvider: provider,
-            automaticallyStartMonitoring: false
-        )
+        let viewModel = AppViewModel(aiProvider: provider)
         viewModel.quickPrompt = "pls send this today"
         viewModel.quickSelectedAction = .tone
         viewModel.quickTargetTone = .professional
