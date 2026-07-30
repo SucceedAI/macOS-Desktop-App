@@ -290,20 +290,20 @@ def outcome_panel(img, xy):
 
     img.alpha_composite(app_icon(82), (x1 + 44, y1 + 40))
     text(d, (x1 + 150, y1 + 44), "SucceedAI", size=43, fill=INK, weight="heavy")
-    text(d, (x1 + 152, y1 + 96), "Private AI, right where you type", size=25, fill=MUTED)
+    text(d, (x1 + 152, y1 + 96), "Private AI for focused writing work", size=25, fill=MUTED)
     label_pill(d, (x2 - 244, y1 + 52), "PRIVACY FIRST", BLUE, (230, 250, 250, 255))
 
     ready_y = y1 + 154
     d.rounded_rectangle((x1 + 44, ready_y, x2 - 44, ready_y + 94), radius=25, fill=(242, 253, 247, 255), outline=GREEN[:3] + (86,), width=2)
     d.ellipse((x1 + 72, ready_y + 25, x1 + 116, ready_y + 69), fill=GREEN)
-    text(d, (x1 + 144, ready_y + 19), "Ready in every app", size=29, fill=INK, weight="bold")
-    text(d, (x1 + 144, ready_y + 56), "Choose an outcome for the selected text.", size=23, fill=MUTED)
+    text(d, (x1 + 144, ready_y + 19), "Copied text ready", size=29, fill=INK, weight="bold")
+    text(d, (x1 + 144, ready_y + 56), "Choose the useful outcome you need.", size=23, fill=MUTED)
 
     card_y = ready_y + 120
     card_bottom = y2 - 154
     d.rounded_rectangle((x1 + 44, card_y, x2 - 44, card_bottom), radius=30, fill=(252, 248, 255, 255), outline=TEAL[:3] + (98,), width=3)
-    text(d, (x1 + 78, card_y + 28), "Selection ready", size=33, fill=TEAL, weight="heavy")
-    label_pill(d, (x2 - 210, card_y + 22), "ONE TAP", TEAL)
+    text(d, (x1 + 78, card_y + 28), "Writing actions", size=33, fill=TEAL, weight="heavy")
+    label_pill(d, (x2 - 250, card_y + 22), "NO PROMPT NEEDED", TEAL)
 
     selected_y = card_y + 82
     d.rounded_rectangle((x1 + 76, selected_y, x2 - 76, selected_y + 78), radius=19, fill=(244, 237, 252, 255))
@@ -337,13 +337,13 @@ def outcome_panel(img, xy):
 
     safety_y = card_bottom - 116
     d.rounded_rectangle((x1 + 76, safety_y, x2 - 76, safety_y + 78), radius=20, fill=(245, 241, 255, 255), outline=TEAL[:3] + (52,), width=2)
-    text(d, (x1 + 104, safety_y + 15), "Context-safe replacement", size=24, fill=INK, weight="bold")
-    text(d, (x1 + 104, safety_y + 47), "Only the exact unchanged selection is replaced. Undo stays ready.", size=20, fill=MUTED)
+    text(d, (x1 + 104, safety_y + 15), "You stay in control", size=24, fill=INK, weight="bold")
+    text(d, (x1 + 104, safety_y + 47), "Import and copy happen only when you choose them.", size=20, fill=MUTED)
 
     footer_y = y2 - 118
     d.rounded_rectangle((x1 + 44, footer_y, x2 - 44, y2 - 38), radius=24, fill=(239, 248, 255, 255), outline=BLUE[:3] + (62,), width=2)
     text(d, (x1 + 76, footer_y + 14), "Nothing uploaded", size=25, fill=INK, weight="bold")
-    text(d, (x1 + 76, footer_y + 47), "Apple’s model runs on this Mac.", size=21, fill=MUTED)
+    text(d, (x1 + 76, footer_y + 47), "The local model runs entirely on device.", size=21, fill=MUTED)
 
 
 def settings_window(img, xy):
@@ -352,18 +352,18 @@ def settings_window(img, xy):
     mac_window(img, xy, "Settings")
     img.alpha_composite(app_icon(106), (x1 + 74, y1 + 126))
     text(d, (x1 + 210, y1 + 130), "Settings", size=58, fill=INK, weight="heavy")
-    paragraph(d, (x1 + 214, y1 + 202), "Model readiness, privacy, permissions, launch behavior, and your replacement trigger in one place.", x2 - x1 - 300, size=30)
+    paragraph(d, (x1 + 214, y1 + 202), "Local model readiness, privacy, launch behavior, and the user-controlled clipboard workflow in one place.", x2 - x1 - 300, size=30)
 
     tab_y = y1 + 315
     d.rounded_rectangle((x1 + 72, tab_y, x1 + 424, tab_y + 64), radius=26, fill=(229, 247, 244, 255))
     d.rounded_rectangle((x1 + 78, tab_y + 6, x1 + 248, tab_y + 58), radius=22, fill=WHITE)
     text(d, (x1 + 163, tab_y + 33), "General", size=25, fill=INK, weight="bold", anchor="mm")
-    text(d, (x1 + 337, tab_y + 33), "Keys", size=25, fill=MUTED, weight="bold", anchor="mm")
+    text(d, (x1 + 337, tab_y + 33), "Local AI", size=25, fill=MUTED, weight="bold", anchor="mm")
 
     rows = [
-        ("Launch at login", "Start automatically when your Mac starts.", GREEN, True),
-        ("Local AI", "Ready. Processing stays on this Mac.", GREEN, True),
-        ("Replacement trigger", "/ai  - customize in Settings > Trigger.", TEAL, False),
+        ("Launch at login", "Keep SucceedAI ready in the menu bar.", GREEN, True),
+        ("Local AI", "Ready. Processing stays on this device.", GREEN, True),
+        ("Clipboard control", "Text is read only when you choose Use Copied Text.", TEAL, False),
     ]
     y = y1 + 430
     for title, desc, col, checked in rows:
@@ -374,7 +374,7 @@ def settings_window(img, xy):
         else:
             text(d, (x1 + 137, y + 75), "/", size=34, fill=col, weight="heavy", anchor="mm")
         text(d, (x1 + 196, y + 36), title, size=34, fill=INK, weight="bold")
-        text(d, (x1 + 196, y + 86), desc, size=27, fill=MUTED, mono=title == "Replacement trigger")
+        text(d, (x1 + 196, y + 86), desc, size=27, fill=MUTED)
         y += 178
 
 
@@ -497,15 +497,15 @@ def result_check(draw, xy, label, detail, color=TEAL):
 def transformation_workspace(img, xy):
     x1, y1, x2, y2 = xy
     d = ImageDraw.Draw(img)
-    mac_window(img, xy, "Mail · Customer Reply")
+    mac_window(img, xy, "SucceedAI · Polish")
 
     toolbar_y = y1 + 86
     d.rectangle((x1, toolbar_y, x2, toolbar_y + 82), fill=(245, 247, 251, 255))
-    for index, label in enumerate(["Send", "Attach", "Format"]):
+    for index, label in enumerate(["Copied Text", "Polish", "Copy Result"]):
         left = x1 + 44 + index * 126
         d.rounded_rectangle((left, toolbar_y + 17, left + 108, toolbar_y + 65), radius=17, fill=WHITE, outline=(217, 224, 232, 255), width=2)
         text(d, (left + 54, toolbar_y + 41), label, size=21, fill=INK_2, weight="bold", anchor="mm")
-    text(d, (x2 - 54, toolbar_y + 41), "To: Jamie · Subject: Your account is ready", size=23, fill=MUTED, anchor="rm")
+    text(d, (x2 - 54, toolbar_y + 41), "PRIVATE LOCAL AI · NO ACCESS PERMISSIONS", size=23, fill=TEAL, weight="bold", anchor="rm")
 
     content_y = toolbar_y + 116
     midpoint = (x1 + x2) // 2
@@ -514,13 +514,13 @@ def transformation_workspace(img, xy):
 
     d.rounded_rectangle(left_card, radius=30, fill=(251, 252, 254, 255), outline=(216, 223, 232, 255), width=2)
     d.rounded_rectangle(right_card, radius=30, fill=(255, 255, 255, 255), outline=TEAL[:3] + (86,), width=3)
-    label_pill(d, (left_card[0] + 38, left_card[1] + 34), "ROUGH DRAFT", MUTED, (239, 242, 246, 255))
-    label_pill(d, (right_card[0] + 38, right_card[1] + 34), "READY TO SEND", TEAL)
+    label_pill(d, (left_card[0] + 38, left_card[1] + 34), "COPIED DRAFT", MUTED, (239, 242, 246, 255))
+    label_pill(d, (right_card[0] + 38, right_card[1] + 34), "POLISHED RESULT", TEAL)
 
     paragraph(
         d,
         (left_card[0] + 44, left_card[1] + 128),
-        "/ai make this clear, warm and confident",
+        "OUTCOME · POLISH",
         left_card[2] - left_card[0] - 88,
         size=31,
         fill=TEAL,
@@ -572,12 +572,12 @@ def transformation_workspace(img, xy):
 def notes_to_plan_workspace(img, xy):
     x1, y1, x2, y2 = xy
     d = ImageDraw.Draw(img)
-    mac_window(img, xy, "Notes · Product Launch")
+    mac_window(img, xy, "SucceedAI · Make a Plan")
 
     sidebar_w = 360
     d.rectangle((x1, y1 + 86, x1 + sidebar_w, y2), fill=(245, 246, 250, 255))
-    text(d, (x1 + 42, y1 + 132), "Folders", size=26, fill=MUTED, weight="bold")
-    folders = [("All iCloud", "18"), ("Work", "7"), ("Ideas", "11")]
+    text(d, (x1 + 42, y1 + 132), "Outcomes", size=26, fill=MUTED, weight="bold")
+    folders = [("Proofread", "✓"), ("Make a Plan", "→"), ("Translate", "9")]
     for index, (name, count) in enumerate(folders):
         top = y1 + 188 + index * 82
         selected = index == 1
@@ -627,27 +627,27 @@ def notes_to_plan_workspace(img, xy):
         text(d, (midpoint + 150, top + 53), task, size=27, fill=INK_2, weight="bold")
 
     d.rounded_rectangle((content_x + 58, y2 - 134, midpoint - 58, y2 - 60), radius=26, fill=(244, 239, 255, 255))
-    text(d, ((content_x + midpoint) // 2, y2 - 97), "SucceedAI turns the selection into a plan", size=25, fill=TEAL, weight="bold", anchor="mm")
+    text(d, ((content_x + midpoint) // 2, y2 - 97), "Copied notes become a clear, actionable plan", size=25, fill=TEAL, weight="bold", anchor="mm")
 
 
 def selection_workspace(img, xy):
     x1, y1, x2, y2 = xy
     d = ImageDraw.Draw(img)
-    mac_window(img, xy, "Mail · Inbox")
+    mac_window(img, xy, "SucceedAI · Writing Workspace")
 
     sidebar = x1 + 410
     d.rectangle((x1, y1 + 86, sidebar, y2), fill=(242, 245, 249, 255))
-    text(d, (x1 + 40, y1 + 136), "Mailboxes", size=25, fill=MUTED, weight="bold")
-    for index, label in enumerate(["Inbox  12", "VIP", "Sent", "Drafts  3", "Archive"]):
+    text(d, (x1 + 40, y1 + 136), "Writing tools", size=25, fill=MUTED, weight="bold")
+    for index, label in enumerate(["Copied Text", "Recent Draft", "Shortcuts", "Privacy", "Settings"]):
         top = y1 + 202 + index * 74
         if index == 0:
             d.rounded_rectangle((x1 + 20, top - 12, sidebar - 22, top + 48), radius=18, fill=(230, 225, 255, 255))
         text(d, (x1 + 48, top), label, size=27, fill=TEAL if index == 0 else INK_2, weight="bold" if index == 0 else "regular")
 
     content_x = sidebar + 54
-    text(d, (content_x, y1 + 142), "Re: Project timeline", size=42, fill=INK, weight="heavy")
-    text(d, (content_x, y1 + 202), "From Jamie Chen · 9:17 AM", size=25, fill=MUTED)
-    paragraph(d, (content_x, y1 + 286), "Hi team,\n\nCan you send a concise update on what is complete, what is blocked, and what you need from me before Friday?", 1020, size=34, fill=INK_2, leading=1.36)
+    text(d, (content_x, y1 + 142), "Copied project update", size=42, fill=INK, weight="heavy")
+    text(d, (content_x, y1 + 202), "Imported only after choosing Use Copied Text", size=25, fill=MUTED)
+    paragraph(d, (content_x, y1 + 286), "Turn this rough update into a clear, concise reply that states what is complete, what is blocked, and what is needed before Friday.", 1020, size=34, fill=INK_2, leading=1.36)
 
     selected_top = y1 + 650
     d.rounded_rectangle((content_x - 12, selected_top - 18, content_x + 1040, selected_top + 174), radius=22, fill=(230, 222, 255, 255), outline=TEAL[:3] + (90,), width=2)
@@ -660,7 +660,7 @@ def selection_workspace(img, xy):
         fill=INK,
         leading=1.35,
     )
-    text(d, (content_x, selected_top + 226), "Selected text stays in place until you choose an outcome.", size=25, fill=MUTED)
+    text(d, (content_x, selected_top + 226), "The source remains editable while you choose an outcome.", size=25, fill=MUTED)
 
     outcome_panel(img, (1510, y1 + 112, x2 - 48, y2 - 38))
 
@@ -683,8 +683,8 @@ def privacy_workspace(img, xy):
     card_h = 330
 
     for left, title, detail, color in [
-        (source_x, "Your writing", "Mail, Notes, documents\nand browser text fields", BLUE),
-        (model_x, "Apple local model", "Runs directly on your Mac\nwith Foundation Models", TEAL),
+        (source_x, "Your writing", "Copied text or a draft\nyou enter directly", BLUE),
+        (model_x, "Local language model", "Runs entirely on device\nwith no external server", TEAL),
         (cloud_x, "The cloud", "No prompt upload\nNo account or API key", ROSE),
     ]:
         d.rounded_rectangle((left, card_y, left + card_w, card_y + card_h), radius=36, fill=(23, 36, 75, 255), outline=color[:3] + (115,), width=3)
@@ -704,7 +704,7 @@ def privacy_workspace(img, xy):
     result_check(d, (x1 + 150, benefits_y), "Works offline", "No connection required", BLUE)
     result_check(d, (x1 + 765, benefits_y), "No prompt logs", "Nothing stored remotely", TEAL)
     result_check(d, (x1 + 1380, benefits_y), "No account", "Open the app and write", GREEN)
-    result_check(d, (x1 + 1995, benefits_y), "No API bill", "No token fees or keys", ORANGE)
+    result_check(d, (x1 + 1995, benefits_y), "No permissions", "No keystroke monitoring", ORANGE)
 
     text(d, (center_x, y2 - 92), "Your words stay yours.", size=39, fill=(169, 238, 255, 255), weight="heavy", anchor="mm")
 
@@ -718,12 +718,12 @@ def settings_showcase(img, xy):
     rounded_shadow(img, (panel_x1, y1 + 36, x2, y2 - 36), radius=42, fill=(13, 23, 58, 248), shadow=(14, 18, 50, 80), blur=46, offset=(0, 28), outline=(118, 91, 255, 105))
     img.alpha_composite(app_icon(126), (panel_x1 + 58, y1 + 104))
     text(d, (panel_x1 + 58, y1 + 270), "Ready when you are", size=45, fill=WHITE, weight="heavy")
-    paragraph(d, (panel_x1 + 60, y1 + 338), "Keep SucceedAI in the menu bar and use it wherever you write.", x2 - panel_x1 - 120, size=28, fill=(194, 207, 235, 255), leading=1.3)
+    paragraph(d, (panel_x1 + 60, y1 + 338), "Keep SucceedAI in the menu bar for quick, private writing help.", x2 - panel_x1 - 120, size=28, fill=(194, 207, 235, 255), leading=1.3)
 
     steps = [
-        ("1", "Select text"),
+        ("1", "Copy your text"),
         ("2", "Choose an outcome"),
-        ("3", "Keep writing"),
+        ("3", "Copy the result"),
     ]
     for index, (number, label) in enumerate(steps):
         top = y1 + 540 + index * 150
@@ -741,12 +741,12 @@ def shot1():
     d = ImageDraw.Draw(img)
     campaign_header(
         d,
-        "AI writing assistant · built for macOS",
+        "Private AI writing assistant",
         "Turn rough thoughts into writing worth sending",
-        "Rewrite, proofread and refine inside the Mac apps you already use.",
+        "Import copied text, choose an outcome, and copy a polished result back to your work.",
     )
     transformation_workspace(img, (150, 370, 2730, 1690))
-    save(img, "01-type-return-done-2880x1800.png")
+    save(img, "01-polish-copied-text-2880x1800.png")
 
 
 def shot2():
@@ -759,7 +759,7 @@ def shot2():
         "Find actions, assign owners and create structure without writing a complicated prompt.",
     )
     notes_to_plan_workspace(img, (150, 370, 2730, 1690))
-    save(img, "02-private-ai-in-every-app-2880x1800.png")
+    save(img, "02-notes-to-plan-2880x1800.png")
 
 
 def shot3():
@@ -767,12 +767,12 @@ def shot3():
     d = ImageDraw.Draw(img)
     campaign_header(
         d,
-        "One selection · every writing task",
-        "Proofread, rewrite and reply without leaving your app",
-        "Choose a useful outcome from the menu bar. SucceedAI handles the prompt for you.",
+        "One focused workspace · every writing task",
+        "Proofread, rewrite and reply without complicated prompts",
+        "Choose a useful outcome from the menu bar and let SucceedAI handle the instruction.",
     )
     selection_workspace(img, (150, 370, 2730, 1690))
-    save(img, "03-menu-bar-control-center-2880x1800.png")
+    save(img, "03-focused-writing-workspace-2880x1800.png")
 
 
 def shot4():
@@ -782,11 +782,11 @@ def shot4():
         d,
         "Privacy first · by design",
         "Private AI that never sends your words away",
-        "Apple Foundation Models run on your Mac. No backend, prompt uploads, account or API key.",
+        "The language model runs on device. No backend, prompt uploads, account, API key, or keystroke monitoring.",
         dark=True,
     )
     privacy_workspace(img, (150, 370, 2730, 1690))
-    save(img, "04-on-device-privacy-2880x1800.png")
+    save(img, "04-private-local-ai-2880x1800.png")
 
 
 def shot5():
@@ -794,12 +794,12 @@ def shot5():
     d = ImageDraw.Draw(img)
     campaign_header(
         d,
-        "Designed to disappear into your workflow",
-        "Set it once. Use it everywhere you write.",
-        "Choose your trigger, launch at login and keep practical local AI one selection away.",
+        "Designed for a simple daily workflow",
+        "Copy it. Transform it. Paste it.",
+        "Launch from the menu bar, import only what you choose, or automate repeatable work with Shortcuts.",
     )
     settings_showcase(img, (150, 370, 2730, 1690))
-    save(img, "05-customize-your-flow-2880x1800.png")
+    save(img, "05-copy-transform-paste-2880x1800.png")
 
 
 def save(img, filename):
