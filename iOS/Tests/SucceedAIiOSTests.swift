@@ -618,6 +618,9 @@ final class SucceedAIiOSTests: XCTestCase {
     }
 
     func testLocalModelGeneratesInsideHostApp() throws {
+#if targetEnvironment(simulator)
+        throw XCTSkip("Foundation Models assets are not available in iOS Simulator.")
+#else
         let provider = LocalFoundationModelProvider()
         guard provider.availability.isAvailable else {
             throw XCTSkip("Apple Intelligence is not ready on this test device.")
@@ -639,6 +642,7 @@ final class SucceedAIiOSTests: XCTestCase {
         case nil:
             XCTFail("The on-device model did not return a result.")
         }
+#endif
     }
 }
 
