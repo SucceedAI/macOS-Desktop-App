@@ -111,7 +111,6 @@ platform :mac do
       platform: "osx",
       app_identifier: MAC_APP_IDENTIFIER,
       app_version: VERSION,
-      build_number: MAC_BUILD_NUMBER,
       metadata_path: MAC_METADATA_PATH,
       screenshots_path: MAC_SCREENSHOTS_PATH,
       skip_binary_upload: skip_binary_upload,
@@ -124,7 +123,11 @@ platform :mac do
       overwrite_screenshots: true,
       force: true
     }
-    options[:pkg] = MAC_PKG_PATH unless skip_binary_upload
+    if skip_binary_upload
+      options[:build_number] = MAC_BUILD_NUMBER
+    else
+      options[:pkg] = MAC_PKG_PATH
+    end
     review = review_information(MAC_REVIEW_NOTES)
     options[:app_review_information] = review if review
     deliver(options)
