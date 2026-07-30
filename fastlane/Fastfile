@@ -17,7 +17,7 @@ MAC_REVIEW_NOTES = File.read(File.join(ROOT_PATH, "fastlane/review-information-m
 IOS_PROJECT_PATH = File.join(ROOT_PATH, "iOS/SucceedAI-iOS.xcodeproj")
 IOS_SCHEME = "SucceedAIiOS"
 IOS_APP_IDENTIFIER = ENV.fetch("IOS_APP_IDENTIFIER", "me.ph7.Succeed-AI")
-IOS_BUILD_NUMBER = ENV.fetch("IOS_BUILD_NUMBER", "9")
+IOS_BUILD_NUMBER = ENV.fetch("IOS_BUILD_NUMBER", "10")
 IOS_OUTPUT_DIR = File.join(ROOT_PATH, "build/fastlane/ios")
 IOS_IPA_PATH = File.join(IOS_OUTPUT_DIR, "SucceedAI.ipa")
 IOS_METADATA_PATH = File.join(ROOT_PATH, "fastlane/metadata-ios")
@@ -150,6 +150,11 @@ platform :mac do
 end
 
 platform :ios do
+  desc "Regenerate the use-case-led iPhone and iPad App Store campaign"
+  lane :screenshots do
+    sh("cd '#{ROOT_PATH}' && python3 scripts/generate_ios_app_store_screenshots.py")
+  end
+
   desc "Refresh App Store profiles for the host app and private keyboard App Group"
   lane :refresh_profiles do
     key = asc_api_key
@@ -185,6 +190,7 @@ platform :ios do
   desc "Build a signed iOS archive containing the no-Full-Access keyboard"
   lane :build_app_store do
     asc_api_key
+    screenshots
     sh("cd '#{File.join(ROOT_PATH, 'iOS')}' && xcodegen generate")
     build_app(
       project: IOS_PROJECT_PATH,
@@ -214,7 +220,6 @@ platform :ios do
       platform: "ios",
       app_identifier: IOS_APP_IDENTIFIER,
       app_version: VERSION,
-      build_number: IOS_BUILD_NUMBER,
       metadata_path: IOS_METADATA_PATH,
       screenshots_path: IOS_SCREENSHOTS_PATH,
       skip_binary_upload: skip_binary_upload,
@@ -227,7 +232,11 @@ platform :ios do
       overwrite_screenshots: true,
       force: true
     }
-    options[:ipa] = IOS_IPA_PATH unless skip_binary_upload
+    if skip_binary_upload
+      options[:build_number] = IOS_BUILD_NUMBER
+    else
+      options[:ipa] = IOS_IPA_PATH
+    end
     review = review_information(IOS_REVIEW_NOTES)
     options[:app_review_information] = review if review
     deliver(options)

@@ -79,6 +79,14 @@ Upload the already-built macOS package without changing listing metadata
 
 ## iOS
 
+### ios screenshots
+
+```sh
+[bundle exec] fastlane ios screenshots
+```
+
+Regenerate the use-case-led iPhone and iPad App Store campaign
+
 ### ios refresh_profiles
 
 ```sh

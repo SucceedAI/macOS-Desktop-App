@@ -112,19 +112,22 @@ cd iOS && xcodebuild -project SucceedAI-iOS.xcodeproj -scheme SucceedAIiOS -dest
 
 ```bash
 python3 scripts/generate_app_store_screenshots.py
+python3 scripts/generate_ios_app_store_screenshots.py
 python3 scripts/generate_product_hunt_assets.py
 ```
 
-The App Store screenshot generator writes both `AppStore/Screenshots/macOS/` and the Fastlane upload folder `fastlane/screenshots/en-AU/`.
+The macOS generator writes both `AppStore/Screenshots/macOS/` and `fastlane/screenshots/en-AU/`. The iOS generator keeps its raw simulator captures in `AppStore/Screenshots/iOS/Raw/` and recreates the complete five-image iPhone and three-image iPad campaign in `fastlane/screenshots-ios/en-US/`.
 
 ## Fastlane Release Checks
 
 ```bash
 fastlane mac screenshots
 fastlane mac verify_release_build
+fastlane ios screenshots
+fastlane ios verify_release_build
 ```
 
-Use `fastlane mac release` for Apple ID 6499462798 and `fastlane ios release` for Apple ID 6479233658 after signing is available. App Store Connect authentication uses the API key path supplied through the release environment.
+Both signed release lanes regenerate their current screenshot campaigns before archiving. Use `fastlane mac release` for Apple ID 6499462798 and `fastlane ios release` for Apple ID 6479233658 after signing is available. App Store Connect authentication uses the API key path supplied through the release environment.
 
 ## Local AI and Privacy
 
