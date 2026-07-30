@@ -66,7 +66,13 @@ abort("No complete App Review contact exists on the account") unless source_cont
 
 territory_ids = nil
 
-TARGETS.each do |target|
+targets = TARGETS
+if ENV["TARGET_BUNDLE_ID"]
+  targets = TARGETS.select { |target| target[:bundle_id] == ENV["TARGET_BUNDLE_ID"] }
+  abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
+end
+
+targets.each do |target|
   app = Spaceship::ConnectAPI::App.find(target[:bundle_id])
   abort("Could not find #{target[:bundle_id]}") unless app
 
