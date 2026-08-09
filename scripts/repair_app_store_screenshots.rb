@@ -12,6 +12,7 @@ targets = [
   {
     bundle_id: "me.ph7.Succeed-AI",
     platform: Spaceship::ConnectAPI::Platform::IOS,
+    version: ENV.fetch("IOS_APP_VERSION", "1.0"),
     expected: {
       "APP_IPHONE_67" => 5,
       "APP_IPAD_PRO_3GEN_129" => 4
@@ -20,6 +21,7 @@ targets = [
   {
     bundle_id: "me.ph7.SucceedAI",
     platform: Spaceship::ConnectAPI::Platform::MAC_OS,
+    version: ENV.fetch("MAC_APP_VERSION", "1.1"),
     expected: { "APP_DESKTOP" => 5 }
   }
 ]
@@ -35,6 +37,9 @@ targets.each do |target|
 
   submission = app.get_in_progress_review_submission(platform: target[:platform])
   if submission
+    unless ENV["CONFIRM_REVIEW_WITHDRAWAL"] == "1"
+      abort("Refusing to withdraw review without CONFIRM_REVIEW_WITHDRAWAL=1")
+    end
     allowed_states = ["WAITING_FOR_REVIEW"]
     allowed_states << "UNRESOLVED_ISSUES" if ENV["ALLOW_UNRESOLVED_ISSUES"] == "1"
     unless allowed_states.include?(submission.state)
@@ -57,9 +62,9 @@ targets.each do |target|
   end
 
   version = app.get_app_store_versions(includes: "build", limit: 20).find do |candidate|
-    candidate.platform == target[:platform] && candidate.version_string == "1.0"
+    candidate.platform == target[:platform] && candidate.version_string == target[:version]
   end
-  abort("Version 1.0 not found for #{target[:bundle_id]}") unless version
+  abort("Version #{target[:version]} not found for #{target[:bundle_id]}") unless version
 
   actual_counts = {}
   version.get_app_store_version_localizations.each do |localization|

@@ -11,18 +11,18 @@ Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
 )
 
 targets = [
-  ["me.ph7.Succeed-AI", Spaceship::ConnectAPI::Platform::IOS],
-  ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS]
+  ["me.ph7.Succeed-AI", Spaceship::ConnectAPI::Platform::IOS, ENV.fetch("IOS_APP_VERSION", "1.0")],
+  ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS, ENV.fetch("MAC_APP_VERSION", "1.1")]
 ]
 
-report = targets.map do |bundle_id, platform|
+report = targets.map do |bundle_id, platform, target_version|
   app = Spaceship::ConnectAPI::App.find(bundle_id)
   abort("App Store Connect app not found: #{bundle_id}") unless app
 
   version = app.get_app_store_versions(includes: "build", limit: 20).find do |candidate|
-    candidate.platform == platform && candidate.version_string == "1.0"
+    candidate.platform == platform && candidate.version_string == target_version
   end
-  abort("Version 1.0 not found for #{bundle_id} (#{platform})") unless version
+  abort("Version #{target_version} not found for #{bundle_id} (#{platform})") unless version
 
   build = begin
     version.get_build

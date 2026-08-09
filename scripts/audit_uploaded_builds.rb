@@ -13,12 +13,14 @@ targets = [
   {
     bundle_id: "me.ph7.Succeed-AI",
     platform: Spaceship::ConnectAPI::Platform::IOS,
-    build_number: ENV.fetch("IOS_BUILD_NUMBER", "9")
+    version: ENV.fetch("IOS_APP_VERSION", "1.0"),
+    build_number: ENV.fetch("IOS_BUILD_NUMBER", "11")
   },
   {
     bundle_id: "me.ph7.SucceedAI",
     platform: Spaceship::ConnectAPI::Platform::MAC_OS,
-    build_number: ENV.fetch("MAC_BUILD_NUMBER", "9")
+    version: ENV.fetch("MAC_APP_VERSION", "1.1"),
+    build_number: ENV.fetch("MAC_BUILD_NUMBER", "12")
   }
 ]
 
@@ -28,13 +30,13 @@ report = targets.map do |target|
 
   uploads = Spaceship::ConnectAPI::BuildUpload.all(
     app_id: app.id,
-    version: "1.0",
+    version: target[:version],
     build_number: target[:build_number]
   )
   builds = Spaceship::ConnectAPI::Build.all(
     app_id: app.id,
     platform: target[:platform],
-    version: "1.0",
+    version: target[:version],
     build_number: target[:build_number],
     limit: 10
   )
@@ -42,6 +44,7 @@ report = targets.map do |target|
   {
     bundle_id: target[:bundle_id],
     platform: target[:platform],
+    version: target[:version],
     build_number: target[:build_number],
     uploads: uploads.map do |upload|
       {

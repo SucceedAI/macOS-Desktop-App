@@ -11,10 +11,11 @@ Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
 app = Spaceship::ConnectAPI::App.find("me.ph7.Succeed-AI")
 abort("iOS app not found") unless app
 
+target_version = ENV.fetch("IOS_APP_VERSION", "1.0")
 version = app.get_app_store_versions(limit: 20).find do |candidate|
-  candidate.platform == Spaceship::ConnectAPI::Platform::IOS && candidate.version_string == "1.0"
+  candidate.platform == Spaceship::ConnectAPI::Platform::IOS && candidate.version_string == target_version
 end
-abort("iOS version 1.0 not found") unless version
+abort("iOS version #{target_version} not found") unless version
 
 detail = version.fetch_app_store_review_detail
 abort("iOS App Review information not found") unless detail

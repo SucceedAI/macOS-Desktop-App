@@ -9,16 +9,16 @@ Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
 )
 
 targets = [
-  ["me.ph7.Succeed-AI", Spaceship::ConnectAPI::Platform::IOS],
-  ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS]
+  ["me.ph7.Succeed-AI", Spaceship::ConnectAPI::Platform::IOS, ENV.fetch("IOS_APP_VERSION", "1.0")],
+  ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS, ENV.fetch("MAC_APP_VERSION", "1.1")]
 ]
 
 if ENV["TARGET_BUNDLE_ID"]
-  targets.select! { |bundle_id, _platform| bundle_id == ENV["TARGET_BUNDLE_ID"] }
+  targets.select! { |bundle_id, _platform, _version| bundle_id == ENV["TARGET_BUNDLE_ID"] }
   abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
 end
 
-targets.each do |bundle_id, platform|
+targets.each do |bundle_id, platform, target_version|
   app = Spaceship::ConnectAPI::App.find(bundle_id)
   abort("App Store Connect app not found: #{bundle_id}") unless app
 
@@ -29,9 +29,9 @@ targets.each do |bundle_id, platform|
   end
 
   version = app.get_app_store_versions(includes: "build", limit: 20).find do |candidate|
-    candidate.platform == platform && candidate.version_string == "1.0"
+    candidate.platform == platform && candidate.version_string == target_version
   end
-  abort("Version 1.0 not found for #{bundle_id}") unless version
+  abort("Version #{target_version} not found for #{bundle_id}") unless version
 
   build = version.get_build
   abort("No build is selected for #{bundle_id}") unless build
@@ -66,5 +66,5 @@ targets.each do |bundle_id, platform|
 
   submitted = submission.submit_for_review
   abort("Unexpected review state for #{bundle_id}: #{submitted.state}") unless submitted.state == "WAITING_FOR_REVIEW"
-  puts "Submitted #{bundle_id} version 1.0 build #{build.version}: #{submitted.state}"
+  puts "Submitted #{bundle_id} version #{target_version} build #{build.version}: #{submitted.state}"
 end
