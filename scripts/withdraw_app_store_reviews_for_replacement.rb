@@ -13,19 +13,32 @@ targets = [
     name: "iOS",
     bundle_id: "me.ph7.Succeed-AI",
     platform: Spaceship::ConnectAPI::Platform::IOS,
-    build_number: ENV.fetch("IOS_BUILD_NUMBER", "9")
+    version: ENV.fetch("IOS_APP_VERSION", "1.0"),
+    build_env: "IOS_BUILD_NUMBER",
+    build_number: ENV["IOS_BUILD_NUMBER"]
   },
   {
     name: "macOS",
     bundle_id: "me.ph7.SucceedAI",
     platform: Spaceship::ConnectAPI::Platform::MAC_OS,
-    build_number: ENV.fetch("MAC_BUILD_NUMBER", "9")
+    version: ENV.fetch("MAC_APP_VERSION", "1.1"),
+    build_env: "MAC_BUILD_NUMBER",
+    build_number: ENV["MAC_BUILD_NUMBER"]
   }
 ]
 
 if ENV["TARGET_BUNDLE_ID"]
   targets.select! { |target| target[:bundle_id] == ENV["TARGET_BUNDLE_ID"] }
   abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
+end
+
+missing_build_numbers = targets.select { |target| target[:build_number].to_s.strip.empty? }
+unless missing_build_numbers.empty?
+  variables = missing_build_numbers.map { |target| target[:build_env] }
+  abort("Explicit replacement build required: set #{variables.join(' and ')}")
+end
+unless ENV["CONFIRM_REVIEW_WITHDRAWAL"] == "1"
+  abort("Refusing to withdraw review without CONFIRM_REVIEW_WITHDRAWAL=1")
 end
 
 targets.each do |target|
@@ -35,7 +48,7 @@ targets.each do |target|
   replacement = Spaceship::ConnectAPI::Build.all(
     app_id: app.id,
     platform: target[:platform],
-    version: "1.0",
+    version: target[:version],
     build_number: target[:build_number],
     limit: 10
   ).first
@@ -48,9 +61,9 @@ targets.each do |target|
   end
 
   version = app.get_app_store_versions(includes: "build", limit: 20).find do |candidate|
-    candidate.platform == target[:platform] && candidate.version_string == "1.0"
+    candidate.platform == target[:platform] && candidate.version_string == target[:version]
   end
-  abort("#{target[:name]} version 1.0 not found") unless version
+  abort("#{target[:name]} version #{target[:version]} not found") unless version
 
   submission = app.get_in_progress_review_submission(platform: target[:platform])
   unless submission
@@ -68,6 +81,17 @@ targets.each do |target|
   if selected_build&.version == target[:build_number] && !allow_selected_build
     puts "#{target[:name]} build #{target[:build_number]} is already selected; no withdrawal performed."
     next
+  end
+
+  selected_number = selected_build&.version.to_s.match?(/\A\d+\z/) ? selected_build.version.to_i : nil
+  replacement_number = target[:build_number].match?(/\A\d+\z/) ? target[:build_number].to_i : nil
+  unless selected_number && replacement_number
+    abort("Refusing to compare non-numeric #{target[:name]} build numbers")
+  end
+  if replacement_number <= selected_number && ENV["ALLOW_NON_NEWER_REPLACEMENT"] != "1"
+    abort(
+      "Refusing to replace #{target[:name]} build #{selected_number} with non-newer build #{replacement_number}"
+    )
   end
 
   canceled = submission.cancel_submission

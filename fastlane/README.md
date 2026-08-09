@@ -56,7 +56,7 @@ Build a signed macOS package for App Store Connect
 [bundle exec] fastlane mac release
 ```
 
-Upload the private local-AI macOS release and submit it for review
+Build and stage the private local-AI macOS release
 
 ### mac publish_built
 
@@ -117,7 +117,7 @@ Build a signed iOS archive containing the no-Full-Access keyboard
 [bundle exec] fastlane ios release
 ```
 
-Upload the private local-AI iOS release and submit it for review
+Build and stage the private local-AI iOS release
 
 ### ios publish_built
 
