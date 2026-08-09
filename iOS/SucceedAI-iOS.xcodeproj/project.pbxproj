@@ -10,6 +10,7 @@
 		02622E29FE8B116E79E2AA74 /* SucceedAIiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5224BBE9B556410EA58BB63A /* SucceedAIiOSApp.swift */; };
 		1D315B6DFC9B1452A0B31A46 /* SucceedAIKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		22983402A8DF0F6F9DBD9CE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3ADA9AC2D24CF970E25545F /* Assets.xcassets */; };
+		3EEEEDAEA3F64B6599CFA8A1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FCC4A852EACB1960ECF8B919 /* PrivacyInfo.xcprivacy */; };
 		521EC95E991C4203650ED102 /* LocalFoundationModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99A758CD9438ED36126D2E /* LocalFoundationModelProvider.swift */; };
 		6B518716C016EB89700DD3F0 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */; };
 		786DFC4D433E9B3F53147F78 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */; };
@@ -21,6 +22,7 @@
 		AF6755931CED51E56F42C813 /* KeyboardReplacementSafety.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFBD2BC049203A426071A7F /* KeyboardReplacementSafety.swift */; };
 		B5975B762EA2824D63DAE0F4 /* SucceedAIKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50BE3A51A499C77AE1DBF1 /* SucceedAIKeyboardView.swift */; };
 		C196EBCB5BE806EE1165FAA3 /* SucceedAITextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39114F60A6312EB4D3BA1A9 /* SucceedAITextIntent.swift */; };
+		CCFEA7A8D22C23E6F5766A5E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EB63C82170D6251063C399D0 /* PrivacyInfo.xcprivacy */; };
 		CE9E49553318896A6E977854 /* KeyboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */; };
 		DA290401BBC27E16263FD7B6 /* SucceedAIHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163BF99BECD8B6E88F79CE2 /* SucceedAIHomeView.swift */; };
 		EA5276DC99031B761F0C3133 /* SucceedAIiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64134272A61CD5C6F434E1DE /* SucceedAIiOSTests.swift */; };
@@ -89,8 +91,10 @@
 		E35C3A63EC9A3E7F624B38D3 /* SucceedAIiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SucceedAIiOS.entitlements; sourceTree = "<group>"; };
 		E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewModel.swift; sourceTree = "<group>"; };
 		EB3F51B6E00B90A740EBB3BF /* SucceedAIKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = SucceedAIKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB63C82170D6251063C399D0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EFEE2EF567E4511FC50FEED6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
 		F6E07D78AAD7BC89D0EB0E36 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		FCC4A852EACB1960ECF8B919 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -143,6 +147,7 @@
 				88E99E74587A5AFCF1F0F98C /* Info.plist */,
 				F6E07D78AAD7BC89D0EB0E36 /* KeyboardViewController.swift */,
 				E60DC9A70466EE4DBDA9FD5B /* KeyboardViewModel.swift */,
+				FCC4A852EACB1960ECF8B919 /* PrivacyInfo.xcprivacy */,
 				8F9C98A5A767015596395DF4 /* SucceedAIKeyboard.entitlements */,
 				CE50BE3A51A499C77AE1DBF1 /* SucceedAIKeyboardView.swift */,
 			);
@@ -161,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				503905DF56F0D92A19937579 /* iOSComposerViewModel.swift */,
+				EB63C82170D6251063C399D0 /* PrivacyInfo.xcprivacy */,
 				2163BF99BECD8B6E88F79CE2 /* SucceedAIHomeView.swift */,
 				E35C3A63EC9A3E7F624B38D3 /* SucceedAIiOS.entitlements */,
 				5224BBE9B556410EA58BB63A /* SucceedAIiOSApp.swift */,
@@ -312,6 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22983402A8DF0F6F9DBD9CE9 /* Assets.xcassets in Resources */,
+				CCFEA7A8D22C23E6F5766A5E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A49246D98DD28A29656B0EB1 /* Assets.xcassets in Resources */,
+				3EEEEDAEA3F64B6599CFA8A1 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,7 @@
 		8F654CB12B94136E00A8F6E6 /* AIProvideable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */; };
 		8F883FCD2BA05C4B008974C9 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F883FCC2BA05C4B008974C9 /* WindowManager.swift */; };
 		A10000022C00000100000001 /* SucceedAITextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012C00000100000001 /* SucceedAITextIntent.swift */; };
+		A20000022D00000100000001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20000012D00000100000001 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		8F654CB02B94136E00A8F6E6 /* AIProvideable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvideable.swift; sourceTree = "<group>"; };
 		8F883FCC2BA05C4B008974C9 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		A10000012C00000100000001 /* SucceedAITextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucceedAITextIntent.swift; sourceTree = "<group>"; };
+		A20000012D00000100000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C31D142B8A7747E38D397F9B /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = SOURCE_ROOT; };
 		56A49EABE1604B199202CBF5 /* Local.xcconfig.dist */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig.dist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -136,6 +138,7 @@
 				8F654C792B93F25000A8F6E6 /* Succeed_AIApp.swift */,
 				8F654C7D2B93F25000A8F6E6 /* Item.swift */,
 				8F654C7F2B93F25100A8F6E6 /* Assets.xcassets */,
+				A20000012D00000100000001 /* PrivacyInfo.xcprivacy */,
 				8F654C842B93F25100A8F6E6 /* Succeed_AI.entitlements */,
 				8F654C812B93F25100A8F6E6 /* Preview Content */,
 			);
@@ -278,6 +281,7 @@
 			files = (
 				8F654C832B93F25100A8F6E6 /* Preview Assets.xcassets in Resources */,
 				8F654C802B93F25100A8F6E6 /* Assets.xcassets in Resources */,
+				A20000022D00000100000001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
