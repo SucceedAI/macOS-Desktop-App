@@ -9,16 +9,26 @@ Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
 )
 
 targets = [
-  ["me.ph7.Succeed-AI", Spaceship::ConnectAPI::Platform::IOS, ENV.fetch("IOS_APP_VERSION", "1.0")],
-  ["me.ph7.SucceedAI", Spaceship::ConnectAPI::Platform::MAC_OS, ENV.fetch("MAC_APP_VERSION", "1.1")]
+  [
+    "me.ph7.Succeed-AI",
+    Spaceship::ConnectAPI::Platform::IOS,
+    ENV.fetch("IOS_APP_VERSION", "1.0"),
+    ENV.fetch("IOS_BUILD_NUMBER", "11")
+  ],
+  [
+    "me.ph7.SucceedAI",
+    Spaceship::ConnectAPI::Platform::MAC_OS,
+    ENV.fetch("MAC_APP_VERSION", "1.1"),
+    ENV.fetch("MAC_BUILD_NUMBER", "12")
+  ]
 ]
 
 if ENV["TARGET_BUNDLE_ID"]
-  targets.select! { |bundle_id, _platform, _version| bundle_id == ENV["TARGET_BUNDLE_ID"] }
+  targets.select! { |bundle_id, _platform, _version, _build| bundle_id == ENV["TARGET_BUNDLE_ID"] }
   abort("Unknown TARGET_BUNDLE_ID: #{ENV['TARGET_BUNDLE_ID']}") if targets.empty?
 end
 
-targets.each do |bundle_id, platform, target_version|
+targets.each do |bundle_id, platform, target_version, target_build_number|
   app = Spaceship::ConnectAPI::App.find(bundle_id)
   abort("App Store Connect app not found: #{bundle_id}") unless app
 
@@ -33,10 +43,29 @@ targets.each do |bundle_id, platform, target_version|
   end
   abort("Version #{target_version} not found for #{bundle_id}") unless version
 
-  build = version.get_build
-  abort("No build is selected for #{bundle_id}") unless build
-  abort("Selected build is not valid for #{bundle_id}: #{build.processing_state}") unless build.processing_state == "VALID"
-  abort("Selected build has no processed App Store icon for #{bundle_id}") if build.icon_asset_token.to_s.empty?
+  build = Spaceship::ConnectAPI::Build.all(
+    app_id: app.id,
+    platform: platform,
+    version: target_version,
+    build_number: target_build_number,
+    limit: 10
+  ).first
+  abort("Build #{target_build_number} was not found for #{bundle_id}") unless build
+  abort("Build #{target_build_number} is not valid for #{bundle_id}: #{build.processing_state}") unless build.processing_state == "VALID"
+  abort("Build #{target_build_number} has no processed App Store icon for #{bundle_id}") if build.icon_asset_token.to_s.empty?
+
+  selected_build = begin
+    version.get_build
+  rescue Spaceship::UnexpectedResponse, RuntimeError
+    nil
+  end
+  unless selected_build&.id == build.id
+    version.select_build(build_id: build.id)
+    selected_build = version.get_build
+  end
+  unless selected_build&.id == build.id
+    abort("App Store Connect did not select #{bundle_id} build #{target_build_number}")
+  end
 
   review_detail = version.fetch_app_store_review_detail
   contact_fields = [
@@ -66,5 +95,5 @@ targets.each do |bundle_id, platform, target_version|
 
   submitted = submission.submit_for_review
   abort("Unexpected review state for #{bundle_id}: #{submitted.state}") unless submitted.state == "WAITING_FOR_REVIEW"
-  puts "Submitted #{bundle_id} version #{target_version} build #{build.version}: #{submitted.state}"
+  puts "Submitted #{bundle_id} version #{target_version} build #{target_build_number}: #{submitted.state}"
 end
