@@ -19,7 +19,7 @@ The app is powered by the on-device Foundation Models framework and has no backe
 
 This submission also addresses Guideline 5.2.5. The subtitle has been changed from “Rewrite text in every Mac app” to “Local AI for Everyday Writing,” removing the rejected Mac trademark usage and accurately describing the revised feature set.
 
-This resubmission addresses Guideline 2.3.3. All four Mac screenshots show the current SucceedAI 1.0 (11) interface captured from the running build. They show the real menu-bar panel, copied-text workflow, Polish action, generated on-device result, and current Settings window. The surrounding headlines and background explain those visible features; no application controls or results are reconstructed.
+All five Mac screenshots show the current SucceedAI 1.1 (12) interface captured from the running build. They show the real menu-bar panel, copied-text workflow, Polish action, generated on-device result, and current Settings window. The surrounding headlines and background explain those visible features; no application controls or results are reconstructed.
 
 This resubmission also addresses Guideline 1.5. The Support URL now provides a direct support email, a technical-issue form, device requirements, current setup steps, troubleshooting guidance, privacy guidance, and an expected response time:
 https://succeed.pierrehenry.dev/support/
