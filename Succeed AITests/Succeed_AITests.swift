@@ -214,6 +214,41 @@ final class Succeed_AITests: XCTestCase {
         XCTAssertTrue(viewModel.quickResult.isEmpty)
     }
 
+    @MainActor
+    func testMacResultKeepsTheLanguageChosenWhenGenerationStarts() async {
+        let provider = CapturingMacProvider(response: "Bonjour")
+        let viewModel = AppViewModel(aiProvider: provider, initialDraft: "Hello")
+        viewModel.quickSelectedAction = .translate
+        viewModel.quickTargetLanguage = .french
+
+        viewModel.generateQuickResult()
+        viewModel.quickSelectedAction = .polish
+        viewModel.quickTargetLanguage = .german
+        await Task.yield()
+
+        XCTAssertEqual(viewModel.quickResult, "Bonjour")
+        XCTAssertEqual(viewModel.quickResultActionTitle, "Translated to French")
+        viewModel.clearQuickResult()
+        XCTAssertTrue(viewModel.quickResultActionTitle.isEmpty)
+    }
+
+    @MainActor
+    func testMacResultKeepsTheToneChosenWhenGenerationStarts() async {
+        let provider = CapturingMacProvider(response: "Please send it today.")
+        let viewModel = AppViewModel(aiProvider: provider, initialDraft: "send it now")
+        viewModel.quickSelectedAction = .tone
+        viewModel.quickTargetTone = .professional
+
+        viewModel.generateQuickResult()
+        viewModel.quickTargetTone = .friendly
+        await Task.yield()
+
+        XCTAssertEqual(viewModel.quickResultActionTitle, "Professional tone")
+        viewModel.editQuickResult()
+        XCTAssertEqual(viewModel.quickPrompt, "Please send it today.")
+        XCTAssertTrue(viewModel.quickResultActionTitle.isEmpty)
+    }
+
     func testCancelledQueuedGenerationDoesNotOccupyTheGate() async {
         let gate = LocalGenerationGate()
         let acquiredFirstSlot = await gate.acquire()

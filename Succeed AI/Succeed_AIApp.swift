@@ -300,6 +300,9 @@ private struct StatusPanelView: View {
 
             if !viewModel.quickResult.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
+                    Text(viewModel.quickResultActionTitle)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
                     Text(viewModel.quickResult)
                         .font(.callout)
                         .textSelection(.enabled)

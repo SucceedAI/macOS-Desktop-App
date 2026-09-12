@@ -6,6 +6,7 @@ final class AppViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var aiAvailability: AIAvailabilityStatus
     @Published private(set) var quickResult = ""
+    @Published private(set) var quickResultActionTitle = ""
     @Published private(set) var errorMessage: String?
     @Published private(set) var clipboardNotice: String?
     @Published private(set) var isQuickGenerating = false
@@ -40,6 +41,7 @@ final class AppViewModel: ObservableObject {
         case .success(let text):
             quickPrompt = text
             quickResult = ""
+            quickResultActionTitle = ""
             clipboardNotice = "Copied text is ready. Choose an outcome and generate."
         case .empty:
             errorMessage = "Copy some text first, then choose Use Copied Text."
@@ -68,10 +70,20 @@ final class AppViewModel: ObservableObject {
         errorMessage = nil
         clipboardNotice = nil
         quickResult = ""
+        quickResultActionTitle = ""
         isQuickGenerating = true
         isLoading = true
 
         let requestID = UUID()
+        let completedActionTitle: String
+        switch quickSelectedAction {
+        case .translate:
+            completedActionTitle = "Translated to \(quickTargetLanguage.displayName)"
+        case .tone:
+            completedActionTitle = "\(quickTargetTone.displayName) tone"
+        default:
+            completedActionTitle = quickSelectedAction.title
+        }
         activeQuickRequestID = requestID
         quickGenerationTask = aiProvider.query(request) { [weak self] result in
             Task { @MainActor in
@@ -79,6 +91,7 @@ final class AppViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self.quickResult = response
+                    self.quickResultActionTitle = completedActionTitle
                 case .failure(let error):
                     if error != .cancelled {
                         self.errorMessage = error.userMessage
@@ -100,6 +113,7 @@ final class AppViewModel: ObservableObject {
 
     func clearQuickResult() {
         quickResult = ""
+        quickResultActionTitle = ""
         errorMessage = nil
         clipboardNotice = nil
     }
