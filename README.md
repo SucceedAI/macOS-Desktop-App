@@ -115,6 +115,8 @@ python3 scripts/generate_app_store_screenshots_v3.py --publish
 python3 scripts/generate_product_hunt_assets.py
 ```
 
+Before any metadata upload, recapture screens that display an old version and inspect the generated artwork. `AppStore/Captures/macOS/04-settings.png` currently shows 1.0 (11), so it needs a fresh capture for a later release. Running the generator alone does not update the source capture.
+
 The unified App Store generator frames real running-app and simulator captures with decorative brand artwork. It recreates the five-image Mac, five-image iPhone, and four-image iPad campaigns in the Fastlane delivery folders.
 
 ## Fastlane Release Checks
